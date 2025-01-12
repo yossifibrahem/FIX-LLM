@@ -1,0 +1,33 @@
+{
+  "id": "ca581fd2-051c-483a-950c-5a2d52f1fc19",
+  "last_updated": "2025-01-12T10:28:04.683086",
+  "messages": [
+    {
+      "role": "user",
+      "content": "show me an image of the big ben"
+    },
+    {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "id": "368332188",
+          "type": "function",
+          "function": {
+            "name": "image",
+            "arguments": "{\"query\": \"big ben\", \"number_of_images\": 1}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "content": "[{'image': 'https://guidelinestobritain.com/wp-content/uploads/2019/01/Big-Ben_Clock-Tower_Palace-Of-Westminster.jpg', 'thumbnail': 'https://tse4.mm.bing.net/th?id=OIP.MwanY3_CkAvYLovN9tdgiwHaOx&pid=Api'}]",
+      "tool_call_id": "368332188"
+    },
+    {
+      "role": "assistant",
+      "content": "Here is an image of Big Ben:\n\n![](https://guidelinestobritain.com/wp-content/uploads/2019/01/Big-Ben_Clock-Tower_Palace-Of-Westminster.jpg)"
+    }
+  ],
+  "name": "Big Ben Image"
+}
