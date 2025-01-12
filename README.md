@@ -6,3 +6,4 @@
 * Search Youtube for videos
 * Open Youtube URL and get Information
 * Search Images and get URL and Thumbnails
+* Simple Chat UI with basic chat functions and Chat history
