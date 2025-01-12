@@ -76,7 +76,7 @@ The application provides 7 core tools:
 - Message history formatting
 - Tool results tracking
 
-# Here's how to set up your production server:
+# Here's how to set up your server:
 
 1. First, install Waitress:
 ```bash
@@ -93,3 +93,10 @@ python server.py
 set FLASK_ENV=production
 set FLASK_DEBUG=0
 ```
+4. Create a batch file (*serverstart.bat*): (optional)
+```batch
+@echo off
+python server.py
+pause
+```
+Then you can double-click the batch file to run the server.
