@@ -77,6 +77,10 @@ The application provides 7 core tools:
 - Tool results tracking
 
 # Here's how to set up your server:
+## Requirments
+```bash
+pip install numpy pandas sympy io traceback typing contextlib sys json threading ctypes uuid flask datetime openai duckduckgo_search logging urllib pytubefix youtube_transcript_api
+```
 
 1. First, install Waitress:
 ```bash
