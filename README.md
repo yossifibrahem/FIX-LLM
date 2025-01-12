@@ -7,6 +7,13 @@
 * Open Youtube URL and get Information
 * Search Images and get URL and Thumbnails
 * Simple Chat UI with basic chat functions and Chat history
+![Screenshot 2025-01-12 072154](https://github.com/user-attachments/assets/feab74bc-2380-443b-9a4d-0062dd6454eb)
+![Screenshot 2025-01-12 071140](https://github.com/user-attachments/assets/da741804-63e1-4177-8c7a-9009609d9ba9)
+![Screenshot 2025-01-12 073601](https://github.com/user-attachments/assets/1b6e3afe-c594-4f74-a29a-017c216bb992)
+![Screenshot 2025-01-12 073433](https://github.com/user-attachments/assets/84dcb994-78fb-4a1a-bab8-5c5f8ab7bda9)
+![Screenshot 2025-01-12 072949](https://github.com/user-attachments/assets/98c1fba3-72d6-4793-963b-4cb2f483dd71)
+
+
 
 # Flask Chat Application Analysis
 
