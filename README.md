@@ -75,3 +75,21 @@ The application provides 7 core tools:
 - Automatic conversation naming
 - Message history formatting
 - Tool results tracking
+
+Here's how to set up your production server:
+
+1. First, install Waitress:
+```bash
+pip install waitress
+```
+
+2. To run the server:
+```bash
+python server.py
+```
+
+3. Environment Variables:
+```bash
+set FLASK_ENV=production
+set FLASK_DEBUG=0
+```
