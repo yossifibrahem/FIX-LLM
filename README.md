@@ -1,4 +1,4 @@
-**LLMs Tool Calls Using LM Studio Server**
+#LLMs Tool Calls Using LM Studio Server
 * Write and run python code
 * Fetch introduction from Wikipedia
 * Search websites for relevant Information
