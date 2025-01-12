@@ -84,8 +84,9 @@ The application provides 7 core tools:
 
 # Here's how to set up your server:
 ## Requirments
-Install LM Studio https://lmstudio.ai/
-Recommended model Qwen2.5 7B: https://huggingface.co/lmstudio-community/Qwen2.5-7B-Instruct-GGUF
+- [Install LM Studio](https://lmstudio.ai/)
+- [Recommended model Qwen2.5 7B](https://huggingface.co/lmstudio-community/Qwen2.5-7B-Instruct-GGUF)
+
 ```bash
 pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api
 ```
