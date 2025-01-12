@@ -76,7 +76,7 @@ The application provides 7 core tools:
 - Message history formatting
 - Tool results tracking
 
-Here's how to set up your production server:
+# Here's how to set up your production server:
 
 1. First, install Waitress:
 ```bash
