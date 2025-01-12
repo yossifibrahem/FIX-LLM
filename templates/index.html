@@ -500,7 +500,7 @@
                 currentConversationId = conversationId;
 
                 els.messages.innerHTML = '';
-                                document.querySelectorAll('.conversation-item').forEach(item => {
+                document.querySelectorAll('.conversation-item').forEach(item => {
                     item.classList.remove('active');
                     if (item.dataset.id === conversationId) {
                         item.classList.add('active');
@@ -514,14 +514,24 @@
                     if (msg.isUser) {
                         acc.push(msg);
                     } else {
-                        if (acc.length > 0 && !acc[acc.length - 1].isUser) {
-                            const lastMsg = acc[acc.length - 1];
-                            lastMsg.content = msg.content;
-                            if (msg.tool_results) {
-                                lastMsg.tool_results = (lastMsg.tool_results || []).concat(msg.tool_results);
+                        if (msg.content || (msg.tool_results && msg.tool_results.length > 0)) {
+                            if (acc.length > 0 && !acc[acc.length - 1].isUser) {
+                                const lastMsg = acc[acc.length - 1];
+                                if (msg.content) {
+                                    lastMsg.content = lastMsg.content ? 
+                                        `${lastMsg.content}\n\n${msg.content}` : msg.content;
+                                }
+                                if (msg.tool_results) {
+                                    lastMsg.tool_results = (lastMsg.tool_results || [])
+                                        .concat(msg.tool_results);
+                                }
+                            } else {
+                                acc.push({
+                                    isUser: false,
+                                    content: msg.content || '',
+                                    tool_results: msg.tool_results || []
+                                });
                             }
-                        } else {
-                            acc.push(msg);
                         }
                     }
                     return acc;
@@ -568,18 +578,16 @@
                     const messageElements = Array.from(messagesContainer.children);
                     
                     if (messageElements.length >= 2) {
-                        // Find the last user message and its corresponding assistant response
                         let lastUserIndex = -1;
                         for (let i = messageElements.length - 1; i >= 0; i--) {
                             const messageEl = messageElements[i];
-                            if (messageEl.querySelector('.bg-blue-500')) { // User message has blue background
+                            if (messageEl.querySelector('.bg-blue-500')) {
                                 lastUserIndex = i;
                                 break;
                             }
                         }
                         
                         if (lastUserIndex !== -1) {
-                            // Remove all messages after and including the last user message
                             for (let i = messageElements.length - 1; i >= lastUserIndex; i--) {
                                 messageElements[i].remove();
                             }
@@ -857,7 +865,6 @@
 
             els.sendButton.classList.add('hidden');
             els.interruptButton.classList.remove('hidden');
-            //els.sendButton.disabled = els.userInput.disabled = true;
 
             currentMessageElement = createMessageElement(false);
             currentResponse = '';
@@ -891,7 +898,6 @@
             } finally {
                 els.sendButton.classList.remove('hidden');
                 els.interruptButton.classList.add('hidden');
-                //els.sendButton.disabled = els.userInput.disabled = false;
                 els.userInput.focus();
                 document.querySelectorAll('pre code').forEach(hljs.highlightBlock);
             }
@@ -908,7 +914,7 @@
             textarea.style.overflowY = lines > maxRows ? 'auto' : 'hidden';
         }
         els.sendButton.onclick = (event) => {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
             handleMessage();
         };
         els.userInput.onkeypress = e => {

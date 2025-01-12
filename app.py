@@ -224,7 +224,6 @@ def chat():
     global current_conversation_id, chat_messages, interrupt_flag
     
     user_message = request.json.get('message')
-    # Ensure the user message is properly formatted
     chat_messages.append({"role": "user", "content": str(user_message)})
     
     if not current_conversation_id:
@@ -462,14 +461,12 @@ def get_messages():
 def delete_last_message():
     global chat_messages
     if len(chat_messages) >= 2:
-        # Remove the last assistant message and related messages
         last_messages = []
         for msg in reversed(chat_messages):
             if msg["role"] == "user":
                 break
             last_messages.append(msg)
         
-        # Remove all collected messages plus the user message
         for _ in range(len(last_messages) + 1):
             chat_messages.pop()
             
@@ -481,7 +478,6 @@ def delete_last_message():
 def regenerate_response():
     global chat_messages
     if len(chat_messages) >= 1:
-        # Find the last user message
         last_user_message = None
         messages_to_remove = 0
         
@@ -492,7 +488,6 @@ def regenerate_response():
                 break
         
         if last_user_message:
-            # Remove all messages after the last user message
             chat_messages = chat_messages[:-messages_to_remove]
             save_conversation()
             return jsonify({"status": "success", "message": last_user_message})

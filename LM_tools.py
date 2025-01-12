@@ -2,7 +2,6 @@
 import json
 import shutil
 from datetime import datetime
-import os
 from datetime import datetime
 
 # Third-party imports
