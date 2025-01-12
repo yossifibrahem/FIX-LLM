@@ -87,20 +87,16 @@ pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_
 pip install waitress
 ```
 
-2. To run the server:
-```bash
-python server.py
-```
-
-3. Environment Variables:
+2. Environment Variables:
 ```bash
 set FLASK_ENV=production
 set FLASK_DEBUG=0
 ```
-4. Create a batch file (*serverstart.bat*): (optional)
-```batch
-@echo off
+
+3. To run the server:
+```bash
 python server.py
-pause
 ```
-Then you can double-click the batch file to run the server.
+
+4. Create a batch file (*serverstart.bat*): (optional)
+double-click the batch file to run the server.
