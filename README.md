@@ -1,4 +1,5 @@
 # LLMs Tool Calls Using LM Studio Server
+**Give the LLM the ability to:**
 * Write and run python code
 * Fetch introduction from Wikipedia
 * Search websites for relevant Information
