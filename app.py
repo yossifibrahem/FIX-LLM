@@ -139,7 +139,7 @@ Tools = [{
     }
 }]
 
-CONVERSATIONS_DIR = "conversations"
+CONVERSATIONS_DIR = os.path.expanduser("~/.conversations")
 if not os.path.exists(CONVERSATIONS_DIR):
     os.makedirs(CONVERSATIONS_DIR)
 
