@@ -1031,18 +1031,36 @@
             try {
                 const response = await fetch('/messages');
                 const messages = await response.json();
+                
+                // Using the same grouping logic as in loadConversation
                 const groupedMessages = messages.reduce((acc, msg) => {
                     if (msg.isUser) {
+                        // Always add user messages as new entries
                         acc.push(msg);
                     } else {
-                        if (acc.length > 0 && !acc[acc.length - 1].isUser) {
-                            const lastMsg = acc[acc.length - 1];
-                            lastMsg.content = msg.content;
-                            if (msg.tool_results) {
-                                lastMsg.tool_results = (lastMsg.tool_results || []).concat(msg.tool_results);
+                        // For assistant messages, check if it contains new content
+                        if (msg.content || (msg.tool_results && msg.tool_results.length > 0)) {
+                            // If the last message was from the assistant and this message has new content
+                            if (acc.length > 0 && !acc[acc.length - 1].isUser) {
+                                const lastMsg = acc[acc.length - 1];
+                                // Append content if the current message has content
+                                if (msg.content) {
+                                    lastMsg.content = lastMsg.content ? 
+                                        `${lastMsg.content}\n\n${msg.content}` : msg.content;
+                                }
+                                // Append tool results if present
+                                if (msg.tool_results) {
+                                    lastMsg.tool_results = (lastMsg.tool_results || [])
+                                        .concat(msg.tool_results);
+                                }
+                            } else {
+                                // Create a new assistant message entry
+                                acc.push({
+                                    isUser: false,
+                                    content: msg.content || '',
+                                    tool_results: msg.tool_results || []
+                                });
                             }
-                        } else {
-                            acc.push(msg);
                         }
                     }
                     return acc;
