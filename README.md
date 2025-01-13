@@ -89,22 +89,20 @@ The application provides 7 core tools:
 - [Install LM Studio](https://lmstudio.ai/)
 - [Recommended model Qwen2.5 7B](https://huggingface.co/lmstudio-community/Qwen2.5-7B-Instruct-GGUF)
 
+1. install Python
+
+2. install required libraries using pip
 ```bash
-pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api
+pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api waitress
 ```
 
-1. First, install Waitress:
-```bash
-pip install waitress
-```
-
-2. Environment Variables:
+3. Environment Variables:
 ```bash
 set FLASK_ENV=production
 set FLASK_DEBUG=0
 ```
 
-3. To run the server:
+4. To run the server:
 ```bash
 python server.py
 ```
