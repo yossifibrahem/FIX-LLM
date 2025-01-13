@@ -9,11 +9,13 @@
 * Search Images and get URL and Thumbnails
 * Simple Chat UI with basic chat functions and Chat history
 
-<img src="https://github.com/user-attachments/assets/1b6e3afe-c594-4f74-a29a-017c216bb992" alt="Screenshot 2025-01-12 073601" width="400"/>
-<img src="https://github.com/user-attachments/assets/84dcb994-78fb-4a1a-bab8-5c5f8ab7bda9" alt="Screenshot 2025-01-12 073433" width="400"/>
-<img src="https://github.com/user-attachments/assets/da741804-63e1-4177-8c7a-9009609d9ba9" alt="Screenshot 2025-01-12 071140" width="400"/>
-<img src="https://github.com/user-attachments/assets/98c1fba3-72d6-4793-963b-4cb2f483dd71" alt="Screenshot 2025-01-12 072949" width="400"/>
-<img src="https://github.com/user-attachments/assets/feab74bc-2380-443b-9a4d-0062dd6454eb" alt="Screenshot 2025-01-12 072154" width="400"/>
+<img src="https://github.com/user-attachments/assets/5ba6af6d-86fa-4712-8838-cc64523b6dfb" alt="Screenshot 2025-01-13 194050" width="300"/>
+<img src="https://github.com/user-attachments/assets/77ad52ee-5ac2-41e9-8afb-040a73c34c0d" alt="Screenshot 2025-01-13 194115" width="300"/>
+<img src="https://github.com/user-attachments/assets/eb73d09b-5ee1-4145-9421-ec31743f15fa" alt="Screenshot 2025-01-13 194057" width="300"/>
+<img src="https://github.com/user-attachments/assets/b96ae1cb-a2cc-4699-bc44-e7bbf798000d" alt="Screenshot 2025-01-13 194110" width="300"/>
+<img src="https://github.com/user-attachments/assets/39fde852-df06-43c7-b759-17da8711af0d" alt="Screenshot 2025-01-13 194104" width="300"/>
+<img src="https://github.com/user-attachments/assets/27387bb0-dedd-4905-9faf-5157887d7a30" alt="Screenshot 2025-01-13 194654" width="300"/>
+
 
 # Flask Chat Application Analysis
 
@@ -88,25 +90,22 @@ The application provides 7 core tools:
 - [Install LM Studio](https://lmstudio.ai/)
 - [Recommended model Qwen2.5 7B](https://huggingface.co/lmstudio-community/Qwen2.5-7B-Instruct-GGUF)
 
+1. install Python
+
+2. install required libraries using pip
 ```bash
-pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api
+pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api waitress
 ```
 
-1. First, install Waitress:
-```bash
-pip install waitress
-```
-
-2. Environment Variables:
+3. Environment Variables:
 ```bash
 set FLASK_ENV=production
 set FLASK_DEBUG=0
 ```
 
-3. To run the server:
+4. To run the server:
 ```bash
 python server.py
 ```
-
-4. Create a batch file (*serverstart.bat*): (optional)
-double-click the batch file to run the server.
+OR double-click the batch file ```serverstart.bat``` to run the server.
+the default server at ```localhost:8080```
