@@ -9,11 +9,12 @@
 * Search Images and get URL and Thumbnails
 * Simple Chat UI with basic chat functions and Chat history
 
-<img src="https://github.com/user-attachments/assets/1b6e3afe-c594-4f74-a29a-017c216bb992" alt="Screenshot 2025-01-12 073601" width="400"/>
-<img src="https://github.com/user-attachments/assets/84dcb994-78fb-4a1a-bab8-5c5f8ab7bda9" alt="Screenshot 2025-01-12 073433" width="400"/>
-<img src="https://github.com/user-attachments/assets/da741804-63e1-4177-8c7a-9009609d9ba9" alt="Screenshot 2025-01-12 071140" width="400"/>
-<img src="https://github.com/user-attachments/assets/98c1fba3-72d6-4793-963b-4cb2f483dd71" alt="Screenshot 2025-01-12 072949" width="400"/>
-<img src="https://github.com/user-attachments/assets/feab74bc-2380-443b-9a4d-0062dd6454eb" alt="Screenshot 2025-01-12 072154" width="400"/>
+<img src="https://github.com/user-attachments/assets/27387bb0-dedd-4905-9faf-5157887d7a30" alt="Screenshot 2025-01-13 194654" width="400"/>
+<img src="https://github.com/user-attachments/assets/26d6e05b-bcbf-4ac4-991c-ab32410bfa82" alt="Screenshot 2025-01-13 194115" width="400"/>
+<img src="https://github.com/user-attachments/assets/b96ae1cb-a2cc-4699-bc44-e7bbf798000d" alt="Screenshot 2025-01-13 194110" width="400"/>
+<img src="https://github.com/user-attachments/assets/39fde852-df06-43c7-b759-17da8711af0d" alt="Screenshot 2025-01-13 194104" width="400"/>
+<img src="https://github.com/user-attachments/assets/1bdf82d0-33a2-4f53-b847-07fac2ab73d4" alt="Screenshot 2025-01-13 194057" width="400"/>
+<img src="https://github.com/user-attachments/assets/5ba6af6d-86fa-4712-8838-cc64523b6dfb" alt="Screenshot 2025-01-13 194050" width="400"/>
 
 # Flask Chat Application Analysis
 
