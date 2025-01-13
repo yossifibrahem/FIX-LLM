@@ -324,22 +324,25 @@ def chat():
                                 "tool_call_id": tool_call["id"]
                             })
                             yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
+
                         elif tool_name == "image":
-                            result = image(arguments["query"], arguments["number_of_images"])
+                            result = image(arguments["query"], arguments.get("number_of_images", 1))
                             chat_messages.append({
                                 "role": "tool",
                                 "content": str(result),
                                 "tool_call_id": tool_call["id"]
                             })
                             yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
+
                         elif tool_name == "video":
-                            result = video(arguments["query"], arguments["number_of_videos"])
+                            result = video(arguments["query"], arguments.get("number_of_videos", 1))
                             chat_messages.append({
                                 "role": "tool",
                                 "content": str(result),
                                 "tool_call_id": tool_call["id"]
                             })
                             yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
+                            
                         elif tool_name == "yt_url":
                             result = yt_url(arguments["url"])
                             chat_messages.append({
