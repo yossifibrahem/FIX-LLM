@@ -107,6 +107,4 @@ set FLASK_DEBUG=0
 ```bash
 python server.py
 ```
-
-4. Create a batch file (*serverstart.bat*): (optional)
-double-click the batch file to run the server.
+OR double-click the batch file "serverstart.bat" to run the server.
