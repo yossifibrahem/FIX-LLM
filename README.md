@@ -2,7 +2,7 @@
 **Give the LLM the ability to:**
 * Write and run python code
 * Fetch introduction from Wikipedia
-* Search websites for relevant Information
+* Search websites for relevant Information (Thanks to [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main))
 * Open URL for websites and get information
 * Search Youtube for videos
 * Open Youtube URL and get Information
