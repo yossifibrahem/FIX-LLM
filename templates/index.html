@@ -990,6 +990,7 @@
                 els.sendButton.classList.remove('hidden');
                 els.interruptButton.classList.add('hidden');
                 els.userInput.focus();
+                document.querySelectorAll('pre code').forEach(hljs.highlightBlock);
             }
         }
 
