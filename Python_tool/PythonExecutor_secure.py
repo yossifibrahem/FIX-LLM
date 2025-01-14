@@ -237,21 +237,3 @@ def make_json_serializable(data):
     else:
         return str(data)
     
-
-
-execute_python_code(
-"""
-import matplotlib.pyplot as plt
-
-# Sample data: temperatures for 5 days
-days = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5']
-temperatures = [68, 70, 69, 72, 71]
-
-# Plotting the line graph
-plt.plot(days, temperatures)
-plt.title('Temperature Over Five Days')
-plt.xlabel('Days')
-plt.ylabel('Temperature (°F)')
-plt.savefig('temperature_graph.png')
-"""
-)
