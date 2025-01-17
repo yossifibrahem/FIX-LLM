@@ -173,7 +173,6 @@
             flex-direction: column;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             flex: 1;
-            padding-bottom: 60px;
         }
 
         .conversation-content {
@@ -188,17 +187,14 @@
         }
 
         #newButton {
-            /* position: fixed; */
             bottom: 0;
             left: 0;
             width: 100%;
             padding: 1rem;
             background: #ffffff71;
-            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
             z-index: 51;
             display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 0.5rem;
             font-weight: 500;
             transition: background-color 0.2s;
@@ -395,8 +391,8 @@
         <div class="p-4 border-b">
             <h2 class="text-xl font-bold">Chat History</h2>
         </div>
-        <div id="conversationsList"></div>
         <button id="newButton" class="text-l transition-opacity p-2 clear-btn" title="New chat">➕ New Chat</button>
+        <div id="conversationsList"></div>
     </div>
 
     <div class="content-wrapper">
