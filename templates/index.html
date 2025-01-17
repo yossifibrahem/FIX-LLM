@@ -443,46 +443,6 @@
             }
         });
 
-        // Debounce function for batching updates
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
-        }
-
-        // Batch process messages
-        let messageBuffer = '';
-        const BATCH_DELAY = 10; // ms
-
-        // Optimized markdown and MathJax processing
-        const processContentDebounced = debounce((container, content) => {
-            let markdownDiv = container.querySelector('.markdown-content');
-            if (!markdownDiv) {
-                markdownDiv = document.createElement('div');
-                markdownDiv.className = 'markdown-content';
-                container.insertBefore(markdownDiv, container.firstChild);
-            }
-            
-            // Process LaTeX and markdown only once per batch
-            const processedContent = processLatex(content);
-            markdownDiv.innerHTML = marked.parse(processedContent);
-            
-            // Schedule MathJax processing
-            if (window.MathJax) {
-                window.requestAnimationFrame(() => {
-                    MathJax.typesetPromise([markdownDiv])
-                        .catch(err => console.log('MathJax error:', err));
-                });
-            }
-            
-            // Highlight code blocks
-            requestAnimationFrame(() => {
-                markdownDiv.querySelectorAll('pre code').forEach(hljs.highlightBlock);
-            });
-        }, BATCH_DELAY);
-
         // Add this new function in your script section
         function processLatex(text) {
             if (typeof text !== 'string') return text;
@@ -892,46 +852,42 @@
                 switch (parsed.type) {
                     case 'content':
                         currentResponse += parsed.content;
-                        messageBuffer += parsed.content;
+                        let markdownDiv = container.querySelector('.markdown-content');
+                        if (!markdownDiv) {
+                            markdownDiv = document.createElement('div');
+                            markdownDiv.className = 'markdown-content';
+                            container.insertBefore(markdownDiv, container.firstChild);
+                        }
+                        markdownDiv.innerHTML = marked.parse(currentResponse);
+                        markdownDiv.querySelectorAll('pre code').forEach(hljs.highlightBlock);
+                        const processedContent = processLatex(currentResponse);
+                        markdownDiv.innerHTML = marked.parse(processedContent);
+                        if (window.MathJax) {
+                            MathJax.typesetPromise([markdownDiv]).catch((err) => console.log('MathJax error:', err));
+                        }
                         
-                        // Batch process the content
-                        processContentDebounced(container, currentResponse);
+                        markdownDiv.querySelectorAll('pre code').forEach(hljs.highlightBlock);
                         break;
                         
                     case 'tool':
-                        // Remove any loading indicator immediately
                         const existingLoader = container.querySelector('.tool-loading');
                         if (existingLoader) {
                             existingLoader.remove();
                         }
-                        
-                        // Tools results are processed immediately
-                        requestAnimationFrame(() => {
-                            addResult(parsed.name, parsed.content, parsed.args);
-                        });
+                        addResult(parsed.name, parsed.content, parsed.args);
                         break;
                         
                     case 'tool-start':
                         if (!container.querySelector('.tool-loading')) {
-                            requestAnimationFrame(() => {
-                                container.appendChild(createLoadingIndicator(parsed));
-                            });
+                            container.appendChild(createLoadingIndicator(parsed));
                         }
                         break;
-                }
-                
-                // Only scroll if we're near the bottom
-                if (isAtBottom) {
-                    requestAnimationFrame(() => {
-                        scrollToBottomIfNeeded();
-                    });
                 }
                 
             } catch (error) {
                 console.error('Parse error:', error, 'Data:', data);
             }
         }
-        // Optimized message handler
         async function handleMessage(existingMessage = null) {
             const message = existingMessage || els.userInput.value.trim();
             if (!message) return;
@@ -944,11 +900,9 @@
 
             els.sendButton.classList.add('hidden');
             els.interruptButton.classList.remove('hidden');
-            
-            // Reset state
+
             currentMessageElement = createMessageElement(false);
             currentResponse = '';
-            messageBuffer = '';
 
             try {
                 const response = await fetch('/chat', {
@@ -959,28 +913,18 @@
 
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
-                let buffer = '';
 
                 while (true) {
                     const { done, value } = await reader.read();
                     if (done) break;
 
-                    // Process the incoming chunks efficiently
-                    buffer += decoder.decode(value, { stream: true });
-                    
-                    // Split on newlines and process complete lines
-                    const lines = buffer.split('\n');
-                    buffer = lines.pop() || ''; // Keep incomplete line in buffer
-                    
-                    // Process complete lines
-                    lines.forEach(processStreamMessage);
+                    decoder.decode(value)
+                        .split('\n')
+                        .filter(Boolean)
+                        .forEach(processStreamMessage);
+                        
+                    scrollToBottomIfNeeded();
                 }
-                
-                // Process any remaining buffer
-                if (buffer) {
-                    processStreamMessage(buffer);
-                }
-
                 await loadConversations();
             } catch (error) {
                 console.error('Error:', error);
