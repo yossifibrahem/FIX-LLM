@@ -8,20 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Add right after your existing script imports in the head section -->
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            svg: {
-                fontCache: 'global'
-            }
-        };
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
     <style>
         body {
             margin: 0;
@@ -443,14 +429,6 @@
             }
         });
 
-        // Add this new function in your script section
-        function processLatex(text) {
-            if (typeof text !== 'string') return text;
-            return text
-                .replace(/\\\((.*?)\\\)/g, '$$$1$$')
-                .replace(/\\\[(.*?)\\\]/g, '$$$$$1$$$$');
-        }
-
         const els = {
             messages: document.getElementById('messages'),
             userInput: document.getElementById('userInput'),
@@ -569,8 +547,7 @@
                         if (container && msg.content) {
                             const markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            const processedContent = processLatex(msg.content);
-                            markdownDiv.innerHTML = marked.parse(processedContent);
+                            markdownDiv.innerHTML = marked.parse(msg.content);
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         
@@ -583,11 +560,7 @@
                         messageEl.querySelectorAll('pre code').forEach(hljs.highlightBlock);
                     }
                 });
-                if (window.MathJax) {
-                    MathJax.typesetPromise(document.querySelectorAll('.markdown-content'))
-                        .catch((err) => console.log('MathJax error:', err));
-                }
-                    
+                
                 scrollToBottomIfNeeded();
             } catch (error) {
                 console.error('Error loading conversation:', error);
@@ -860,13 +833,6 @@
                         }
                         markdownDiv.innerHTML = marked.parse(currentResponse);
                         markdownDiv.querySelectorAll('pre code').forEach(hljs.highlightBlock);
-                        const processedContent = processLatex(currentResponse);
-                        markdownDiv.innerHTML = marked.parse(processedContent);
-                        if (window.MathJax) {
-                            MathJax.typesetPromise([markdownDiv]).catch((err) => console.log('MathJax error:', err));
-                        }
-                        
-                        markdownDiv.querySelectorAll('pre code').forEach(hljs.highlightBlock);
                         break;
                         
                     case 'tool':
@@ -1105,8 +1071,7 @@
                         if (container && msg.content) {
                             const markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            const processedContent = processLatex(msg.content);
-                            markdownDiv.innerHTML = marked.parse(processedContent);
+                            markdownDiv.innerHTML = marked.parse(msg.content);
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         
@@ -1120,12 +1085,6 @@
                         messageEl.querySelectorAll('pre code').forEach(hljs.highlightBlock);
                     }
                 });
-
-                 // Add MathJax processing
-                if (window.MathJax) {
-                    MathJax.typesetPromise(document.querySelectorAll('.markdown-content'))
-                        .catch((err) => console.log('MathJax error:', err));
-                }
                 
                 scrollToBottomIfNeeded();
             } catch (error) {
