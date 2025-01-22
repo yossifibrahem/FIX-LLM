@@ -5,7 +5,7 @@
 * Search websites for relevant Information (Thanks to [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main))
 * Open website URL and scrape content
 * Search Youtube for videos
-* Open Youtube URL and get Information
+* Open YouTube URL and get information (title, description, and transcriptions)
 * Search Images and get URL and Thumbnails
 * Simple Chat UI with basic chat functions and Chat history
 
