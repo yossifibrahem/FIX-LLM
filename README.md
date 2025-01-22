@@ -2,7 +2,7 @@
 **Give the LLM the ability to:**
 * Write and Executes Python code
 * Searches Wikipedia articles and Fetch introduction
-* Search Performs web searches and extracts citations (Thanks to [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main))
+* Performs web searches and extracts citations (Thanks to [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main))
 * Scrapes content from specific URLs
 * Searches YouTube videos
 * Retrieves YouTube video metadata (title, description, and transcriptions)
