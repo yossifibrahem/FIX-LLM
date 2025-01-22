@@ -3,7 +3,7 @@
 * Write and run python code
 * Fetch introduction from Wikipedia
 * Search websites for relevant Information (Thanks to [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main))
-* Open URL for websites and scrape content
+* Open website URL and scrape content
 * Search Youtube for videos
 * Open Youtube URL and get Information
 * Search Images and get URL and Thumbnails
