@@ -1,12 +1,12 @@
 # LLMs Tool Calls Using LM Studio Server
 **Give the LLM the ability to:**
-* Write and run python code
-* Fetch introduction from Wikipedia
-* Search websites for relevant Information (Thanks to [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main))
-* Open URL for websites and get information
-* Search Youtube for videos
-* Open Youtube URL and get Information
-* Search Images and get URL and Thumbnails
+* Write and Executes Python code
+* Searches Wikipedia articles and Fetch introduction
+* Performs web searches and extracts citations (Thanks to [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main))
+* Scrapes content from specific URLs
+* Searches YouTube videos
+* Retrieves YouTube video metadata (title, description, and transcriptions)
+* Searches for images
 * Simple Chat UI with basic chat functions and Chat history
 
 <img src="https://github.com/user-attachments/assets/5ba6af6d-86fa-4712-8838-cc64523b6dfb" alt="Screenshot 2025-01-13 194050" width="300"/>
