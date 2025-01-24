@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -355,6 +358,14 @@
             }
         }
         
+        /* Add KaTeX specific styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.5em 0;
+        }
+        .katex { font-size: 1.1em; }
+        
     </style>
 </head>
 <div class="modal-backdrop" id="deleteModal">
@@ -431,6 +442,22 @@
                 return hljs.highlightAuto(code).value;
             }
         });
+
+        // Add LaTeX processing function
+        function processLatex(text) {
+            return text.replace(/\(([^)]+)\)|\[([^\]]+)\]/g, (match, inline, display) => {
+                try {
+                    const tex = inline || display;
+                    return katex.renderToString(tex, {
+                        displayMode: !!display,
+                        throwOnError: false
+                    });
+                } catch (e) {
+                    console.warn('LaTeX parsing error:', e);
+                    return match;
+                }
+            });
+        }
 
         const els = {
             messages: document.getElementById('messages'),
@@ -550,7 +577,8 @@
                         if (container && msg.content) {
                             const markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            markdownDiv.innerHTML = marked.parse(msg.content);
+                            // Process both Markdown and LaTeX
+                            markdownDiv.innerHTML = processLatex(marked.parse(msg.content));
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         
@@ -627,11 +655,12 @@
             const textColor = isUser ? 'text-white' : 'text-black';
             const alignment = isUser ? 'justify-end' : '';
             
-            const formattedContent = isUser ? content
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/\n/g, '<br>') : content;
+            const formattedContent = isUser ? 
+                processLatex(content
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/\n/g, '<br>')) : content;
             
             const div = document.createElement('div');
             div.innerHTML = `
@@ -833,7 +862,8 @@
                             markdownDiv.className = 'markdown-content';
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
-                        markdownDiv.innerHTML = marked.parse(currentResponse);
+                        const processedContent = processLatex(marked.parse(currentResponse));
+                        markdownDiv.innerHTML = processedContent;
                         highlightCodeBlocks(markdownDiv);
                         break;
                         
@@ -1081,7 +1111,8 @@
                         if (container && msg.content) {
                             const markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            markdownDiv.innerHTML = marked.parse(msg.content);
+                            // Process both Markdown and LaTeX
+                            markdownDiv.innerHTML = processLatex(marked.parse(msg.content));
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         
@@ -1110,4 +1141,4 @@
         });
     </script>
 </body>
-</html
+</html>
