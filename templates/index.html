@@ -425,6 +425,9 @@
     <script>
         marked.setOptions({
             highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    return hljs.highlight(code, {language: lang}).value;
+                }
                 return hljs.highlightAuto(code).value;
             }
         });
@@ -557,7 +560,7 @@
                                 addResult(result.name, result.content, result.args);
                             });
                         }
-                        messageEl.querySelectorAll('pre code').forEach(hljs.highlightBlock);
+                        messageEl.querySelectorAll('pre code').forEach(hljs.highlightElement);
                     }
                 });
                 
@@ -721,8 +724,7 @@
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-200"></div>
                                     <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/50 to-transparent">
                                         <div class="text-xs text-white">Click to view full size</div>
-                                    </div>
-                                </a>
+                                    </a>
                             </div>
                         `).join('')}
                     </div>`,
@@ -804,7 +806,7 @@
                     const isHidden = contentDiv.classList.contains('hidden');
                     contentDiv.classList.toggle('hidden');
                     toggleBtn.style.transform = isHidden ? 'rotate(-180deg)' : '';
-                    if (!isHidden) contentDiv.querySelectorAll('pre code').forEach(hljs.highlightBlock);
+                    if (!isHidden) highlightCodeBlocks(contentDiv);
                     resultDiv.querySelector('.border').classList.toggle('rounded-lg', !isHidden);
                 };
                 toggleSection.onclick = toggle;
@@ -832,7 +834,7 @@
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         markdownDiv.innerHTML = marked.parse(currentResponse);
-                        markdownDiv.querySelectorAll('pre code').forEach(hljs.highlightBlock);
+                        highlightCodeBlocks(markdownDiv);
                         break;
                         
                     case 'tool':
@@ -900,7 +902,7 @@
                 els.sendButton.classList.remove('hidden');
                 els.interruptButton.classList.add('hidden');
                 els.userInput.focus();
-                document.querySelectorAll('pre code').forEach(hljs.highlightBlock);
+                document.querySelectorAll('pre code').forEach(hljs.highlightElement);
             }
         }
 
@@ -1021,6 +1023,14 @@
             toggleBtn.textContent = isExpanded ? '💬➡️' : '💬⬅️';
         };
 
+        function highlightCodeBlocks(element) {
+            element.querySelectorAll('pre code').forEach(block => {
+                // Only highlight if not already highlighted
+                if (!block.dataset.highlighted) {
+                    hljs.highlightElement(block);
+                }
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', async () => {
             await loadConversations();
@@ -1082,7 +1092,11 @@
                             });
                         }
                         
-                        messageEl.querySelectorAll('pre code').forEach(hljs.highlightBlock);
+                        messageEl.querySelectorAll('pre code').forEach(block => {
+                            if (!block.dataset.highlighted) {
+                                hljs.highlightElement(block);
+                            }
+                        });
                     }
                 });
                 
