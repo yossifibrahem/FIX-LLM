@@ -1,6 +1,6 @@
 import os
 import uuid
-from flask import Flask, render_template, request, jsonify, Response, stream_with_context
+from flask import Flask, render_template, request, jsonify, Response, stream_with_context, send_from_directory
 import json
 from datetime import datetime
 from openai import OpenAI
@@ -27,7 +27,7 @@ def home():
 
 @app.route('/style.css')
 def serve_css():
-    return app.send_from_directory('templates', 'style.css')
+    return send_from_directory('templates', 'style.css')
 
 Tools = [{
     "type": "function",
