@@ -1,6 +1,6 @@
 import os
 import uuid
-from flask import Flask, render_template, request, jsonify, Response, stream_with_context
+from flask import Flask, render_template, request, jsonify, Response, stream_with_context, send_from_directory
 import json
 from datetime import datetime
 from openai import OpenAI
@@ -17,6 +17,10 @@ from youtube_tool.youtube import get_video_info as yt_url
 
 app = Flask(__name__)
 app.static_folder="templates"
+
+@app.route('/style.css')
+def serve_css():
+    return send_from_directory('templates', 'style.css')
 
 client = OpenAI(base_url="http://127.0.0.1:1234/v1", api_key="lm-studio")
 MODEL = "lmstudio-community/qwen2.5-7b-instruct"
