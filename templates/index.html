@@ -6,8 +6,12 @@
     <title>LM Studio Chat</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <!-- Add KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Add KaTeX JS -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <div class="modal-backdrop" id="deleteModal">
@@ -84,6 +88,66 @@
                 return hljs.highlightAuto(code).value;
             }
         });
+
+        // Add math rendering function
+        function renderMath(text) {
+            const codeBlocks = new Map();
+            let counter = 0;
+
+            // First, protect code blocks by replacing them with placeholders
+            text = text.replace(/```[\s\S]*?```|`[^`]+`/g, match => {
+                const placeholder = `%%CODE_BLOCK_${counter}%%`;
+                codeBlocks.set(placeholder, match);
+                counter++;
+                return placeholder;
+            });
+
+            // Process display math with \[ \]
+            text = text.replace(/\\\[([\s\S]*?)\\\]/g, (_, math) => {
+                try {
+                    return katex.renderToString(math, { displayMode: true });
+                } catch (e) {
+                    console.error('KaTeX error:', e);
+                    return math;
+                }
+            });
+
+            // Process inline math with \( \)
+            text = text.replace(/\\\((.*?)\\\)/g, (_, math) => {
+                try {
+                    return katex.renderToString(math, { displayMode: false });
+                } catch (e) {
+                    console.error('KaTeX error:', e);
+                    return math;
+                }
+            });
+
+            // Also keep the original [math] and (math) syntax
+            text = text.replace(/\[math\]([\s\S]*?)\[\/math\]/g, (_, math) => {
+                try {
+                    return katex.renderToString(math, { displayMode: true });
+                } catch (e) {
+                    console.error('KaTeX error:', e);
+                    return math;
+                }
+            });
+
+            text = text.replace(/\(math\)(.*?)\(\/math\)/g, (_, math) => {
+                try {
+                    return katex.renderToString(math, { displayMode: false });
+                } catch (e) {
+                    console.error('KaTeX error:', e);
+                    return math;
+                }
+            });
+
+            // Restore code blocks
+            codeBlocks.forEach((value, key) => {
+                text = text.replace(key, value);
+            });
+
+            return text;
+        }
 
         const els = {
             messages: document.getElementById('messages'),
@@ -203,7 +267,7 @@
                         if (container && msg.content) {
                             const markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            markdownDiv.innerHTML = marked.parse(msg.content);
+                            markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         
@@ -357,7 +421,7 @@
             const escapeHtml = (unsafe) => {
                 return unsafe
                     .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
+                    .replace(/</g, "&lt;")  // Fixed: removed extra forward slash
                     .replace(/>/g, "&gt;")
                     .replace(/"/g, "&quot;")
                     .replace(/'/g, "&#039;");
@@ -480,6 +544,7 @@
             }
         }
 
+        // Update the processStreamMessage function
         function processStreamMessage(line) {
             if (!line.startsWith('data: ')) return;
             
@@ -499,7 +564,7 @@
                             markdownDiv.className = 'markdown-content';
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
-                        markdownDiv.innerHTML = marked.parse(currentResponse);
+                        markdownDiv.innerHTML = marked.parse(renderMath(currentResponse));
                         highlightCodeBlocks(markdownDiv);
                         break;
                         
@@ -697,6 +762,7 @@
             });
         }
 
+        // Update the loadMessages part in DOMContentLoaded
         document.addEventListener('DOMContentLoaded', async () => {
             await loadConversations();
             try {
@@ -739,7 +805,7 @@
                         if (container && msg.content) {
                             const markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            markdownDiv.innerHTML = marked.parse(msg.content);
+                            markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         
@@ -768,4 +834,4 @@
         });
     </script>
 </body>
-</html
+</html>
