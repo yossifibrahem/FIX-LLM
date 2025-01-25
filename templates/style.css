@@ -1,17 +1,15 @@
 body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 .messages-container {
     flex: 1;
     overflow-y: auto;
     padding-bottom: 50px;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 250px);
     border-bottom: solid 1px lightgray;
-    max-height: calc(100vh - 250px);
 }
 .message pre {
     background-color: #f6f8fa;
