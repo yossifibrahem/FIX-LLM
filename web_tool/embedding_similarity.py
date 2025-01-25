@@ -59,5 +59,5 @@ def spliting(results: list):
          one_site_chunks = []
          one_site_chunks.extend(divide_into_chunks(result["content"]))
          for chunk in one_site_chunks:
-               chunks.append({"url": result["url"], "citation": chunk})
+               chunks.append({"url": result["url"],"title": result["title"], "citation": chunk})
    return chunks

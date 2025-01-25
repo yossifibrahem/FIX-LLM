@@ -421,7 +421,7 @@
                     title: args.query, icon: '🌐',
                     content: Array.isArray(data) ? 
                         `<div class="space-y-4">${data.map(r => 
-                            `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-600 hover:underline mb-2 block">${r.url}</a>
+                            `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-600 hover:underline mb-2 block">${r.title}</a>
                             <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${r.citation}</div></div>`
                         ).join('')}</div>` : 
                         `<div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${data}</div>`,
