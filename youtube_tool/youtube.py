@@ -28,7 +28,7 @@ def get_video_info(url):
     """
     try:
         video_id = url.split('v=')[1]
-        yt = YouTube(url)
+        yt = YouTube(url, use_oauth=True)  # Added use_oauth parameter
         try:
             transcript = YouTubeTranscriptApi.get_transcript(video_id)
             transcript_text = ' '.join([entry['text'] for entry in transcript])
