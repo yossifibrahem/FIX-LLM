@@ -189,7 +189,7 @@ def get_conversation_name(messages):
     user_messages = [msg for msg in messages if msg["role"] == "user"]
     assistant_messages = [msg for msg in messages if msg["role"] == "assistant"]
 
-    if len(user_messages) > 3:
+    if len(user_messages) > 2:
         with open(f"{CONVERSATIONS_DIR}/{current_conversation_id}.json", "r") as f:
             data = json.load(f)
             return data["name"]

@@ -12,10 +12,11 @@ def search_youtube(query: str, max_results: int = 5):
     :return: A list of dictionaries, where each dictionary represents a search result. Each dictionary contains two keys: 'title', title of the video, and 'url', URL to the video.
     """
     try:
+        search = Search(query, 'WEB')  # Added 'WEB' parameter
         return [{'title': video.title, 'url': f'https://www.youtube.com/watch?v={video.video_id}'} 
-                for video in Search(query).videos[:max_results]]
+                for video in search.videos[:max_results]]
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error during search: {e}")
         return []
     
 def get_video_info(url):
@@ -28,7 +29,7 @@ def get_video_info(url):
     """
     try:
         video_id = url.split('v=')[1]
-        yt = YouTube(url, use_oauth=True)  # Added use_oauth parameter
+        yt = YouTube(url, 'WEB')
         try:
             transcript = YouTubeTranscriptApi.get_transcript(video_id)
             transcript_text = ' '.join([entry['text'] for entry in transcript])
