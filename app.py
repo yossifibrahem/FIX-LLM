@@ -25,10 +25,6 @@ MODEL = "lmstudio-community/qwen2.5-7b-instruct"
 def home():
     return render_template('index.html')
 
-@app.route('/style.css')
-def serve_css():
-    return app.send_from_directory('templates', 'style.css')
-
 Tools = [{
     "type": "function",
     "function": {
