@@ -347,3 +347,86 @@ body {
         transform: rotate(360deg);
     }
 }
+
+/* Code block styling */
+.pre-wrapper {
+    position: relative;
+    background: #2d2d2d;
+    border-radius: 6px;
+}
+
+.message pre {
+    margin: 0;
+    padding: 1rem;
+    background-color: #2d2d2d;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.message code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9em;
+    background-color: rgba(175, 184, 193, 0.2);
+    border-radius: 4px;
+    padding: 0.2em 0.4em;
+}
+
+.message pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Keep and update the code header styles */
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #343434;
+    color: #fff;
+     padding: 0.5rem 1rem;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9em;
+}
+
+/* Code block header styling */
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #343434;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9em;
+}
+
+.code-header + pre {
+    margin-top: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.copy-button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.copy-button.copied {
+    background: #4caf50;
+    border-color: #4caf50;
+}
