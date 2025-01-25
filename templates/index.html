@@ -221,7 +221,7 @@
                         if (container && msg.content) {
                             const markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            markdownDiv.innerHTML = processLatex(marked.parse(msg.content));
+                            markdownDiv.innerHTML = processLatex(marked.parse(msg.content.replace('[TOOL_REQUEST', '🪛')));
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         
@@ -505,7 +505,7 @@
                             markdownDiv.className = 'markdown-content';
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
-                        const processedContent = processLatex(marked.parse(currentResponse));
+                        const processedContent = processLatex(marked.parse(currentResponse.replace('[TOOL_REQUEST', '🪛')));
                         markdownDiv.innerHTML = processedContent;
                         highlightCodeBlocks(markdownDiv);
                         break;
@@ -618,11 +618,11 @@
                     if (assistantContent) {
                         let markdownDiv = assistantContent.querySelector('.markdown-content');
                         if (markdownDiv) {
-                            markdownDiv.innerHTML = marked.parse(currentResponse);
+                            markdownDiv.innerHTML = marked.parse(currentResponse.replace('[TOOL_REQUEST', '🪛'));
                         } else {
                             markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            markdownDiv.innerHTML = marked.parse(currentResponse);
+                            markdownDiv.innerHTML = marked.parse(currentResponse.replace('[TOOL_REQUEST', '🪛'));
                             assistantContent.insertBefore(markdownDiv, assistantContent.firstChild);
                         }
                     }
@@ -746,7 +746,7 @@
                         if (container && msg.content) {
                             const markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            markdownDiv.innerHTML = processLatex(marked.parse(msg.content));
+                            markdownDiv.innerHTML = processLatex(marked.parse(msg.content.replace('[TOOL_REQUEST', '🪛')));
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
                         
