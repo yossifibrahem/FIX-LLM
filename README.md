@@ -1,13 +1,31 @@
-# LLMs Tool Calls Using Openai Api
-**Give the LLM the ability to:**
-* Write and Executes Python code
-* Searches Wikipedia articles and Fetch introduction
-* Performs web searches and extracts citations (Thanks to [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main))
-* Scrapes content from specific URLs
-* Searches YouTube videos
-* Retrieves YouTube video metadata (title, description, and transcriptions)
-* Searches for images
-* Simple Chat UI with basic chat functions and Chat history
+# LM Studio Chat Application
+
+## Overview
+
+This is a powerful, multi-functional chat application that leverages local language models to provide advanced conversational capabilities with integrated tool calling. Built using Flask and OpenAI's function calling API, the application allows users to interact with an AI assistant that can perform a wide range of tasks through specialized tools.
+
+## Key Features
+
+### Integrated Tools
+The application provides seven powerful tools for enhanced interaction:
+
+1. **Python Code Execution**: Run and analyze Python code directly within the chat
+2. **Web Search**: Perform live web searches and extract relevant citations
+3. **Wikipedia Search**: Quickly retrieve article introductions
+4. **Website Scraping**: Extract content from specific web URLs
+5. **Image Search**: Find and display relevant images
+6. **YouTube Video Search**: Search and retrieve video information
+7. **YouTube Video Metadata**: Get detailed information about specific videos
+
+### Additional Capabilities
+- Streaming response generation
+- Conversation history management
+- Tool call interruption
+- Markdown and math rendering
+- Code syntax highlighting
+- Responsive web interface
+
+## Screenshots
 
 <img src="https://github.com/user-attachments/assets/5ba6af6d-86fa-4712-8838-cc64523b6dfb" alt="Screenshot 2025-01-13 194050" width="300"/>
 <img src="https://github.com/user-attachments/assets/77ad52ee-5ac2-41e9-8afb-040a73c34c0d" alt="Screenshot 2025-01-13 194115" width="300"/>
@@ -16,96 +34,74 @@
 <img src="https://github.com/user-attachments/assets/39fde852-df06-43c7-b759-17da8711af0d" alt="Screenshot 2025-01-13 194104" width="300"/>
 <img src="https://github.com/user-attachments/assets/27387bb0-dedd-4905-9faf-5157887d7a30" alt="Screenshot 2025-01-13 194654" width="300"/>
 
+## Prerequisites
 
-# Flask Chat Application Analysis
+### Software Requirements
+- Python 3.8+
+- LM Studio
+- pip (Python package manager)
 
-## Core Components
+### Recommended Model
+- [Qwen2.5 7B Instruct GGUF](https://huggingface.co/lmstudio-community/Qwen2.5-7B-Instruct-GGUF)
 
-### 1. Application Setup
-- Flask application with static folder set to "templates"
-- Uses OpenAI client configured to connect to a local LM Studio instance (port 1234)
-- Uses Qwen 2.5 7B Instruct model
+## Installation
 
-### 2. Available Tools
-The application provides 7 core tools:
-- `python`: Executes Python code securely
-- `web`: Performs web searches and extracts citations
-- `wiki`: Searches Wikipedia articles
-- `web_url`: Scrapes content from specific URLs
-- `image`: Searches for images
-- `video`: Searches YouTube videos
-- `yt_url`: Retrieves YouTube video metadata
+1. Clone the repository
+```bash
+git clone https://github.com/yossifibrahem/Tools_GUI.git
+cd Tools_GUI
+```
 
-### 3. Conversation Management
-- Conversations are stored in a "conversations" directory as JSON files
-- Each conversation has:
-  - Unique UUID
-  - Last updated timestamp
-  - Message history
-  - Auto-generated name based on content
-
-### 4. Key Routes
-- `/`: Home page
-- `/chat`: Main chat endpoint (POST)
-- `/conversations`: List all conversations (GET)
-- `/conversation/<id>`: Get/Delete specific conversation (GET/DELETE)
-- `/new`: Create new conversation (POST)
-- `/interrupt`: Stop current processing (POST)
-- `/messages`: Get formatted message history (GET)
-- `/delete-last`: Remove last message (POST)
-- `/regenerate`: Regenerate last response (POST)
-
-### 5. Chat Processing Features
-- Streaming response generation
-- Tool execution pipeline
-- Message history tracking
-- Error handling
-- Conversation auto-saving
-- Message formatting for frontend display
-
-## Notable Implementation Details
-
-### Tool Execution Flow
-1. Receives user message
-2. Streams response from model
-3. Detects tool calls in response
-4. Executes tools as needed
-5. Streams results back to client
-6. Continues conversation if more tool calls needed
-
-### Safety Features
-- Secure Python code execution (via separate executor)
-- Error handling throughout
-- Development server warning
-- Interrupt capability for long-running operations
-
-### Data Management
-- Persistent storage of conversations
-- Automatic conversation naming
-- Message history formatting
-- Tool results tracking
-
-# Here's how to set up your server:
-## Requirments
-- [Install LM Studio](https://lmstudio.ai/)
-- [Recommended model Qwen2.5 7B](https://huggingface.co/lmstudio-community/Qwen2.5-7B-Instruct-GGUF)
-
-1. install Python
-
-2. install required libraries using pip
+2. Install required Python libraries
 ```bash
 pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api waitress
 ```
 
-3. Environment Variables:
+3. Set Environment Variables
 ```bash
-set FLASK_ENV=production
-set FLASK_DEBUG=0
+export FLASK_ENV=production
+export FLASK_DEBUG=0
 ```
 
-4. To run the server:
+## Running the Application
+
+### Development Server
+```bash
+python app.py
+```
+
+### Production Server
 ```bash
 python server.py
 ```
-OR double-click the batch file ```serverstart.bat``` to run the server.
-the default server at ```localhost:8080```
+
+The application will be accessible at `http://localhost:8080`
+
+## Configuration
+
+- Modify the OpenAI client configuration in `app.py` to point to your local LM Studio server
+- Adjust model selection as needed
+- Customize tool configurations in the `Tools` list
+
+## Technology Stack
+
+- **Backend**: Flask
+- **Frontend**: HTML5, Tailwind CSS
+- **Language Model**: LM Studio (local inference)
+- **Additional Libraries**: 
+  - Marked.js (Markdown rendering)
+  - Prism.js (Code highlighting)
+  - KaTeX (Math rendering)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Acknowledgements
+
+- [LM Studio](https://lmstudio.ai/) for providing local inference capabilities
+- Open-source libraries used in the project
+
+## Disclaimer
+
+This project is a demonstration of local AI tool calling and should be used responsibly.
