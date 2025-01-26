@@ -591,7 +591,7 @@
             try {
                 const parsed = JSON.parse(data);
                 const container = currentMessageElement.querySelector('.assistant-content');
-                
+                const existingLoader = container.querySelector('.tool-loading');
                 switch (parsed.type) {
                     case 'content':
                         currentResponse += parsed.content;
@@ -606,7 +606,6 @@
                         break;
                         
                     case 'tool':
-                        const existingLoader = container.querySelector('.tool-loading');
                         if (existingLoader) {
                             existingLoader.remove();
                         }
@@ -614,9 +613,10 @@
                         break;
                         
                     case 'tool-start':
-                        if (!container.querySelector('.tool-loading')) {
-                            container.appendChild(createLoadingIndicator(parsed));
+                    if (existingLoader) {
+                            existingLoader.remove();
                         }
+                        container.appendChild(createLoadingIndicator(parsed));
                         break;
                 }
                 
