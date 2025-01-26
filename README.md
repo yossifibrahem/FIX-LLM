@@ -42,8 +42,8 @@ This is a powerful, flexible web application that enables an Large Language Mode
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yossifibrahem/Tools_GUI.git
-cd Tools_GUI
+git clone https://github.com/yossifibrahem/LLM-Tool-Calling-Web-Application.git
+cd LLM-Tool-Calling-Web-Application
 ```
 
 ### 2. Install Dependencies
