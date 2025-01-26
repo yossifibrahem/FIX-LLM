@@ -394,8 +394,13 @@
                     <div class="spinner"></div>
                     <span>Executing Python code...</span>
                 `;
-                return div;
-            }else if (tool_info.name === 'web') {
+            }else if (tool_info.name === 'coding') {
+                div.innerHTML = `
+                    <div class="spinner"></div>
+                    <span>writing code...</span>
+                `;
+            }
+            else if (tool_info.name === 'web') {
                 div.innerHTML = `
                     <div class="spinner"></div>
                     <span>Searching the web for ${tool_info.args.query}</span>
@@ -561,9 +566,7 @@
                     contentDiv.classList.toggle('hidden');
                     toggleBtn.style.transform = isHidden ? 'rotate(-180deg)' : '';
                     
-                    // Always highlight code blocks when showing content
                     if (isHidden) {
-                        // Small delay to ensure content is visible first
                         setTimeout(() => {
                             highlightCodeBlocks(contentDiv);
                         }, 0);
@@ -571,7 +574,6 @@
                     resultDiv.querySelector('.border').classList.toggle('rounded-lg', !isHidden);
                 };
                 
-                // Initial highlighting of code blocks
                 highlightCodeBlocks(contentDiv);
                 
                 toggleSection.onclick = toggle;
@@ -711,11 +713,9 @@
                     if (assistantContent) {
                         let markdownDiv = assistantContent.querySelector('.markdown-content');
                         
-                        // Clean up any incomplete code blocks
                         let fixedContent = currentResponse;
                         if (currentResponse.includes('```') && 
                             (currentResponse.match(/```/g) || []).length % 2 !== 0) {
-                            // Add closing ``` if missing
                             fixedContent += '\n```';
                         }
                         
@@ -728,7 +728,6 @@
                             assistantContent.insertBefore(markdownDiv, assistantContent.firstChild);
                         }
                         
-                        // Re-highlight code blocks
                         highlightCodeBlocks(markdownDiv);
                     }
                 }

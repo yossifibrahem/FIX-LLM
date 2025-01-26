@@ -262,6 +262,9 @@ def chat():
                     
                     elif delta.tool_calls:
                         for tc in delta.tool_calls:
+                            # Show indicator when Python tool is called
+                            if tc.function and tc.function.name == "python": yield f"data: {json.dumps({'type': 'tool-start', 'name': 'coding', 'args': {'code': 'Writing code...'}})}\n\n"
+                            
                             if len(tool_calls) <= tc.index:
                                 tool_calls.append({
                                     "id": "", "type": "function",
