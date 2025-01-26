@@ -14,21 +14,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
     <!-- Load common programming languages -->
-        <!-- core programming -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
-        <!-- scripting and data -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
-        <!-- Configuration and Interchange -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
-        <!-- Documentation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -99,7 +94,6 @@
     
 
     <script>
-        // Update the marked options to use Prism instead of highlight.js
         marked.setOptions({
             highlight: function(code, lang) {
                 if (Prism.languages[lang]) {
@@ -109,12 +103,10 @@
             }
         });
 
-        // Add math rendering function
         function renderMath(text) {
             const codeBlocks = new Map();
             let counter = 0;
 
-            // First, protect code blocks by replacing them with placeholders
             text = text.replace(/```[\s\S]*?```|`[^`]+`/g, match => {
                 const placeholder = `%%CODE_BLOCK_${counter}%%`;
                 codeBlocks.set(placeholder, match);
@@ -122,7 +114,6 @@
                 return placeholder;
             });
 
-            // Process display math with \[ \]
             text = text.replace(/\\\[([\s\S]*?)\\\]/g, (_, math) => {
                 try {
                     return katex.renderToString(math, { displayMode: true });
@@ -132,7 +123,6 @@
                 }
             });
 
-            // Process inline math with \( \)
             text = text.replace(/\\\((.*?)\\\)/g, (_, math) => {
                 try {
                     return katex.renderToString(math, { displayMode: false });
@@ -142,7 +132,6 @@
                 }
             });
 
-            // Also keep the original [math] and (math) syntax
             text = text.replace(/\[math\]([\s\S]*?)\[\/math\]/g, (_, math) => {
                 try {
                     return katex.renderToString(math, { displayMode: true });
@@ -161,7 +150,6 @@
                 }
             });
 
-            // Restore code blocks
             codeBlocks.forEach((value, key) => {
                 text = text.replace(key, value);
             });
@@ -289,7 +277,6 @@
                             markdownDiv.className = 'markdown-content';
                             markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
                             container.insertBefore(markdownDiv, container.firstChild);
-                            // Apply code highlighting to the new markdown content
                             highlightCodeBlocks(markdownDiv);
                         }
                         
@@ -297,7 +284,6 @@
                             msg.tool_results.forEach(result => {
                                 currentMessageElement = messageEl; 
                                 addResult(result.name, result.content, result.args);
-                                // Apply code highlighting to the tool results
                                 const resultContent = messageEl.querySelector('.assistant-content');
                                 if (resultContent) {
                                     highlightCodeBlocks(resultContent);
@@ -813,11 +799,9 @@
                     const parent = block.parentElement;
                     const language = block.className.replace('language-', '');
                     
-                    // Create toolbar wrapper
                     const wrapper = document.createElement('div');
                     wrapper.className = 'code-toolbar';
                     
-                    // Create header with language and copy button
                     const header = document.createElement('div');
                     header.className = 'code-header';
                     header.innerHTML = `
@@ -825,12 +809,10 @@
                         <button class="copy-button" onclick="copyCode(this)">Copy</button>
                     `;
                     
-                    // Wrap the pre element
                     parent.parentNode.insertBefore(wrapper, parent);
                     wrapper.appendChild(header);
                     wrapper.appendChild(parent);
                     
-                    // Ensure proper Prism classes
                     parent.className = `pre-wrapper position-relative ${parent.className}`;
                     block.className = `language-${language}`;
                     
@@ -862,7 +844,6 @@
             });
         }
 
-        // Update the loadMessages part in DOMContentLoaded
         document.addEventListener('DOMContentLoaded', async () => {
             await loadConversations();
             try {
@@ -907,7 +888,6 @@
                             markdownDiv.className = 'markdown-content';
                             markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
                             container.insertBefore(markdownDiv, container.firstChild);
-                            // Apply code highlighting to markdown content
                             highlightCodeBlocks(markdownDiv);
                         }
                         
@@ -918,12 +898,10 @@
                             });
                         }
                         
-                        // Apply code highlighting to the entire message element after all content is added
                         highlightCodeBlocks(messageEl);
                     }
                 });
                 
-                // Ensure all code blocks in the messages container are highlighted
                 highlightCodeBlocks(els.messages);
                 
                 scrollToBottomIfNeeded();
