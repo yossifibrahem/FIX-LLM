@@ -84,8 +84,8 @@ The application provides 7 core tools:
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yossifibrahem/Tools_GUI.git
-cd Tools_GUI
+git clone https://github.com/yossifibrahem/LLM-Tool-Calling-Web-Application.git
+cd LLM-Tool-Calling-Web-Application
 ```
 
 2. Install required Python libraries
