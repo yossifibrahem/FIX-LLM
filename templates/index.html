@@ -481,7 +481,7 @@
                     className: 'bg-white'
                 }),
                 video: () => ({
-                    title: args.query, icon: '🎥',
+                    title: args.query, icon: '▶️',
                     content: `<div class="space-y-4">${(Array.isArray(data) ? data : [data]).map(item => {
                         const vidId = (item.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/) || [])[1];
                         return vidId ? 
@@ -511,9 +511,13 @@
                     className: 'bg-white'
                 }),
                 yt_url: () => ({
-                    title: data.title, icon: '▶️',
-                    content: `<div class="text-sm text-gray-600">${data.content}</div>
-                                <div class="text-sm text-gray-600">${data.transcription}</div>`,
+                    title: data.title, icon: '🎥',
+                    content: `<div class="space-y-4">
+                                <div><div class="text-sm text-gray-500 mb-1">Description</div>
+                                <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${data.content}</div></div>
+                                <div><div class="text-sm text-gray-500 mb-1">Transcription</div>
+                                <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${data.transcription}</div></div>
+                            </div>`,
                     className: 'bg-white'
                 }),
                 web_url: () => ({
