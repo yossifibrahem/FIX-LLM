@@ -139,3 +139,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Disclaimer
 
 This project is a demonstration of local AI tool calling and should be used responsibly.
+
+*This README is written Anthropic's Claude*
