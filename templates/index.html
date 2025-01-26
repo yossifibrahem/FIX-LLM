@@ -278,15 +278,21 @@
                             markdownDiv.className = 'markdown-content';
                             markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
                             container.insertBefore(markdownDiv, container.firstChild);
+                            // Apply code highlighting to the new markdown content
+                            highlightCodeBlocks(markdownDiv);
                         }
                         
                         if (msg.tool_results && msg.tool_results.length > 0) {
                             msg.tool_results.forEach(result => {
                                 currentMessageElement = messageEl; 
                                 addResult(result.name, result.content, result.args);
+                                // Apply code highlighting to the tool results
+                                const resultContent = messageEl.querySelector('.assistant-content');
+                                if (resultContent) {
+                                    highlightCodeBlocks(resultContent);
+                                }
                             });
                         }
-                        document.querySelectorAll('pre code').forEach(block => Prism.highlightElement(block));
                     }
                 });
                 
@@ -769,6 +775,23 @@
                     const parent = block.parentElement;
                     const language = block.className.replace('language-', '');
                     
+                    // Create toolbar wrapper
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'code-toolbar';
+                    
+                    // Create header with language and copy button
+                    const header = document.createElement('div');
+                    header.className = 'code-header';
+                    header.innerHTML = `
+                        <span>${language}</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    `;
+                    
+                    // Wrap the pre element
+                    parent.parentNode.insertBefore(wrapper, parent);
+                    wrapper.appendChild(header);
+                    wrapper.appendChild(parent);
+                    
                     // Ensure proper Prism classes
                     parent.className = `pre-wrapper position-relative ${parent.className}`;
                     block.className = `language-${language}`;
@@ -776,6 +799,28 @@
                     Prism.highlightElement(block);
                     block.dataset.highlighted = 'true';
                 }
+            });
+        }
+
+        function copyCode(button) {
+            const pre = button.closest('.code-toolbar').querySelector('pre');
+            const code = pre.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy code:', err);
+                button.textContent = 'Error!';
+                
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
             });
         }
 
@@ -824,6 +869,8 @@
                             markdownDiv.className = 'markdown-content';
                             markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
                             container.insertBefore(markdownDiv, container.firstChild);
+                            // Apply code highlighting to markdown content
+                            highlightCodeBlocks(markdownDiv);
                         }
                         
                         if (msg.tool_results && msg.tool_results.length > 0) {
@@ -833,13 +880,13 @@
                             });
                         }
                         
-                        messageEl.querySelectorAll('pre code').forEach(block => {
-                            if (!block.dataset.highlighted) {
-                                Prism.highlightElement(block);
-                            }
-                        });
+                        // Apply code highlighting to the entire message element after all content is added
+                        highlightCodeBlocks(messageEl);
                     }
                 });
+                
+                // Ensure all code blocks in the messages container are highlighted
+                highlightCodeBlocks(els.messages);
                 
                 scrollToBottomIfNeeded();
             } catch (error) {
