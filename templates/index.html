@@ -551,9 +551,20 @@
                     const isHidden = contentDiv.classList.contains('hidden');
                     contentDiv.classList.toggle('hidden');
                     toggleBtn.style.transform = isHidden ? 'rotate(-180deg)' : '';
-                    if (!isHidden) highlightCodeBlocks(contentDiv);
+                    
+                    // Always highlight code blocks when showing content
+                    if (isHidden) {
+                        // Small delay to ensure content is visible first
+                        setTimeout(() => {
+                            highlightCodeBlocks(contentDiv);
+                        }, 0);
+                    }
                     resultDiv.querySelector('.border').classList.toggle('rounded-lg', !isHidden);
                 };
+                
+                // Initial highlighting of code blocks
+                highlightCodeBlocks(contentDiv);
+                
                 toggleSection.onclick = toggle;
                 toggleSection.onkeydown = e => ['Enter', ' '].includes(e.key) && (e.preventDefault(), toggle());
             }
