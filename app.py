@@ -293,13 +293,7 @@ def chat():
                         
                         if tool_name == "python":
                             result = python(arguments["code"])
-                            chat_messages.append({
-                                "role": "tool",
-                                "content": str(result),
-                                "tool_call_id": tool_call["id"]
-                            })
-                            yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
-                        
+                            
                         elif tool_name == "web":
                             result = web(
                                 arguments["query"],
@@ -307,57 +301,28 @@ def chat():
                                 arguments.get("number_of_websites", 3),
                                 arguments.get("number_of_citations", 5)
                             )
-                            chat_messages.append({
-                                "role": "tool",
-                                "content": str(result),
-                                "tool_call_id": tool_call["id"]
-                            })
-                            yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
-                        
+                            
                         elif tool_name == "wiki":
                             result = wiki(arguments["query"])
-                            chat_messages.append({
-                                "role": "tool",
-                                "content": str(result),
-                                "tool_call_id": tool_call["id"]
-                            })
-                            yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
-
+                            
                         elif tool_name == "web_url":
                             result = web_url(arguments["url"])
-                            chat_messages.append({
-                                "role": "tool",
-                                "content": str(result),
-                                "tool_call_id": tool_call["id"]
-                            })
-                            yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
-
+                            
                         elif tool_name == "image":
                             result = image(arguments["query"], arguments.get("number_of_images", 1))
-                            chat_messages.append({
-                                "role": "tool",
-                                "content": str(result),
-                                "tool_call_id": tool_call["id"]
-                            })
-                            yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
-
+                    
                         elif tool_name == "video":
                             result = video(arguments["query"], arguments.get("number_of_videos", 1))
-                            chat_messages.append({
-                                "role": "tool",
-                                "content": str(result),
-                                "tool_call_id": tool_call["id"]
-                            })
-                            yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
                             
                         elif tool_name == "yt_url":
                             result = yt_url(arguments["url"])
-                            chat_messages.append({
+                            
+                    chat_messages.append({
                                 "role": "tool",
                                 "content": str(result),
                                 "tool_call_id": tool_call["id"]
                             })
-                            yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
+                    yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
                     
                     continue_tool_execution = True
                 else:
