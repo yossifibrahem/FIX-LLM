@@ -440,7 +440,7 @@
             const escapeHtml = (unsafe) => {
                 return unsafe
                     .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")  // Fixed: removed extra forward slash
+                    .replace(/</g, "&lt;")
                     .replace(/>/g, "&gt;")
                     .replace(/"/g, "&quot;")
                     .replace(/'/g, "&#039;");
@@ -473,7 +473,8 @@
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-200"></div>
                                     <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/50 to-transparent">
                                         <div class="text-xs text-white">Click to view full size</div>
-                                    </a>
+                                    </div>
+                                </a>
                             </div>
                         `).join('')}
                     </div>`,
