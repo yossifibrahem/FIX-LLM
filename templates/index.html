@@ -710,14 +710,26 @@
                     const assistantContent = currentMessageElement.querySelector('.assistant-content');
                     if (assistantContent) {
                         let markdownDiv = assistantContent.querySelector('.markdown-content');
+                        
+                        // Clean up any incomplete code blocks
+                        let fixedContent = currentResponse;
+                        if (currentResponse.includes('```') && 
+                            (currentResponse.match(/```/g) || []).length % 2 !== 0) {
+                            // Add closing ``` if missing
+                            fixedContent += '\n```';
+                        }
+                        
                         if (markdownDiv) {
-                            markdownDiv.innerHTML = marked.parse(currentResponse);
+                            markdownDiv.innerHTML = marked.parse(renderMath(fixedContent));
                         } else {
                             markdownDiv = document.createElement('div');
                             markdownDiv.className = 'markdown-content';
-                            markdownDiv.innerHTML = marked.parse(currentResponse);
+                            markdownDiv.innerHTML = marked.parse(renderMath(fixedContent));
                             assistantContent.insertBefore(markdownDiv, assistantContent.firstChild);
                         }
+                        
+                        // Re-highlight code blocks
+                        highlightCodeBlocks(markdownDiv);
                     }
                 }
                 
