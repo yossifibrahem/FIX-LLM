@@ -4,7 +4,7 @@ from openai import OpenAI
 # Initialize the OpenAI client
 client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
 
-def get_embedding(text, model="Embed_model"):
+def get_embedding(text, model="text-embedding-nomic-embed-text-v1.5"):
     text = text.replace("\n", " ")
     return client.embeddings.create(input=[text], model=model).data[0].embedding
 
