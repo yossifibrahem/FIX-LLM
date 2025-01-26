@@ -393,7 +393,7 @@ body {
 }
 
 .copy-button.copied {
-    background: #4CAF50;
+    background: #4caf4f46;
     border-color: #4CAF50;
 }
 
