@@ -85,13 +85,15 @@ The application will be accessible at `http://localhost:8080`
 
 ## Technology Stack
 
-- **Backend**: Flask
-- **Frontend**: HTML5, Tailwind CSS
-- **Language Model**: LM Studio (local inference)
-- **Additional Libraries**: 
-  - Marked.js (Markdown rendering)
-  - Prism.js (Code highlighting)
-  - KaTeX (Math rendering)
+- ## 🛠️ Tech Stack
+- **Model**: Qwen2.5 7B Instruct (via LM Studio)
+- **Backend**: Flask, Python
+- **Frontend**: HTML, Tailwind CSS, JavaScript
+- **Libraries**: 
+  - OpenAI API
+  - Marked.js
+  - Prism.js
+  - KaTeX
 
 ## Contributing
 

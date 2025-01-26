@@ -5,23 +5,25 @@ This is a powerful, flexible web application that enables an Large Language Mode
 
 ## 🌟 Key Features
 
-### Multi-Tool Capabilities
-The application supports seamless integration with various tools:
-- **Python Code Execution**: Run and analyze Python code in real-time
-- **Web Search**: Perform web searches and extract relevant citations
-- **Wikipedia Search**: Fetch Wikipedia article introductions
-- **Web Scraping**: Extract content from specific URLs
-- **YouTube Search**: Find and retrieve video information
-- **Image Search**: Search and display images
-- **Conversation Management**: Save, load, and manage chat histories
+### Multi-Tool Integration
+- 🐍 **Python Code Execution**: Run and analyze Python code directly in the chat
+- 🌐 **Web Search**: Perform real-time web searches and extract citations
+- 📚 **Wikipedia Lookup**: Instantly retrieve Wikipedia article introductions
+- 🖼️ **Image Search**: Find and display images related to your queries
+- 🎥 **YouTube Search**: Search and retrieve YouTube video information
+- 🔗 **Web Scraping**: Extract content from specific websites
 
-### Technical Highlights
-- Streaming response generation
-- Tool execution pipeline
-- Real-time tool result display
-- Markdown and math rendering
-- Code syntax highlighting
-- Responsive web design
+### Advanced Conversation Management
+- 💬 **Persistent Conversations**: Save and load chat histories
+- ♻️ **Conversation Regeneration**: Easily regenerate or delete last messages
+- 🏷️ **Automatic Conversation Naming**: Smart, context-aware conversation titles
+- 📜 **Conversation Listing**: Browse and manage your chat history
+
+### User Experience
+- 🎨 **Responsive Design**: Clean, modern UI with Tailwind CSS
+- </> **Code Highlighting**: Syntax highlighting with Prism.js
+- 📊 **Markdown & Math Support**: Render markdown and mathematical equations
+- 🌈 **Tool Results Visualization**: Interactive, collapsible tool result sections
 
 ## 🖥️ Screenshots
 <img src="https://github.com/user-attachments/assets/5ba6af6d-86fa-4712-8838-cc64523b6dfb" alt="Screenshot 2025-01-13 194050" width="300"/>
