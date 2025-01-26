@@ -1,4 +1,4 @@
-# LLMs Tool Calls Using LM Studio Server
+# LLMs Tool Calls Using Openai Api
 **Give the LLM the ability to:**
 * Write and Executes Python code
 * Searches Wikipedia articles and Fetch introduction
