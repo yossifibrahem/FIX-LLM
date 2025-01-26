@@ -317,12 +317,12 @@ def chat():
                         elif tool_name == "yt_url":
                             result = yt_url(arguments["url"])
                             
-                    chat_messages.append({
-                                "role": "tool",
-                                "content": str(result),
-                                "tool_call_id": tool_call["id"]
-                            })
-                    yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
+                        chat_messages.append({
+                                    "role": "tool",
+                                    "content": str(result),
+                                    "tool_call_id": tool_call["id"]
+                                })
+                        yield f"data: {json.dumps({'type': 'tool', 'name': tool_name, 'content': result, 'args': arguments})}\n\n"
                     
                     continue_tool_execution = True
                 else:
