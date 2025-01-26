@@ -613,8 +613,8 @@
                         break;
                         
                     case 'tool-start':
-                    if (existingLoader) {
-                            existingLoader.remove();
+                        if (existingLoader) {
+                                existingLoader.remove();
                         }
                         container.appendChild(createLoadingIndicator(parsed));
                         break;
