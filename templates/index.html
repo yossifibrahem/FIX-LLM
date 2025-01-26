@@ -446,37 +446,30 @@
 
             const generators = {
                 python: () => {
-                    const content = `<div class="space-y-4">
-                        <div><div class="text-sm text-gray-500 mb-1">Code</div><pre><code class="language-python">${escapeHtml(args.code)}</code></pre></div>
+                    const content = `
+                        ${args.code ? `<pre><code class="language-python">${escapeHtml(args.code)}</code></pre>` : ''}
                         ${data.success ? 
-                            `${data.output ? `<div><div class="text-sm text-gray-500 mb-1">Output</div><pre><code>${escapeHtml(data.output)}</code></pre></div>` : ''}
-                            ${data.result !== null ? `<div><div class="text-sm text-gray-500 mb-1">Result</div><pre><code>${escapeHtml(JSON.stringify(data.result))}</code></pre></div>` : ''}`
-                            : `<div><div class="text-sm text-red-500 mb-1">Error</div><pre><code>${escapeHtml(data.error)}</code></pre></div>`}
-                    </div>`;
+                            `${data.output ? `<pre><code>${escapeHtml(data.output)}</code></pre>` : ''}
+                            ${data.result !== null ? `<pre><code>${escapeHtml(JSON.stringify(data.result))}</code></pre>` : ''}`
+                            : `<div class="text-red-500"><pre><code>${escapeHtml(data.error)}</code></pre></div>`}
+                    `;
                     return {
                         title: 'Python Execution',
-                        icon: '🐍',
-                        content: content,
-                        className: data.success ? 'bg-white' : 'bg-red-50'
+                        icon: data.success ? '🐍' : '❌',
+                        content: content
                     };
                 },
                 image: () => ({
-                    title: args.query, icon: '🖼️',
-                    content: `<div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                    title: args.query,
+                    icon: '🖼️',
+                    content: `<div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         ${(Array.isArray(data) ? data : [data]).map(item => `
-                            <div class="rounded-lg overflow-hidden border border-gray-200">
-                                <a href="${item.image}" target="_blank" class="block relative group">
-                                    <img src="${item.thumbnail || item.image}" alt="Search result" 
-                                        class="w-full h-24 object-cover transform transition-transform duration-200 group-hover:scale-105">
-                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-200"></div>
-                                    <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/50 to-transparent">
-                                        <div class="text-xs text-white">Click to view full size</div>
-                                    </div>
-                                </a>
-                            </div>
+                            <a href="${item.image}" target="_blank" class="block">
+                                <img src="${item.thumbnail || item.image}" alt="Search result" 
+                                    class="w-full h-20 object-cover rounded">
+                            </a>
                         `).join('')}
-                    </div>`,
-                    className: 'bg-white'
+                    </div>`
                 }),
                 video: () => ({
                     title: args.query, icon: '▶️',
@@ -524,54 +517,48 @@
                             <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${data.content}</div></div>`,
                     className: 'bg-white'
                 })
+                
             };
 
-            const { title, icon, content, className } = (generators[name] || (() => ({
-                title: name, icon: '🔧',
-                content: `<div class="text-sm text-gray-600">${JSON.stringify(data)}</div>`,
-                className: 'bg-white'
+            const { title, icon, content } = (generators[name] || (() => ({
+                title: name,
+                icon: '🔧',
+                content: `<pre><code>${escapeHtml(JSON.stringify(data, null, 2))}</code></pre>`
             })))();
 
             const resultDiv = document.createElement('div');
-            resultDiv.className = 'mt-3';
+            resultDiv.className = 'tool-result';
             resultDiv.innerHTML = `
-                <div class="border border-gray-200 rounded-lg overflow-hidden ${className}">
-                    <div class="flex items-center justify-between p-3 cursor-pointer hover:bg-gray-50" role="button" tabindex="0">
-                        <div class="flex items-center space-x-2"><span class="text-lg">${icon}</span><h3 class="font-medium">${title}</h3></div>
-                        <button class="toggle-content text-gray-400"><svg class="w-5 h-5 transition-transform" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-width="2" d="M19 9l-7 7-7-7" fill="none"/>
-                        </svg></button>
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span>${icon}</span>
+                        <span>${title}</span>
                     </div>
-                    <div class="content hidden"><div class="px-4 pb-4 pt-1">${content}</div></div>
-                </div>`;
+                    <svg class="tool-toggle w-4 h-4" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-width="2" d="M19 9l-7 7-7-7" fill="none"/>
+                    </svg>
+                </div>
+                <div class="tool-content">${content}</div>
+            `;
 
             const container = currentMessageElement.querySelector('.assistant-content');
             if (!container) return;
             container.appendChild(resultDiv);
 
-            const toggleSection = resultDiv.querySelector('[role="button"]');
-            const toggleBtn = resultDiv.querySelector('.toggle-content svg');
-            const contentDiv = resultDiv.querySelector('.content');
+            const header = resultDiv.querySelector('.tool-header');
+            const toggle = resultDiv.querySelector('.tool-toggle');
+            const contentDiv = resultDiv.querySelector('.tool-content');
             
-            if (toggleSection && contentDiv) {
-                const toggle = () => {
-                    const isHidden = contentDiv.classList.contains('hidden');
-                    contentDiv.classList.toggle('hidden');
-                    toggleBtn.style.transform = isHidden ? 'rotate(-180deg)' : '';
-                    
-                    if (isHidden) {
-                        setTimeout(() => {
-                            highlightCodeBlocks(contentDiv);
-                        }, 0);
-                    }
-                    resultDiv.querySelector('.border').classList.toggle('rounded-lg', !isHidden);
-                };
-                
-                highlightCodeBlocks(contentDiv);
-                
-                toggleSection.onclick = toggle;
-                toggleSection.onkeydown = e => ['Enter', ' '].includes(e.key) && (e.preventDefault(), toggle());
-            }
+            const toggleContent = () => {
+                contentDiv.classList.toggle('hidden');
+                toggle.classList.toggle('expanded');
+                if (!contentDiv.classList.contains('hidden')) {
+                    highlightCodeBlocks(contentDiv);
+                }
+            };
+            
+            header.onclick = toggleContent;
+            toggleContent(); // Start expanded
         }
 
         // Update the processStreamMessage function
