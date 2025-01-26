@@ -4,35 +4,71 @@
 
 This is a powerful, multi-functional chat application that leverages local language models to provide advanced conversational capabilities with integrated tool calling. Built using Flask and OpenAI's function calling API, the application allows users to interact with an AI assistant that can perform a wide range of tasks through specialized tools.
 
-## Key Features
+## Core Components
 
-### Integrated Tools
-The application provides seven powerful tools for enhanced interaction:
+### 1. Application Setup
+- Flask application with static folder set to "templates"
+- Uses OpenAI client configured to connect to a local LM Studio instance (port 1234)
+- Uses Qwen 2.5 7B Instruct model
 
-1. **Python Code Execution**: Run and analyze Python code directly within the chat
-2. **Web Search**: Perform live web searches and extract relevant citations
-3. **Wikipedia Search**: Quickly retrieve article introductions
-4. **Website Scraping**: Extract content from specific web URLs
-5. **Image Search**: Find and display relevant images
-6. **YouTube Video Search**: Search and retrieve video information
-7. **YouTube Video Metadata**: Get detailed information about specific videos
+### 2. Available Tools
+The application provides 7 core tools:
+- `python`: Executes Python code securely
+- `web`: Performs web searches and extracts citations
+- `wiki`: Searches Wikipedia articles
+- `web_url`: Scrapes content from specific URLs
+- `image`: Searches for images
+- `video`: Searches YouTube videos
+- `yt_url`: Retrieves YouTube video metadata
 
-### Additional Capabilities
+### 3. Conversation Management
+- Conversations are stored in a "conversations" directory as JSON files
+- Each conversation has:
+  - Unique UUID
+  - Last updated timestamp
+  - Message history
+  - Auto-generated name based on content
+
+### 4. Key Routes
+- `/`: Home page
+- `/chat`: Main chat endpoint (POST)
+- `/conversations`: List all conversations (GET)
+- `/conversation/<id>`: Get/Delete specific conversation (GET/DELETE)
+- `/new`: Create new conversation (POST)
+- `/interrupt`: Stop current processing (POST)
+- `/messages`: Get formatted message history (GET)
+- `/delete-last`: Remove last message (POST)
+- `/regenerate`: Regenerate last response (POST)
+
+### 5. Chat Processing Features
 - Streaming response generation
-- Conversation history management
-- Tool call interruption
-- Markdown and math rendering
-- Code syntax highlighting
-- Responsive web interface
+- Tool execution pipeline
+- Message history tracking
+- Error handling
+- Conversation auto-saving
+- Message formatting for frontend display
 
-## Screenshots
+## Notable Implementation Details
 
-<img src="https://github.com/user-attachments/assets/5ba6af6d-86fa-4712-8838-cc64523b6dfb" alt="Screenshot 2025-01-13 194050" width="300"/>
-<img src="https://github.com/user-attachments/assets/77ad52ee-5ac2-41e9-8afb-040a73c34c0d" alt="Screenshot 2025-01-13 194115" width="300"/>
-<img src="https://github.com/user-attachments/assets/eb73d09b-5ee1-4145-9421-ec31743f15fa" alt="Screenshot 2025-01-13 194057" width="300"/>
-<img src="https://github.com/user-attachments/assets/b96ae1cb-a2cc-4699-bc44-e7bbf798000d" alt="Screenshot 2025-01-13 194110" width="300"/>
-<img src="https://github.com/user-attachments/assets/39fde852-df06-43c7-b759-17da8711af0d" alt="Screenshot 2025-01-13 194104" width="300"/>
-<img src="https://github.com/user-attachments/assets/27387bb0-dedd-4905-9faf-5157887d7a30" alt="Screenshot 2025-01-13 194654" width="300"/>
+### Tool Execution Flow
+1. Receives user message
+2. Streams response from model
+3. Detects tool calls in response
+4. Executes tools as needed
+5. Streams results back to client
+6. Continues conversation if more tool calls needed
+
+### Safety Features
+- Secure Python code execution (via separate executor)
+- Error handling throughout
+- Development server warning
+- Interrupt capability for long-running operations
+
+### Data Management
+- Persistent storage of conversations
+- Automatic conversation naming
+- Message history formatting
+- Tool results tracking
 
 ## Prerequisites
 
@@ -70,12 +106,7 @@ export FLASK_DEBUG=0
 python app.py
 ```
 
-### Production Server
-```bash
-python server.py
-```
-
-The application will be accessible at `http://localhost:8080`
+The application will be accessible at `http://localhost:5000`
 
 ## Configuration
 
@@ -85,7 +116,7 @@ The application will be accessible at `http://localhost:8080`
 
 ## Technology Stack
 
-- ## 🛠️ Tech Stack
+- ## Tech Stack
 - **Model**: Qwen2.5 7B Instruct (via LM Studio)
 - **Backend**: Flask, Python
 - **Frontend**: HTML, Tailwind CSS, JavaScript
@@ -102,6 +133,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Acknowledgements
 
 - [LM Studio](https://lmstudio.ai/) for providing local inference capabilities
+- [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main) for web function
 - Open-source libraries used in the project
 
 ## Disclaimer
