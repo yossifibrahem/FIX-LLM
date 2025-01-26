@@ -22,6 +22,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-latex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -392,12 +394,12 @@
             if (tool_info.name === 'python') {
                 div.innerHTML = `
                     <div class="spinner"></div>
-                    <span>Executing Python code...</span>
+                    <span>Executing Python code</span>
                 `;
             }else if (tool_info.name === 'coding') {
                 div.innerHTML = `
                     <div class="spinner"></div>
-                    <span>writing code...</span>
+                    <span>Writing python code</span>
                 `;
             }
             else if (tool_info.name === 'web') {
