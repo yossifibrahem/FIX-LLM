@@ -396,7 +396,7 @@ body {
 
 /* Update tool result styles */
 .tool-result {
-    border: 1px solid gainsboro;
+    border: 1px solid #e2e3e4;
     border-radius: 0.5rem;
     margin: 0.75rem 0;
     background: #fff;
