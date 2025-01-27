@@ -155,6 +155,96 @@ body {
     text-decoration: underline;
 }
 
+.markdown-content {
+    line-height: 1.6;
+    color: #e0e0e0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+.markdown-content > * {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.markdown-content h1, 
+.markdown-content h2, 
+.markdown-content h3, 
+.markdown-content h4, 
+.markdown-content h5, 
+.markdown-content h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #fff;
+}
+
+.markdown-content h1 { font-size: 2em; }
+.markdown-content h2 { font-size: 1.5em; }
+.markdown-content h3 { font-size: 1.25em; }
+.markdown-content h4 { font-size: 1em; }
+.markdown-content h5 { font-size: 0.875em; }
+.markdown-content h6 { font-size: 0.85em; }
+
+.markdown-content ul, 
+.markdown-content ol {
+    padding-left: 2em;
+    margin: 1em 0;
+}
+
+.markdown-content ul {
+    list-style-type: disc;
+}
+
+.markdown-content ol {
+    list-style-type: decimal;
+}
+
+.markdown-content li {
+    margin: 0.5em 0;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #4a5568;
+    padding-left: 1em;
+    margin: 1em 0;
+    color: #a0aec0;
+}
+
+.markdown-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+.markdown-content th, 
+.markdown-content td {
+    border: 1px solid #4a5568;
+    padding: 0.5em;
+    text-align: left;
+}
+
+.markdown-content th {
+    background-color: #2d3748;
+    font-weight: 600;
+}
+
+.markdown-content hr {
+    border: none;
+    border-top: 2px solid #4a5568;
+    margin: 2em 0;
+}
+
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1em 0;
+}
+
 .conversation-list {
     position: fixed;
     left: 0;
@@ -514,7 +604,14 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
+    height: 8px;
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar:hover {
+    width: 18px;
+    height: 18px;
 }
 
 ::-webkit-scrollbar-track {
@@ -524,10 +621,12 @@ body {
 ::-webkit-scrollbar-thumb {
     background-color: #3b82f6;
     border-radius: 10px;
-    border: 3px solid #171717;
+    border: 2px solid #171717;
+    transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: #2563eb;
+    border-width: 1px;
 }
 
