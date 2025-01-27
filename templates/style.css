@@ -5,34 +5,42 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background-color: #121212;
+    color: #e0e0e0;
 }
+
 .messages-container {
     flex: 1;
     overflow-y: auto;
     padding-bottom: 50px;
     height: calc(100vh - 200px);
-    border-bottom: solid 1px lightgray;
-    max-height: calc(100vh - 250px);
+    border-bottom: solid 1px #333;
+    max-height: calc(100vh - 220px);
+    background-color: #171717;
 }
+
 .message pre {
-    background-color: #f6f8fa;
+    background-color: #2d2d2d;
     border-radius: 6px;
     padding: 16px;
     overflow-x: auto;
 }
+
 .message code {
     font-family: monospace;
     font-size: 85%;
-    background-color: rgba(175, 184, 193, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     padding: 0.2em 0.4em;
 }
+
 .message pre code {
     background-color: transparent;
     padding: 0;
 }
-.message p { 
-    white-space: pre-wrap; 
+
+.message p {
+    white-space: pre-wrap;
     max-width: 100%;
     word-wrap: break-word;
 }
@@ -42,18 +50,26 @@ body {
     word-break: break-word;
 }
 
-.assistant-content, 
+.assistant-content,
 .assistant-content > div {
     max-width: 100%;
     overflow-wrap: break-word;
 }
+
+.messages-header{
+    color: #e0e0e0;
+    background-color: #171717;
+    border-radius: 1.25rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adjusted for shadow-lg */
+    margin-bottom: 24px; /* Adjusted for mb-24 */
+}
+
 
 .input-container {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to bottom, transparent, rgb(243 244 246 / 0.8) 20%);
     padding-bottom: 1rem;
     backdrop-filter: blur(10px);
     transition: padding-left 0.3s ease;
@@ -64,18 +80,18 @@ body {
 }
 
 .input-group {
-    background: white;
-    border: 1px solid #e5e7eb;
+    background: #171717;
+    border: 1px solid #333;
     border-radius: 1.25rem;
     padding: 0.5rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     transition: all 0.2s ease;
 }
 
-.input-group:focus-within {
+/* .input-group:focus-within {
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
     border-color: #3b82f6;
-}
+} */
 
 #userInput {
     width: 100%;
@@ -85,11 +101,12 @@ body {
     font-size: 0.95rem;
     line-height: 1.5;
     background: transparent;
+    color: #e0e0e0;
 }
 
 .button-group button {
-    background: #ffffff;
-    border: 1px solid #d1d5db;
+    background: #333;
+    border: 1px solid #444;
     border-radius: 1.25rem;
     cursor: pointer;
     outline: none;
@@ -97,22 +114,22 @@ body {
     transition: all 0.15s ease;
     padding: 0.5rem 0.75rem;
     box-shadow: 
-        0 5px 0 #d1d5db,
-        0 3px 3px rgba(0, 0, 0, 0.1);
+        0 5px 0 #444,
+        0 3px 3px rgba(0, 0, 0, 0.5);
 }
 
 .button-group button:hover {
     transform: translateY(-1px);
     box-shadow: 
-        0 7px 0 #d1d5db,
-        0 4px 4px rgba(0, 0, 0, 0.1);
+        0 7px 0 #444,
+        0 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .button-group button:active {
     transform: translateY(1px);
     box-shadow: 
-        0 1px 0 #d1d5db,
-        0 2px 2px rgba(0, 0, 0, 0.1);
+        0 1px 0 #444,
+        0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .button-group {
@@ -125,14 +142,18 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem;
-    background-color: #f3f4f6;
+    background-color: #2d2d2d;
     border-radius: 0.5rem;
     margin: 0.5rem 0;
 }
 
-.markdown-content a {color: #3b82f6;}
+.markdown-content a {
+    color: #3b82f6;
+}
 
-.markdown-content a:hover {text-decoration: underline;}
+.markdown-content a:hover {
+    text-decoration: underline;
+}
 
 .conversation-list {
     position: fixed;
@@ -140,8 +161,8 @@ body {
     top: 10%;
     bottom: 10%;
     width: 300px;
-    background: white;
-    border-right: 1px solid #e5e7eb;
+    background: #171717;
+    border-right: 1px solid #333;
     overflow-y: auto;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
@@ -149,7 +170,7 @@ body {
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .conversation-content {
@@ -168,8 +189,7 @@ body {
     left: 0;
     width: 100%;
     padding: 1rem;
-    background: #ffffff71;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #444;
     z-index: 51;
     display: flex;
     gap: 0.5rem;
@@ -178,7 +198,7 @@ body {
 }
 
 #newButton:hover {
-    background-color: #f3f4f6;
+    background-color: #44444444;
 }
 
 .conversation-list.visible {
@@ -190,25 +210,23 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #333;
     cursor: pointer;
     transition: background-color 0.2s;
     position: relative;
 }
 
 .delete-button {
-    padding: 0.25rem 0.5rem;
-    background-color: #fee2e2;
-    color: #dc2626;
-    border: none;
+    padding: 0rem 0.25rem;
+    border: 1px solid #ef4444;
+    color: #ef4444;
     border-radius: 0.375rem;
     cursor: pointer;
     font-size: 0.875rem;
-    transition: all 0.2s;
     opacity: 0;
     position: absolute;
     right: 1rem;
-    top: 50%;
+    top: 55%;
 }
 
 .conversation-item:hover .delete-button {
@@ -216,7 +234,8 @@ body {
 }
 
 .delete-button:hover {
-    background-color: #fecaca;
+    background-color: #ef4444;
+    color: #fff;
 }
 
 .modal-backdrop {
@@ -235,10 +254,10 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
+    background-color: #1e1e1e;
     padding: 1.5rem;
     border-radius: 0.5rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     z-index: 101;
 }
 
@@ -253,7 +272,7 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
     cursor: pointer;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #333;
 }
 
 .confirm-delete {
@@ -263,15 +282,15 @@ body {
 }
 
 .cancel-delete {
-    background-color: white;
+    background-color: #1e1e1e;
 }
 
 .conversation-item:hover {
-    background-color: #f3f4f6;
+    background-color: #44444444;
 }
 
 .conversation-item.active {
-    background-color: #e5e7eb;
+    background-color: #44444480;
 }
 
 .content-wrapper {
@@ -287,53 +306,55 @@ body {
     left: 1rem;
     top: 1rem;
     z-index: 60;
-    background: white;
-    border: 1px solid #e5e7eb;
+    background: #171717;
+    border: 1px solid #333;
     border-radius: 0.5rem;
     padding: 0.5rem;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .button-action {
-    border: 1px solid #d1d5db;
+    border: 1px solid #444;
+    background: #333;
     border-radius: 1.25rem;
     cursor: pointer;
     padding: 0.5rem 0.75rem;
     transition: all 0.15s ease;
     left: 50rem;
     box-shadow: 
-        0 5px 0 #d1d5db,
-        0 3px 3px rgba(0, 0, 0, 0.1);
+        0 5px 0 #444,
+        0 3px 3px rgba(0, 0, 0, 0.5);
 }
 
 .action-group {
     padding: 8px;
     justify-content: center;
+    /* background-color: #1E1E1E; */
 }
 
 .action-group button:hover {
     transform: translateY(-1px);
     box-shadow: 
-        0 7px 0 #d1d5db,
-        0 4px 4px rgba(0, 0, 0, 0.1);
+        0 7px 0 #444,
+        0 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .action-group button:active {
     transform: translateY(1px);
     box-shadow: 
-        0 1px 0 #d1d5db,
-        0 2px 2px rgba(0, 0, 0, 0.1);
+        0 1px 0 #444,
+        0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .markdown-content img {
-    margin: 1rem 0; /* Add some vertical spacing */
-    border-radius: 0.5rem; /* Optional: rounded corners */
+    margin: 1rem 0;
+    border-radius: 0.5rem;
 }
 
 .spinner {
     width: 1.25rem;
     height: 1.25rem;
-    border: 2px solid #e5e7eb;
+    border: 2px solid #333;
     border-top-color: #3b82f6;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -345,7 +366,6 @@ body {
     }
 }
 
-/* Code block toolbar styles */
 .code-toolbar {
     position: relative;
     margin-top: 1rem;
@@ -360,7 +380,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
-    background: #2d2d2d;
+    background: #1e1e1e;
     color: #fff;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
@@ -372,6 +392,10 @@ body {
     margin-top: 0;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+.main{
+    background: #212121;
 }
 
 .copy-button {
@@ -394,14 +418,13 @@ body {
     border-color: #4CAF50;
 }
 
-/* Update tool result styles */
 .tool-result {
-    border: 1px solid #e2e3e4;
+    border: 1px solid #333;
     border-radius: 0.5rem;
     margin: 0.75rem 0;
-    background: #fff;
+    background: #1e1e1e;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     max-height: 0;
     transition: max-height 0.3s ease-out;
 }
@@ -411,14 +434,14 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0.75rem 1rem;
-    background: #f8fafc;
-    border-bottom: 1px solid #edf2f7;
+    background: #2d2d2d;
+    border-bottom: 1px solid #333;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
 .tool-header:hover {
-    background: #f1f5f9;
+    background: #333;
 }
 
 .tool-title {
@@ -426,13 +449,13 @@ body {
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
-    color: #4b5563;
+    color: #e0e0e0;
 }
 
 .tool-content {
     padding: 1rem;
     font-size: 0.875rem;
-    color: #4b5563;
+    color: #e0e0e0;
 }
 
 .tool-content.hidden {
@@ -448,12 +471,10 @@ body {
     transform: rotate(180deg);
 }
 
-/* New styles for tool icons and results */
 .tool-icons-row {
     display: flex;
     gap: 0.5rem;
     padding-top: 0.5rem;
-    border-top: 1px solid #edf2f7;
     margin-top: 0.5rem;
 }
 
@@ -463,20 +484,19 @@ body {
     gap: 0.25rem;
     padding: 0.25rem 0.5rem;
     border-radius: 1rem;
-    background: #f3f4f6;
-    border: 1px solid #00000033;
+    border: 1px solid #ffffff40;
     cursor: pointer;
     transition: all 0.2s;
     font-size: 0.875rem;
 }
 
 .tool-icon:hover {
-    background: #e5e7eb;
+    background: #333;
 }
 
 .tool-icon.active {
-    background: #dbeafe;
-    color: #2563eb;
+    background: #333;
+    color: #fff;
 }
 
 .tool-result.expanded {
@@ -484,7 +504,6 @@ body {
     transition: max-height 0.5s ease-in;
 }
 
-/* Update link styles in tool results */
 .tool-content a {
     color: #3b82f6;
     text-decoration: none;
@@ -492,5 +511,23 @@ body {
 
 .tool-content a:hover {
     text-decoration: underline;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #171717;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #3b82f6;
+    border-radius: 10px;
+    border: 3px solid #171717;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #2563eb;
 }
 

@@ -29,8 +29,8 @@
 </head>
 <div class="modal-backdrop" id="deleteModal">
     <div class="modal">
-        <h3 class="text-lg font-medium mb-2">Delete Conversation</h3>
-        <p>Are you sure you want to delete this conversation? This action cannot be undone.</p>
+        <h3 class="text-lg font-medium mb-2 text-gray-100">Delete Conversation</h3>
+        <p class="text-gray-300">Are you sure you want to delete this conversation? This action cannot be undone.</p>
         <div class="modal-buttons">
             <button class="modal-button cancel-delete" id="cancelDelete">Cancel</button>
             <button class="modal-button confirm-delete" id="confirmDelete">Delete</button>
@@ -38,24 +38,28 @@
     </div>
 </div>
 
-<body class="bg-gray-100">
+<body class="main">
     <button class="toggle-conversations" data-expanded="false">
-        💬➡️
+        <img src="static\menu.png" height="20", width="20">
     </button>
 
     <div class="conversation-list">
-        <div class="p-4 border-b">
-            <h2 class="text-xl font-bold">Chat History</h2>
+        <div class="p-4 border-b border-gray-700">
+            <h2 class="text-xl font-bold text-gray-100">Chat History</h2>
         </div>
-        <button id="newButton" class="text-l transition-opacity p-2 clear-btn" title="New chat">➕ New Chat</button>
+        <button id="newButton" class="text-l transition-opacity p-2 clear-btn text-gray-100" title="New chat">
+            <img src="static\chat.png" height="25", width="25">New Chat
+        </button>
         <div id="conversationsList"></div>
     </div>
 
     <div class="content-wrapper">
         <div class="container mx-auto p-4 max-w-4xl">
-            <div class="bg-white rounded-lg shadow-lg mb-24">
-                <div class="p-4 border-b">
-                    <h1 class="text-2xl font-bold text-gray-800">LM Studio Chat 👾</h1>
+            <div class="messages-header" rounded-lg shadow-lg mb-24">
+                <div class="p-4 border-b border-gray-700">
+                    <h1 class="font-bold flex items-center">
+                        Chat with AI <img src="static\conversation.png" height="25" width="25" class="ml-2">
+                    </h1>
                 </div>
                 <div class="messages-container p-4" id="messages"></div>
                 <div class="action-group flex justify-end space-x-2 p-4">
@@ -79,10 +83,10 @@
                             placeholder="Message here"></textarea>
                         <div class="button-group flex items-center space-x-2">
                             <button id="sendButton" class="visible transition-opacity p-2 send-btn" title="Send message">
-                                <img src="static\send-message.png" alt="send" class="w-8 h-8 rounded-full">
+                                <img src="static\send.png" alt="send" class="w-8 h-8 rounded-full">
                             </button>
                             <button id="interruptButton" class="hidden transition-opacity p-2 stop-btn" title="Stop generation">
-                                <img src="static\stop.png" alt="send" class="w-8 h-8 rounded-full", height="5", width="5">
+                                <img src="static\stop.png" alt="stop" class="w-8 h-8 rounded-full">
                             </button>
                         </div>
                     </div>
@@ -208,7 +212,7 @@
                     div.innerHTML = `
                         <div class="conversation-content" onclick="loadConversation('${conv.id}')">
                             <div class="text-sm font-bold mb-1">${conv.name}</div>
-                            <div class="text-xs text-gray-500">${new Date(conv.last_updated).toLocaleString()}</div>
+                            <div class="text-xs text-gray-400">${new Date(conv.last_updated).toLocaleString()}</div>
                         </div>
                         <button class="delete-button" onclick="deleteConversation('${conv.id}', event)">
                             Delete
@@ -351,8 +355,8 @@
 
         function createMessageElement(isUser, content) {
             const avatar = isUser ? '/static/man.png' : '/static/bot.png';
-            const bgColor = isUser ? 'bg-blue-500' : 'bg-gray-100';
-            const textColor = isUser ? 'text-white' : 'text-black';
+            const bgColor = isUser ? 'bg-blue-500' : 'bg-gray-1000';
+            const textColor = isUser ? 'text-white' : 'text-gray-100';
             const alignment = isUser ? 'justify-end' : '';
             
             const formattedContent = isUser ? content
@@ -475,46 +479,45 @@
                     content: `<div class="space-y-4">${(Array.isArray(data) ? data : [data]).map(item => {
                         const vidId = (item.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/) || [])[1];
                         return vidId ? 
-                            `<div class="mb-4"><div class="text-sm font-medium mb-2">${item.title}</div>
-                            <div class="rounded-lg bg-gray-50 p-4"><div class="flex items-center space-x-3">
+                            `<div class="mb-4"><div class="text-sm font-medium mb-2 text-gray-300">${item.title}</div>
+                            <div class="rounded-lg bg-gray-800 p-4"><div class="flex items-center space-x-3">
                             <img src="https://img.youtube.com/vi/${vidId}/default.jpg" alt="Thumbnail" class="w-24 h-auto rounded">
-                            <div><a href="https://www.youtube.com/watch?v=${vidId}" target="_blank" class="text-blue-600 hover:underline">Watch on YouTube</a>
-                            <div class="text-sm text-gray-600">ID: ${vidId}</div></div></div></div></div>` :
-                            `<div class="mb-4"><div class="text-sm font-medium mb-2">${item.title}</div>
-                            <a href="${item.content}" target="_blank" class="text-blue-600 hover:underline">${item.content}</a></div>`;
+                            <div><a href="https://www.youtube.com/watch?v=${vidId}" target="_blank" class="text-blue-400 hover:underline">Watch on YouTube</a>
+                            <div class="text-sm text-gray-400">ID: ${vidId}</div></div></div></div></div>` :
+                            `<div class="mb-4"><div class="text-sm font-medium mb-2 text-gray-300">${item.title}</div>
+                            <a href="${item.content}" target="_blank" class="text-blue-400 hover:underline">${item.content}</a></div>`;
                     }).join('')}</div>`,
-                    className: 'bg-white'
+                    className: 'bg-gray-900'
                 }),
                 web: () => ({
                     title: args.query, icon: '🌐',
                     content: Array.isArray(data) ? 
                         `<div class="space-y-4">${data.map(r => 
-                            `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-600 hover:underline mb-2 block">${r.title}</a>
-                            <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${r.citation}</div></div>`
+                            `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-400 hover:underline mb-2 block">${r.title}</a>
+                            <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${r.citation}</div></div>`
                         ).join('')}</div>` : 
-                        `<div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${data}</div>`,
-                    className: 'bg-white'
+                        `<div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${data}</div>`,
+                    className: 'bg-gray-900'
                 }),
                 wiki: () => ({
                     title: data.title, icon: '📚',
-                    content: `<div class="text-sm text-gray-600">${data.content}</div>`,
-                    className: 'bg-white'
+                    content: `<div class="text-sm text-gray-300">${data.content}</div>`,
+                    className: 'bg-gray-900'
                 }),
                 yt_url: () => ({
                     title: data.title, icon: '🎥',
                     content: `<div class="space-y-4">
-                                <div><div class="text-sm text-gray-500 mb-1">Description</div>
-                                <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${data.content}</div></div>
-                                <div><div class="text-sm text-gray-500 mb-1">Transcription</div>
-                                <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${data.transcription}</div></div>
+                                <div><div class="text-sm text-gray-400 mb-1">Description</div>
+                                <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${data.content}</div></div>
+                                <div><div class="text-sm text-gray-400 mb-1">Transcription</div>
+                                <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${data.transcription}</div></div>
                             </div>`,
-                    className: 'bg-white'
+                    className: 'bg-gray-900'
                 }),
                 web_url: () => ({
                     title: data.title || "Unable to open URL", icon: '🔗',
-                    content: `<div><a href="${args.url}" target="_blank" class="text-sm text-blue-600 hover:underline mb-2 block">${args.url}</a>
-                            <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">${data.content}</div></div>`,
-                    className: 'bg-white'
+                    content: `<div class="text-sm text-gray-300">${data.content}</div>`,
+                    className: 'bg-gray-900'
                 })
                 
             };
@@ -788,8 +791,8 @@
             document.querySelector('.content-wrapper').classList.toggle('shifted');
             document.querySelector('.input-container').classList.toggle('shifted');
             
-            toggleBtn.dataset.expanded = !isExpanded;
-            toggleBtn.textContent = isExpanded ? '💬➡️' : '💬⬅️';
+            // toggleBtn.dataset.expanded = !isExpanded;
+            // toggleBtn.textContent = isExpanded ? '💬➡️' : '💬⬅️';
         };
 
         function highlightCodeBlocks(element) {
