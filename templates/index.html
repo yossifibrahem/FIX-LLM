@@ -549,19 +549,23 @@
             // Add click handler to toggle content
             toolIcon.onclick = () => {
                 const isExpanded = resultDiv.classList.contains('expanded');
+                const currentActive = container.querySelector('.tool-icon.active');
+                const currentExpanded = container.querySelector('.tool-result.expanded');
                 
-                // Collapse all other results
-                container.querySelectorAll('.tool-result').forEach(el => {
-                    el.classList.remove('expanded');
-                });
-                container.querySelectorAll('.tool-icon').forEach(el => {
-                    el.classList.remove('active');
-                });
+                if (currentActive && currentActive !== toolIcon) {
+                    currentActive.classList.remove('active');
+                }
+                if (currentExpanded && currentExpanded !== resultDiv) {
+                    currentExpanded.classList.remove('expanded');
+                }
 
                 if (!isExpanded) {
                     resultDiv.classList.add('expanded');
                     toolIcon.classList.add('active');
                     highlightCodeBlocks(resultDiv);
+                } else {
+                    resultDiv.classList.remove('expanded');
+                    toolIcon.classList.remove('active');
                 }
             };
 
