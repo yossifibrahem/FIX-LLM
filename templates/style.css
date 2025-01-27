@@ -453,7 +453,7 @@ body {
 .tool-icons-row {
     display: flex;
     gap: 0.5rem;
-    padding: 0.5rem 0;
+    padding-top: 0.5rem;
     border-top: 1px solid #edf2f7;
     margin-top: 0.5rem;
 }
