@@ -470,12 +470,13 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
-    background: #1e1e1e;
-    color: #fff;
+    background: #2d2d2d;
+    color: #e0e0e0;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     font-family: monospace;
     font-size: 0.9em;
+    border-bottom: 1px solid #444;
 }
 
 .code-header + pre {
