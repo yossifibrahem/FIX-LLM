@@ -449,7 +449,47 @@ body {
     transform: rotate(180deg);
 }
 
+/* New styles for tool icons and results */
+.tool-icons-row {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid #edf2f7;
+    margin-top: 0.5rem;
+}
 
+.tool-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    background: #f3f4f6;
+    border: 1px solid #00000033;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+}
+
+.tool-icon:hover {
+    background: #e5e7eb;
+}
+
+.tool-icon.active {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.tool-result {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.tool-result.expanded {
+    max-height: 2000px;
+    transition: max-height 0.5s ease-in;
+}
 
 /* Update link styles in tool results */
 .tool-content a {

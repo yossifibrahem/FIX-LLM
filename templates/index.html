@@ -462,7 +462,7 @@
                 image: () => ({
                     title: args.query,
                     icon: '🖼️',
-                    content: `<div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    content: `<div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
                         ${(Array.isArray(data) ? data : [data]).map(item => `
                             <a href="${item.image}" target="_blank" class="block">
                                 <img src="${item.thumbnail || item.image}" alt="Search result" 
@@ -526,39 +526,48 @@
                 content: `<pre><code>${escapeHtml(JSON.stringify(data, null, 2))}</code></pre>`
             })))();
 
-            const resultDiv = document.createElement('div');
-            resultDiv.className = 'tool-result';
-            resultDiv.innerHTML = `
-                <div class="tool-header">
-                    <div class="tool-title">
-                        <span>${icon}</span>
-                        <span>${title}</span>
-                    </div>
-                    <svg class="tool-toggle w-4 h-4" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-width="2" d="M19 9l-7 7-7-7" fill="none"/>
-                    </svg>
-                </div>
-                <div class="tool-content">${content}</div>
-            `;
-
             const container = currentMessageElement.querySelector('.assistant-content');
             if (!container) return;
-            container.appendChild(resultDiv);
 
-            const header = resultDiv.querySelector('.tool-header');
-            const toggle = resultDiv.querySelector('.tool-toggle');
-            const contentDiv = resultDiv.querySelector('.tool-content');
-            
-            const toggleContent = () => {
-                contentDiv.classList.toggle('hidden');
-                toggle.classList.toggle('expanded');
-                if (!contentDiv.classList.contains('hidden')) {
-                    highlightCodeBlocks(contentDiv);
+            // Create or get the tool icons row
+            let iconsRow = container.querySelector('.tool-icons-row');
+            if (!iconsRow) {
+                iconsRow = document.createElement('div');
+                iconsRow.className = 'tool-icons-row';
+                container.appendChild(iconsRow);
+            }
+
+            // Create the tool icon
+            const toolIcon = document.createElement('div');
+            toolIcon.className = 'tool-icon';
+            toolIcon.innerHTML = `${icon} ${title}`;
+
+            // Create the tool result container
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'tool-result';
+            resultDiv.innerHTML = `<div class="tool-content">${content}</div>`;
+
+            // Add click handler to toggle content
+            toolIcon.onclick = () => {
+                const isExpanded = resultDiv.classList.contains('expanded');
+                
+                // Collapse all other results
+                container.querySelectorAll('.tool-result').forEach(el => {
+                    el.classList.remove('expanded');
+                });
+                container.querySelectorAll('.tool-icon').forEach(el => {
+                    el.classList.remove('active');
+                });
+
+                if (!isExpanded) {
+                    resultDiv.classList.add('expanded');
+                    toolIcon.classList.add('active');
+                    highlightCodeBlocks(resultDiv);
                 }
             };
-            
-            header.onclick = toggleContent;
-            toggleContent(); // Start expanded
+
+            iconsRow.appendChild(toolIcon);
+            container.appendChild(resultDiv);
         }
 
         // Update the processStreamMessage function
