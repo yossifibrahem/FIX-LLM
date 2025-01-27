@@ -60,8 +60,6 @@ body {
     color: #e0e0e0;
     background-color: #171717;
     border-radius: 1.25rem;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adjusted for shadow-lg */
-    margin-bottom: 24px; /* Adjusted for mb-24 */
 }
 
 
