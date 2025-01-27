@@ -803,9 +803,10 @@
             document.querySelector('.conversation-list').classList.toggle('visible');
             document.querySelector('.content-wrapper').classList.toggle('shifted');
             document.querySelector('.input-container').classList.toggle('shifted');
-            
-            // toggleBtn.dataset.expanded = !isExpanded;
-            // toggleBtn.textContent = isExpanded ? '💬➡️' : '💬⬅️';
+        
+            toggleBtn.dataset.expanded = (!isExpanded).toString();            
+            const menuImg = toggleBtn.querySelector('img');
+            menuImg.style.transform = isExpanded ? '' : 'scaleX(-1)';
         };
 
         function highlightCodeBlocks(element) {
