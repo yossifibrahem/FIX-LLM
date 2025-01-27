@@ -637,8 +637,11 @@
                 createMessageElement(true, message);
             }
 
+            // Disable all control buttons during streaming
             els.sendButton.classList.add('hidden');
             els.interruptButton.classList.remove('hidden');
+            document.getElementById('regenerateResponseButton').disabled = true;
+            document.getElementById('deleteLastMessageButton').disabled = true;
 
             currentMessageElement = createMessageElement(false);
             currentResponse = '';
@@ -673,6 +676,8 @@
                 els.sendButton.classList.remove('hidden');
                 els.interruptButton.classList.add('hidden');
                 els.userInput.focus();
+                document.getElementById('regenerateResponseButton').disabled = false;
+                document.getElementById('deleteLastMessageButton').disabled = false;
                 document.querySelectorAll('pre code').forEach(block => Prism.highlightElement(block));
             }
         }
