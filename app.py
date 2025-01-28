@@ -227,7 +227,21 @@ def get_conversation_name(messages):
 def chat():
     global current_conversation_id, chat_messages, interrupt_flag
     
-    user_message = request.json.get('message')
+    data = request.json
+    user_message = data.get('message', '')
+    file_data = data.get('file')
+
+    if file_data:
+        file_content = file_data['content']
+        file_name = file_data['name']
+        
+        # Add file information to the message
+        system_message = {
+            "role": "system",
+            "content": f"The user has attached a file named '{file_name}' with the following content:\n\n{file_content}\n\nPlease process this file along with their message: {user_message}"
+        }
+        chat_messages.append(system_message)
+
     chat_messages.append({"role": "user", "content": str(user_message)})
     
     if not current_conversation_id:
