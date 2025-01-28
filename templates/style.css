@@ -283,16 +283,16 @@ body {
 }
 
 #newButton {
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 1rem;
-    border-bottom: 1px solid #444;
-    z-index: 51;
     display: flex;
     gap: 0.5rem;
-    font-weight: 500;
+    align-items: flex-start;
+    padding: 1rem;
+    /* border-bottom: 1px solid #333; */
+    cursor: pointer;
     transition: background-color 0.2s;
+    position: relative;
+    margin: 2px;
+    border-radius: 0.5rem;
 }
 
 #newButton:hover {
@@ -308,10 +308,12 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     padding: 1rem;
-    border-bottom: 1px solid #333;
+    /* border-bottom: 1px solid #333; */
     cursor: pointer;
     transition: background-color 0.2s;
     position: relative;
+    margin: 5px;
+    border-radius: 0.5rem;
 }
 
 .delete-button {
