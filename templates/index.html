@@ -324,7 +324,7 @@
                     // Find the last user message
                     let lastUserIndex = -1;
                     for (let i = messageElements.length - 1; i >= 0; i--) {
-                        if (messageElements[i].querySelector('.bg-blue-900')) {
+                        if (messageElements[i].querySelector('.user-message')) {
                             lastUserIndex = i;
                             break;
                         }
@@ -363,9 +363,9 @@
 
         function createMessageElement(isUser, content) {
             const avatar = isUser ? '/static/man.png' : '/static/bot.png';
-            const bgColor = isUser ? 'bg-blue-900' : 'bg-gray-1000';
             const textColor = isUser ? 'text-white' : 'text-gray-100';
             const alignment = isUser ? 'justify-end' : '';
+            const className = isUser ? 'user-message' : 'assistant-message';
             
             const formattedContent = isUser ? content
                 .replace(/&/g, '&amp;')
@@ -379,7 +379,7 @@
                     ${!isUser ? `
                         <img src="${avatar}" alt="Avatar" class="w-8 h-8 rounded-full">
                     ` : ''}
-                    <div class="mx-3 ${bgColor} rounded-lg py-2 px-4 max-w-3xl ${textColor}">
+                    <div class="${className} rounded-lg py-2 px-4 max-w-3xl ${textColor}">
                         ${isUser ? `<div style="white-space: pre-wrap;">${formattedContent}</div>` : '<div class="assistant-content"></div>'}
                     </div>
                     ${isUser ? `<img src="${avatar}" alt="Avatar" class="w-8 h-8 rounded-full">` : ''}
