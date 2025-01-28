@@ -82,10 +82,6 @@
                             rows="2"
                             placeholder="Message here"></textarea>
                         <div class="button-group flex items-center space-x-2">
-                            <input type="file" id="fileInput" class="file-input" accept=".txt,.csv,.md,.docx,.py">
-                            <button id="fileButton" class="file-button" title="Attach file">
-                                <img src="static\attach.png" alt="attach" class="w-8 h-8 rounded-full">
-                            </button>
                             <button id="sendButton" class="visible transition-opacity p-2 send-btn" title="Send message">
                                 <img src="static\send.png" alt="send" class="w-8 h-8 rounded-full">
                             </button>
@@ -93,10 +89,6 @@
                                 <img src="static\stop.png" alt="stop" class="w-8 h-8 rounded-full">
                             </button>
                         </div>
-                    </div>
-                    <div id="fileAttachment" class="file-attachment" style="display: none;">
-                        <span id="fileName"></span>
-                        <span class="remove-file" title="Remove file">×</span>
                     </div>
                 </div>
             </div>
@@ -636,24 +628,8 @@
             }
         }
         async function handleMessage(existingMessage = null) {
-            let message = existingMessage || els.userInput.value.trim();
-            if (!message && !attachedFile) return;
-
-            const payload = {
-                message: message
-            };
-
-            if (attachedFile) {
-                payload.file = {
-                    name: attachedFile.name,
-                    content: attachedFile.content,
-                    type: attachedFile.type
-                };
-                // Clear the file attachment after sending
-                attachedFile = null;
-                document.getElementById('fileInput').value = '';
-                document.getElementById('fileAttachment').style.display = 'none';
-            }
+            const message = existingMessage || els.userInput.value.trim();
+            if (!message) return;
 
             if (!existingMessage) {
                 els.userInput.value = '';
@@ -674,7 +650,7 @@
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ message })
                 });
 
                 const reader = response.body.getReader();
@@ -958,35 +934,6 @@
             els.userInput.focus();
             adjustTextareaHeight();
         });
-
-        let attachedFile = null;
-
-        document.getElementById('fileButton').onclick = () => {
-            document.getElementById('fileInput').click();
-        };
-
-        document.getElementById('fileInput').onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    attachedFile = {
-                        name: file.name,
-                        content: event.target.result,
-                        type: file.type
-                    };
-                    document.getElementById('fileName').textContent = file.name;
-                    document.getElementById('fileAttachment').style.display = 'flex';
-                };
-                reader.readAsText(file);
-            }
-        };
-
-        document.querySelector('.remove-file').onclick = () => {
-            attachedFile = null;
-            document.getElementById('fileInput').value = '';
-            document.getElementById('fileAttachment').style.display = 'none';
-        };
     </script>
 </body>
 </html>
