@@ -78,17 +78,16 @@ body {
 
 .input-group {
     background: #171717;
-    border: 1px solid #333;
+    border: 1px solid #555;
     border-radius: 1.25rem;
     padding: 0.5rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     transition: all 0.2s ease;
 }
 
 .input-group:focus-within {
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-    border-color: #3b82f6;
+    background: #1e1e1e;
 }
+
 
 #userInput {
     width: 100%;
