@@ -85,7 +85,7 @@ body {
 }
 
 .input-group:focus-within {
-    background: #1e1e1e;
+    background: #212121;
 }
 
 
@@ -637,4 +637,73 @@ button:disabled{
 
 .user-message {
     background-color: #333; 
+}
+
+.file-upload-button {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 1rem;
+    /* background: #212121; */
+}
+
+.file-upload-button:hover {
+    background: #333;
+}
+
+.file-upload-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.file-attachment-indicator {
+    display: none;
+    background: #2d2d2d;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.file-attachment-indicator.visible {
+    display: flex;
+}
+
+.remove-file {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.remove-file:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.file-content {
+    margin-top: 1rem;
+}
+
+.file-content-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: #2d2d2d;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.file-content-body {
+    display: none;
+    padding: 1rem;
+    background: #1e1e1e;
+    border-radius: 0 0 0.5rem 0.5rem;
+    font-family: monospace;
+}
+
+.file-content-body.visible {
+    display: block;
 }

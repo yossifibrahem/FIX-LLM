@@ -75,8 +75,16 @@
     
         <div class="input-container">
             <div class="container mx-auto px-4 max-w-4xl">
+                <div id="fileAttachmentIndicator" class="file-attachment-indicator">
+                    <span id="attachedFileName"></span>
+                    <button class="remove-file" onclick="removeAttachedFile()">Remove</button>
+                </div>
                 <div class="input-group">
                     <div class="flex items-start space-x-3">
+                        <input type="file" id="fileInput" style="display: none" accept=".txt,.doc, .py, .json , .csv, .js, .html, .css, .md, .java, .cpp, .c, .sql, .yaml, .yml, .sh">
+                        <button class="file-upload-button" title="Attach file" >
+                            <img src="static/upload.png" alt="attach w-8 h-8 rounded-full">
+                        </button>
                         <textarea id="userInput"
                             class="flex-grow focus:outline-none"
                             rows="2"
@@ -367,7 +375,22 @@
             const alignment = isUser ? 'justify-end' : '';
             const className = isUser ? 'user-message' : 'assistant-message';
             
-            const formattedContent = isUser ? content
+            // Check if content contains file attachment
+            let messageContent = content;
+            let fileAttachment = null;
+            
+            if (isUser && content.includes('Attached file (')) {
+                const matches = content.match(/^(.*?)\n\nAttached file \((.*?)\):\n([\s\S]*)$/);
+                if (matches) {
+                    messageContent = matches[1];
+                    fileAttachment = {
+                        name: matches[2],
+                        content: matches[3]
+                    };
+                }
+            }
+            
+            const formattedContent = isUser ? messageContent
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
@@ -381,6 +404,16 @@
                     ` : ''}
                     <div class="${className} rounded-lg py-2 px-4 max-w-3xl ${textColor}">
                         ${isUser ? `<div style="white-space: pre-wrap;">${formattedContent}</div>` : '<div class="assistant-content"></div>'}
+                        ${fileAttachment ? `
+                            <div class="file-content">
+                                <div class="file-content-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">
+                                    📄 ${fileAttachment.name}
+                                </div>
+                                <div class="file-content-body">
+                                    ${fileAttachment.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                     ${isUser ? `<img src="${avatar}" alt="Avatar" class="w-8 h-8 rounded-full">` : ''}
                 </div>
@@ -634,7 +667,31 @@
             if (!existingMessage) {
                 els.userInput.value = '';
                 els.userInput.rows = DEFAULT_ROWS;
-                createMessageElement(true, message);
+                const messageEl = createMessageElement(true, message);
+                
+                if (attachedFile) {
+                    const fileContent = document.createElement('div');
+                    fileContent.className = 'file-content';
+                    fileContent.innerHTML = `
+                        <div class="file-content-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">
+                            📄 ${attachedFile.name}
+                        </div>
+                        <div class="file-content-body">
+                            ${attachedFile.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+                        </div>
+                    `;
+                    messageEl.querySelector('.user-message').appendChild(fileContent);
+                }
+            }
+            
+            // Add file content to the actual message if attached
+            const fullMessage = attachedFile ? 
+                `${message}\n\nAttached file (${attachedFile.name}):\n${attachedFile.content}` : 
+                message;
+
+            // Remove file attachment after preparing the message
+            if (attachedFile) {
+                removeAttachedFile();
             }
 
             // Disable all control buttons during streaming
@@ -650,7 +707,7 @@
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message })
+                    body: JSON.stringify({ message: fullMessage })
                 });
 
                 const reader = response.body.getReader();
@@ -753,6 +810,7 @@
                 currentConversationId = data.conversation_id;
                 els.messages.innerHTML = '';
                 await loadConversations();
+                removeAttachedFile();
             } catch (error) {
                 console.error('Error creating new conversation:', error);
             }
@@ -866,6 +924,56 @@
             });
         }
 
+        let attachedFile = null;
+        const fileInput = document.getElementById('fileInput');
+        const fileAttachmentIndicator = document.getElementById('fileAttachmentIndicator');
+        const attachedFileName = document.getElementById('attachedFileName');
+
+        document.querySelector('.file-upload-button').onclick = () => fileInput.click();
+
+        fileInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            attachedFile = {
+                name: file.name,
+                content: await file.text(),
+                type: file.type
+            };
+            
+            attachedFileName.textContent = file.name;
+            fileAttachmentIndicator.classList.add('visible');
+            
+            saveAttachedFile();
+        };
+
+        function removeAttachedFile() {
+            attachedFile = null;
+            fileInput.value = '';
+            fileAttachmentIndicator.classList.remove('visible');
+            localStorage.removeItem(`file_${currentConversationId}`);
+        }
+
+        function saveAttachedFile() {
+            if (currentConversationId && attachedFile) {
+                localStorage.setItem(`file_${currentConversationId}`, JSON.stringify(attachedFile));
+            }
+        }
+
+        function loadAttachedFile() {
+            if (currentConversationId) {
+                const savedFile = localStorage.getItem(`file_${currentConversationId}`);
+                if (savedFile) {
+                    attachedFile = JSON.parse(savedFile);
+                    attachedFileName.textContent = attachedFile.name;
+                    fileAttachmentIndicator.classList.add('visible');
+                } else {
+                    attachedFile = null;
+                    fileAttachmentIndicator.classList.remove('visible');
+                }
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             await loadConversations();
             try {
@@ -933,6 +1041,7 @@
             
             els.userInput.focus();
             adjustTextareaHeight();
+            loadAttachedFile();
         });
     </script>
 </body>
