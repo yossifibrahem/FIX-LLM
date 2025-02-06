@@ -1,7 +1,7 @@
 # LLM Tool Calling Web Application 🤖💬
 
 ## Overview
-This is a powerful, flexible web application that enables an Large Language Model (LLM) to interact with multiple tools and perform complex tasks using function calling. Built with Flask and integrated with LM Studio, this application provides a rich, interactive chat experience with multi-tool support.
+This is a web application that enables a Large Language Model (LLM) to interact with multiple tools and perform tasks using function calling. Built with Flask and with LM Studio server, this application provides an interactive chat experience with multi-tool support.
 
 ## 🌟 Key Features
 
