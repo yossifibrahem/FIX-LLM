@@ -26,12 +26,13 @@ This is a powerful, flexible web application that enables an Large Language Mode
 - 🌈 **Tool Results Visualization**: Interactive, collapsible tool result sections
 
 ## 🖥️ Screenshots
-<img src="https://github.com/user-attachments/assets/5ba6af6d-86fa-4712-8838-cc64523b6dfb" alt="Screenshot 2025-01-13 194050" width="300"/>
-<img src="https://github.com/user-attachments/assets/77ad52ee-5ac2-41e9-8afb-040a73c34c0d" alt="Screenshot 2025-01-13 194115" width="300"/>
-<img src="https://github.com/user-attachments/assets/eb73d09b-5ee1-4145-9421-ec31743f15fa" alt="Screenshot 2025-01-13 194057" width="300"/>
-<img src="https://github.com/user-attachments/assets/b96ae1cb-a2cc-4699-bc44-e7bbf798000d" alt="Screenshot 2025-01-13 194110" width="300"/>
-<img src="https://github.com/user-attachments/assets/39fde852-df06-43c7-b759-17da8711af0d" alt="Screenshot 2025-01-13 194104" width="300"/>
-<img src="https://github.com/user-attachments/assets/27387bb0-dedd-4905-9faf-5157887d7a30" alt="Screenshot 2025-01-13 194654" width="300"/>
+
+<img width="400" alt="python" src="https://github.com/user-attachments/assets/01762e23-575d-454c-8533-a1d10dc4c0cb" />
+<img width="400" alt="web and image" src="https://github.com/user-attachments/assets/e1772634-064e-4592-9ae6-757281b45cd4" />
+<img width="400" alt="YT" src="https://github.com/user-attachments/assets/cfa6d63e-fea8-4c2e-b5de-e16abfdbda24" />
+<img width="400" alt="urls" src="https://github.com/user-attachments/assets/322db552-7f1a-4678-9039-46420f8e87ab" />
+<img width="400" alt="wikipidia" src="https://github.com/user-attachments/assets/be587034-a76e-4785-bcb8-ab9573b5aa35" />
+<img width="400" alt="history" src="https://github.com/user-attachments/assets/8cd972d2-b816-4588-8826-dcb82f1aa8ba" />
 
 ## 🔧 Prerequisites
 - Python 3.8+
