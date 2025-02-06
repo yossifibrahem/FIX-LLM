@@ -8,43 +8,17 @@ import json
 import threading
 import ctypes
 import re
-import resource
-import signal
-import ast
-from functools import wraps
-import numpy as np
-
 Base_Dir = os.path.expanduser("~/.conversations/python")
 if not os.path.exists(Base_Dir):
     os.makedirs(Base_Dir)
 os.chdir(Base_Dir)
 
-# Memory limit in bytes (default: 100MB)
-DEFAULT_MEMORY_LIMIT = 100 * 1024 * 1024
-DEFAULT_TIMEOUT = 5
-
-def limit_memory(max_memory):
-    """Set memory limit using resource module"""
-    try:
-        resource.setrlimit(resource.RLIMIT_AS, (max_memory, max_memory))
-    except ValueError as e:
-        print(f"Warning: Could not set memory limit: {e}")
-
-class MemoryError(Exception):
-    """Custom exception for memory limit violations"""
-    pass
-
-class SecurityError(Exception):
-    """Custom exception for security violations"""
-    pass
-
-def timeout_handler(signum, frame):
-    raise TimeoutError("Code execution timed out")
 
 class ThreadWithException(threading.Thread):
     """A Thread subclass that can be stopped by forcing an exception."""
     
     def _get_id(self):
+        # Returns the thread ID
         if hasattr(self, '_thread_id'):
             return self._thread_id
         for id, thread in threading._active.items():
@@ -53,6 +27,7 @@ class ThreadWithException(threading.Thread):
                 return id
 
     def raise_exception(self):
+        """Raises KeyboardInterrupt in the thread to stop it."""
         thread_id = self._get_id()
         if thread_id is not None:
             res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
@@ -60,78 +35,26 @@ class ThreadWithException(threading.Thread):
                 ctypes.py_object(KeyboardInterrupt)
             )
             if res > 1:
+                # If more than one exception was raised, something went wrong
                 ctypes.pythonapi.PyThreadState_SetAsyncExc(
                     ctypes.c_long(thread_id),
                     None
                 )
-                raise RuntimeError("Failed to safely stop thread execution")
+                raise RuntimeError("Failed to stop thread")
 
 class PythonExecutor:
     """
-    A tool for safely executing Python code with memory and timeout limits.
+    A tool for safely executing Python code and capturing its output.
+    Windows-compatible version with timeout support.
     """
     
-    def __init__(self, memory_limit: int = DEFAULT_MEMORY_LIMIT):
+    def __init__(self):
         self.global_state: Dict = {}
         self.execution_result = None
-        self.memory_limit = memory_limit
-        
-        # Expanded blocked imports for better security
-        self.blocked_imports = [
-            "os", "sys", "subprocess", "shutil", "socket", "requests",
-            "urllib", "ftplib", "telnetlib", "poplib", "smtplib",
-            "ctypes", "multiprocessing", "threading"
-        ]
-        
-        # Expanded blocked keywords for better security
+        self.blocked_imports = ["os", "sys", "subprocess", "shutil"]
         self.blocked_keywords = [
-            "exec", "eval", "compile", "open", "file", "os.system",
-            "subprocess", "ctypes", "importlib", "input", "__import__",
-            "globals", "locals", "dir", "getattr", "setattr"
+            "exec", "eval", "open", "os.system", "subprocess", "ctypes", "importlib" , "input"
         ]
-        
-        # Add unsafe built-in functions
-        self.blocked_builtins = [
-            "globals", "locals", "dir", "vars", "getattr", "setattr",
-            "delattr", "hasattr", "__import__"
-        ]
-
-    def _create_safe_globals(self) -> Dict:
-        """Create a restricted globals dictionary for safe execution"""
-        safe_builtins = dict(__builtins__)
-        for func in self.blocked_builtins:
-            if func in safe_builtins:
-                del safe_builtins[func]
-        
-        return {
-            '__builtins__': safe_builtins,
-            '__name__': '__main__',
-            **self.global_state
-        }
-
-    def _check_ast_security(self, tree: ast.AST) -> bool:
-        """Analyze AST for potentially unsafe operations"""
-        for node in ast.walk(tree):
-            # Check for import statements
-            if isinstance(node, (ast.Import, ast.ImportFrom)):
-                names = []
-                if isinstance(node, ast.Import):
-                    names = [n.name for n in node.names]
-                else:
-                    if node.module in self.blocked_imports:
-                        return False
-                    names = [f"{node.module}.{n.name}" for n in node.names]
-                
-                if any(name.split('.')[0] in self.blocked_imports for name in names):
-                    return False
-            
-            # Check for calls to blocked built-ins
-            elif isinstance(node, ast.Call):
-                if isinstance(node.func, ast.Name):
-                    if node.func.id in self.blocked_keywords:
-                        return False
-        
-        return True
 
     @contextlib.contextmanager
     def _capture_output(self) -> Generator[Tuple[StringIO, StringIO], None, None]:
@@ -145,15 +68,21 @@ class PythonExecutor:
             sys.stdout, sys.stderr = old_out, old_err
 
     def _is_code_safe(self, code: str) -> bool:
-        """Enhanced security check for code safety"""
-        try:
-            tree = ast.parse(code)
-            return self._check_ast_security(tree)
-        except SyntaxError:
-            return False
+        """Check if the provided code contains unsafe imports or keywords."""
+        # Check for blocked imports
+        for module in self.blocked_imports:
+            if re.search(rf"\bimport\s+{module}\b|\bfrom\s+{module}\b", code):
+                return False
+
+        # Check for blocked keywords
+        for keyword in self.blocked_keywords:
+            if keyword in code:
+                return False
+
+        return True
 
     def _execute_code(self, code: str):
-        """Execute code with memory limits and store the result"""
+        """Execute code and store the result"""
         result = {
             'success': False,
             'output': '',
@@ -161,59 +90,57 @@ class PythonExecutor:
             'result': None
         }
 
+        # Security check
         if not self._is_code_safe(code):
-            result['error'] = "SecurityError: Unsafe code detected - possible security violation"
+            result['error'] = "SecurityError: Unsafe code detected"
             self.execution_result = result
             return
-
-        # Set memory limit
-        limit_memory(self.memory_limit)
         
         with self._capture_output() as (out, err):
             try:
-                # Create restricted globals
-                exec_globals = self._create_safe_globals()
+                # Execute the code within the global state
+                exec_globals = {
+                    '__builtins__': __builtins__,
+                    **self.global_state
+                }
                 
-                # Compile and execute code
+                # Try to compile the code first to catch syntax errors
                 compiled_code = compile(code, '<string>', 'exec')
+                
+                # Execute the code
                 exec(compiled_code, exec_globals)
                 
-                # Update global state with safe values only
-                self.global_state.update({
-                    k: v for k, v in exec_globals.items()
-                    if k not in self.blocked_keywords and not k.startswith('__')
-                })
+                # Update global state
+                self.global_state.update(exec_globals)
                 
+                # Get output
                 result['output'] = out.getvalue()
                 result['success'] = True
                 
-                # Get last expression result
+                # Try to get the last expression result
+                # Split by both newlines and semicolons
                 lines = [line.strip() for line in re.split(r'[;\n]', code) if line.strip()]
                 if lines:
                     try:
                         last_expr = compile(lines[-1], '<string>', 'eval')
                         result['result'] = eval(last_expr, exec_globals)
-                    except Exception:
+                    except:
                         pass
                     
-            except MemoryError:
-                result['error'] = f"MemoryError: Exceeded memory limit of {self.memory_limit/1024/1024:.1f}MB"
             except KeyboardInterrupt:
-                result['error'] = 'ExecutionError: Code execution timed out'
+                result['error'] = 'Execution timed out'
+                result['output'] = out.getvalue()
             except Exception as e:
-                result['error'] = (
-                    f"{type(e).__name__}: {str(e)}\n"
-                    f"Traceback:\n{traceback.format_exc()}"
-                )
+                result['error'] = f"{type(e).__name__}: {str(e)}\n{traceback.format_exc()}"
                 result['output'] = out.getvalue()
 
         if not is_json_serializable(result):
             result = make_json_serializable(result)
         self.execution_result = result
-
-    def execute(self, code: str, timeout: Optional[int] = DEFAULT_TIMEOUT) -> Dict:
+            
+    def execute(self, code: str, timeout: Optional[int] = 10) -> Dict:
         """
-        Execute Python code with timeout and memory limits.
+        Execute Python code with timeout and return the results.
         
         Args:
             code: String containing Python code to execute
@@ -223,33 +150,30 @@ class PythonExecutor:
             Dictionary containing execution results
         """
         if timeout is None or timeout <= 0:
-            timeout = DEFAULT_TIMEOUT
+            timeout = float('inf')
         
-        # Set up timeout handler
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(timeout)
+        # Create and start execution thread
+        execution_thread = ThreadWithException(target=self._execute_code, args=(code,))
+        execution_thread.start()
         
-        try:
-            execution_thread = ThreadWithException(target=self._execute_code, args=(code,))
-            execution_thread.start()
-            execution_thread.join(timeout)
-            
-            if execution_thread.is_alive():
-                execution_thread.raise_exception()
-                execution_thread.join()
-                return {
-                    'success': False,
-                    'output': '',
-                    'error': f'ExecutionError: Code timed out after {timeout} seconds',
-                    'result': None
-                }
-        finally:
-            signal.alarm(0)
+        # Wait for completion or timeout
+        execution_thread.join(timeout)
+        
+        # If thread is still alive after join, it's running too long
+        if execution_thread.is_alive():
+            execution_thread.raise_exception()
+            execution_thread.join()
+            return {
+                'success': False,
+                'output': '',
+                'error': f'Execution timed out after {timeout} seconds',
+                'result': None
+            }
             
         return self.execution_result or {
             'success': False,
             'output': '',
-            'error': 'ExecutionError: Code execution failed with no result',
+            'error': 'Execution failed with no result',
             'result': None
         }
     
@@ -257,14 +181,14 @@ class PythonExecutor:
         """Clear the stored global state"""
         self.global_state = {}
 
-def execute_python_code(code: str, timeout: int = DEFAULT_TIMEOUT, memory_limit: int = DEFAULT_MEMORY_LIMIT) -> dict:
+# Example usage
+def execute_python_code(code: str, timeout: int = 5) -> dict:
     """
-    Execute Python code with security, memory, and timeout limits.
+    Execute Python code and return the execution results.
     
     Args:
         code: String containing the Python code to execute
         timeout: Maximum execution time in seconds (default: 5)
-        memory_limit: Maximum memory usage in bytes (default: 100MB)
         
     Returns:
         Dictionary containing:
@@ -273,10 +197,9 @@ def execute_python_code(code: str, timeout: int = DEFAULT_TIMEOUT, memory_limit:
         - error: Error message if execution failed
         - result: Last evaluated expression result
     """
-    executor = PythonExecutor(memory_limit=memory_limit)
+    executor = PythonExecutor()
     return executor.execute(code, timeout)
 
-# Helper functions remain unchanged
 def is_json_serializable(data):
     try:
         json.dumps(data)
@@ -284,7 +207,17 @@ def is_json_serializable(data):
     except (TypeError, OverflowError):
         return False
 
+import numpy as np
 def make_json_serializable(data):
+    """
+    Convert non-JSON-serializable data to a JSON-serializable format.
+    
+    Args:
+        data: The data to convert.
+        
+    Returns:
+        The JSON-serializable data.
+    """
     if isinstance(data, np.ndarray):
         return data.tolist()
     elif isinstance(data, (set,)):
@@ -303,5 +236,4 @@ def make_json_serializable(data):
         return data
     else:
         return str(data)
-    
     
