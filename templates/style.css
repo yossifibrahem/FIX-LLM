@@ -13,9 +13,8 @@ body {
     flex: 1;
     overflow-y: auto;
     padding-bottom: 50px;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 220px);
     border-bottom: solid 1px #333;
-    max-height: calc(100vh - 220px);
     background-color: #171717;
 }
 
@@ -77,7 +76,7 @@ body {
 }
 
 .input-group {
-    background: #171717;
+    background: #1e1e1e;
     border: 1px solid #555;
     border-radius: 1.25rem;
     padding: 0.5rem;
@@ -85,7 +84,7 @@ body {
 }
 
 .input-group:focus-within {
-    background: #1e1e1e;
+    background: #171717;
 }
 
 
@@ -100,28 +99,31 @@ body {
     color: #e0e0e0;
 }
 
-.button-group button {
-    background: #333;
+.button-group button,
+.button-action {
+    background: #171717;
     border: 1px solid #444;
     border-radius: 1rem;
     cursor: pointer;
     outline: none;
-    transform: translateY(0);
-    transition: all 0.15s ease;
     padding: 0.5rem 0.75rem;
+    transition: all 0.15s ease;
+    transform: translateY(0);
     box-shadow: 
-        0 5px 0 #444,
+        0 5px 0 #333,
         0 3px 3px rgba(0, 0, 0, 0.5);
 }
 
-.button-group button:hover {
+.button-group button:hover,
+.button-action:hover {
     transform: translateY(-1px);
     box-shadow: 
         0 7px 0 #444,
         0 4px 4px rgba(0, 0, 0, 0.5);
 }
 
-.button-group button:active {
+.button-group button:active,
+.button-action:active {
     transform: translateY(1px);
     box-shadow: 
         0 1px 0 #444,
@@ -245,7 +247,7 @@ body {
     position: fixed;
     left: 0;
     top: 1rem;
-    bottom: 1rem;
+    bottom: 6rem;
     width: 300px;
     background: #171717;
     border-right: 1px solid #333;
@@ -407,19 +409,6 @@ body {
     border: 2px solid #555;
     border-radius: 0.5rem;
     padding: 0.25rem;
-}
-
-.button-action {
-    border: 1px solid #444;
-    background: #333;
-    border-radius: 1rem;
-    cursor: pointer;
-    padding: 0.5rem 0.75rem;
-    transition: all 0.15s ease;
-    left: 50rem;
-    box-shadow: 
-        0 5px 0 #444,
-        0 3px 3px rgba(0, 0, 0, 0.5);
 }
 
 .action-group {
