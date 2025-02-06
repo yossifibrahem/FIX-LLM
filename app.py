@@ -51,7 +51,7 @@ Tools = [{
             "type": "object",
             "properties": {
                 "query": {"type": "string", "description": "Search query for websites"},
-                "embedding_matcher": {"type": "string", "description": "Used for finding relevant citations"},
+                "citation_finder": {"type": "string", "description": "Used for finding relevant citations"},
                 "number_of_websites": {
                     "type": "integer",
                     "description": "Maximum websites to visit",
@@ -59,11 +59,11 @@ Tools = [{
                 },
                 "number_of_citations": {
                     "type": "integer",
-                    "description": "Maximum citations to scrape (250 words each)",
+                    "description": "Maximum citations to scrape",
                     "default": 5,
                 }
             },
-            "required": ["query", "embedding_matcher"]
+            "required": ["query"]
         }
     }
 }, {
@@ -104,7 +104,7 @@ Tools = [{
                 "number_of_images": {
                     "type": "integer",
                     "description": "Maximum images to get",
-                    "default": 3,
+                    "default": 1,
                 },
             },
             "required": ["query"]
@@ -297,7 +297,7 @@ def chat():
                         elif tool_name == "web":
                             result = web(
                                 arguments["query"],
-                                arguments.get("embedding_matcher", arguments["query"]),
+                                arguments.get("citation_finder", arguments["query"]),
                                 arguments.get("number_of_websites", 3),
                                 arguments.get("number_of_citations", 5)
                             )
