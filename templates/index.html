@@ -44,13 +44,13 @@
     </button>
 
     <div class="conversation-list">
-        <div class="p-4 border-b border-gray-700">
-            <h2 class="text-l font-bold text-gray-100">Chat History</h2>
+        <h2 class="text-l font-bold text-gray-100 p-4">Chat History</h2>
+        <div class="conversation-content">
+            <button id="newButton" class="text-l transition-opacity p-2 clear-btn text-gray-100" title="New chat">
+                <img src="static\new.png" height="25", width="25">Start New Chat
+            </button>
+            <div id="conversationsList"></div>
         </div>
-        <button id="newButton" class="text-l transition-opacity p-2 clear-btn text-gray-100" title="New chat">
-            <img src="static\new.png" height="25", width="25">Start New Chat
-        </button>
-        <div id="conversationsList"></div>
     </div>
 
     <div class="content-wrapper">
@@ -466,7 +466,7 @@
                     `;
                     return {
                         title: 'Python Execution',
-                        icon: data.success ? '🐍' : '❌',
+                        icon: data.success ? '🐍' : (data.error.startsWith('SecurityError') || data.error.startsWith('Execution timed out')  ? '⚠️' : '❌'),
                         content: content
                     };
                 },
@@ -524,10 +524,9 @@
                 }),
                 web_url: () => ({
                     title: data.title || "Unable to open URL", icon: '🔗',
-                    content: `<div class="text-sm text-gray-300">${data.content}</div>`,
+                    content: `<div class="text-sm text-gray-300 web-url-content">${marked.parse(renderMath(data.content))}</div>`,
                     className: 'bg-gray-900'
                 })
-                
             };
 
             const { title, icon, content } = (generators[name] || (() => ({

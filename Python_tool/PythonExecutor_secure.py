@@ -236,4 +236,3 @@ def make_json_serializable(data):
         return data
     else:
         return str(data)
-    

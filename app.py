@@ -51,7 +51,7 @@ Tools = [{
             "type": "object",
             "properties": {
                 "query": {"type": "string", "description": "Search query for websites"},
-                "embedding_matcher": {"type": "string", "description": "Used for finding relevant citations"},
+                "citation_finder": {"type": "string", "description": "Used for finding relevant citations"},
                 "number_of_websites": {
                     "type": "integer",
                     "description": "Maximum websites to visit",
@@ -59,11 +59,11 @@ Tools = [{
                 },
                 "number_of_citations": {
                     "type": "integer",
-                    "description": "Maximum citations to scrape (250 words each)",
+                    "description": "Maximum citations to scrape",
                     "default": 5,
                 }
             },
-            "required": ["query", "embedding_matcher"]
+            "required": ["query"]
         }
     }
 }, {
@@ -104,7 +104,7 @@ Tools = [{
                 "number_of_images": {
                     "type": "integer",
                     "description": "Maximum images to get",
-                    "default": 3,
+                    "default": 1,
                 },
             },
             "required": ["query"]
@@ -297,7 +297,7 @@ def chat():
                         elif tool_name == "web":
                             result = web(
                                 arguments["query"],
-                                arguments.get("embedding_matcher", arguments["query"]),
+                                arguments.get("citation_finder", arguments["query"]),
                                 arguments.get("number_of_websites", 3),
                                 arguments.get("number_of_citations", 5)
                             )
@@ -436,17 +436,19 @@ def get_messages():
 def delete_last_message():
     global chat_messages
     if len(chat_messages) >= 2:
-        last_messages = []
-        for msg in reversed(chat_messages):
-            if msg["role"] == "user":
+        # Find the last user message index
+        last_user_index = None
+        for i in range(len(chat_messages) - 1, -1, -1):
+            if chat_messages[i]["role"] == "user":
+                last_user_index = i
                 break
-            last_messages.append(msg)
         
-        for _ in range(len(last_messages) + 1):
-            chat_messages.pop()
+        if last_user_index is not None:
+            # Remove all messages after and including the last user message
+            chat_messages = chat_messages[:last_user_index]
+            save_conversation()
+            return jsonify({"status": "success"})
             
-        save_conversation()
-        return jsonify({"status": "success"})
     return jsonify({"status": "error", "message": "No messages to delete"}), 400
 
 @app.route('/regenerate', methods=['POST'])

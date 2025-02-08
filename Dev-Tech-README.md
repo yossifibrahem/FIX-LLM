@@ -133,7 +133,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Acknowledgements
 
 - [LM Studio](https://lmstudio.ai/) for providing local inference capabilities
-- [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main) for web function
+- [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main) for web searching
+- [crawl4ai](https://github.com/unclecode/crawl4ai) for web scraping
 - Open-source libraries used in the project
 
 ## Disclaimer
