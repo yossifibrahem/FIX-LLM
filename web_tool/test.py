@@ -20,4 +20,3 @@ async def scrape_multiple_websites(urls):
         return results
     except Exception as e:
         return json.dumps({"error": str(e)})
-

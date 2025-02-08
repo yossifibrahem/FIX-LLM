@@ -519,6 +519,12 @@ body {
     transition: max-height 0.3s ease-out;
 }
 
+.tool-content .markdown-content img {
+    max-width: 10%;
+    height: auto;
+    margin: 1em auto;
+}
+
 .tool-header {
     display: flex;
     align-items: center;
@@ -590,9 +596,9 @@ body {
 }
 
 .tool-result.expanded {
-    max-height: 350px; /* Set a fixed maximum height */
+    max-height: 350px;
     transition: max-height 0.5s ease-in;
-    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-y: auto; 
 }
 
 .tool-content a {

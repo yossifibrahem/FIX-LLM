@@ -524,7 +524,7 @@
                 }),
                 web_url: () => ({
                     title: data.title || "Unable to open URL", icon: '🔗',
-                    content: `<div class="text-sm text-gray-300">${data.content}</div>`,
+                    content: `<div class="text-sm text-gray-300 markdown-content">${marked.parse(renderMath(data.content))}</div>`,
                     className: 'bg-gray-900'
                 })
                 

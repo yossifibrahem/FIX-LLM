@@ -1,11 +1,11 @@
 import json
+import asyncio
 
 from web_tool.duck_duck_go_search import DuckDuckGoSearchManager
-from web_tool.web_scraper import WebContentScraper
+from web_tool.test import scrape_multiple_websites
 from web_tool.embedding_similarity import find_most_similar_content
 
 ddg = DuckDuckGoSearchManager()
-scraper = WebContentScraper()
 
 
 def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -> str:
@@ -28,7 +28,7 @@ def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -
         citations = min(citations, 10)        # Maximum 10 citations
         
         urls = ddg.text_search(query, int(num_websites))
-        scraped_data = scraper.scrape_multiple_websites(urls)
+        scraped_data = asyncio.run(scrape_multiple_websites(urls))
         filtered_data = find_most_similar_content(scraped_data, prompt, citations)
     except Exception as e:
         return {"url": "error", "citation": str(e)}
@@ -63,7 +63,7 @@ def webpage_scraper(url):
     :return: A JSON-formatted string containing the scraped text. In case of an error, it returns a JSON-formatted string with an error message.
     """
     try:
-        result = scraper.scrape_website(url)
-        return result
+        result = asyncio.run(scrape_multiple_websites([url]))
+        return result[0]
     except Exception as e:
         return json.dumps({"error": str(e)})
