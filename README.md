@@ -119,9 +119,9 @@ Open your browser and navigate to `http://localhost:8080`
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 🙏 Acknowledgements
+- [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [LM Studio](https://lmstudio.ai/)
 - Open-source libraries and tools used in this project
-- [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [crawl4ai](https://github.com/unclecode/crawl4ai)
 - [azure-openai-function-calling](https://github.com/tankibaj/azure-openai-function-calling/tree/main)
 
