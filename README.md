@@ -121,6 +121,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [LM Studio](https://lmstudio.ai/)
 - Open-source libraries and tools used in this project
 - [crawl4ai](https://github.com/unclecode/crawl4ai)
+- [tankibaj](https://github.com/tankibaj/azure-openai-function-calling/tree/main)
 
 ## 📞 Support
 For issues or questions, please open a GitHub issue or contact the maintainer.
