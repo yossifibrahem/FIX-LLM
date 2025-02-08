@@ -49,7 +49,7 @@ cd LLM-Tool-Calling-Web-Application
 
 ### 2. Install Dependencies
 ```bash
-pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api waitress
+pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api waitress crawl4ai
 ```
 
 ### 3. Set Environment Variables
@@ -61,6 +61,15 @@ set FLASK_DEBUG=0
 # For Unix/MacOS
 export FLASK_ENV=production
 export FLASK_DEBUG=0
+```
+
+### post-installation setup for crawl4ai
+```bash
+# Run post-installation setup
+crawl4ai-setup
+
+# Verify your installation
+crawl4ai-doctor
 ```
 
 ## 🚀 Running the Application
@@ -111,6 +120,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 🙏 Acknowledgements
 - [LM Studio](https://lmstudio.ai/)
 - Open-source libraries and tools used in this project
+- [crawl4ai](https://github.com/unclecode/crawl4ai)
 
 ## 📞 Support
 For issues or questions, please open a GitHub issue or contact the maintainer.
