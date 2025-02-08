@@ -1,7 +1,7 @@
 import numpy as np
 from openai import OpenAI
 import re
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any
 from functools import lru_cache
 import concurrent.futures
 
@@ -112,14 +112,13 @@ def process_content(item: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [{
         "url": item["url"],
         "title": item["title"],
-        "citation": chunk,
-        "chunk_index": idx,
-        "total_chunks": len(chunks)
-    } for idx, chunk in enumerate(chunks)]
+        "citation": chunk
+    } for chunk in chunks]
 
 def find_most_similar_content(data: List[Dict[str, Any]], prompt: str, top_n: int = 3) -> List[Dict[str, Any]]:
     """
     Find the most similar content to a given query from a list of data using parallel processing.
+    Returns a list of dictionaries containing url, title, and citation for the most similar chunks.
     """
     # Clean and prepare the prompt
     cleaned_prompt = clean_markdown_content(prompt)
