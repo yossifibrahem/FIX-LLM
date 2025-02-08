@@ -178,6 +178,9 @@ body {
     font-weight: 600;
     line-height: 1.25;
     color: #fff;
+    overflow: visible; 
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 
 .markdown-content h1 { font-size: 2em; }
