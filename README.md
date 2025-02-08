@@ -52,7 +52,8 @@ cd LLM-Tool-Calling-Web-Application
 pip install numpy pandas sympy flask openai duckduckgo_search pytubefix youtube_transcript_api waitress crawl4ai
 ```
 
-### 3. Set Environment Variables
+### 3. post-installation setup
+Set Environment Variables
 ```bash
 # For Windows
 set FLASK_ENV=production
@@ -63,7 +64,7 @@ export FLASK_ENV=production
 export FLASK_DEBUG=0
 ```
 
-### post-installation setup for crawl4ai
+Setup for crawl4ai
 ```bash
 # Run post-installation setup
 crawl4ai-setup
