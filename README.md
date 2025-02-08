@@ -119,6 +119,7 @@ Open your browser and navigate to `http://localhost:8080`
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 🙏 Acknowledgements
+- [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [LM Studio](https://lmstudio.ai/)
 - Open-source libraries and tools used in this project
 - [crawl4ai](https://github.com/unclecode/crawl4ai)
@@ -127,4 +128,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📞 Support
 For issues or questions, please open a GitHub issue or contact the maintainer.
 
-*This README is written Anthropic's Claude*
+*This README is written by Anthropic's Claude*
