@@ -178,6 +178,9 @@ body {
     font-weight: 600;
     line-height: 1.25;
     color: #fff;
+    overflow: visible; 
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 
 .markdown-content h1 { font-size: 2em; }
@@ -237,10 +240,10 @@ body {
 }
 
 .markdown-content img {
-    max-width: 100%;
+    max-width: 80%;
     height: auto;
     border-radius: 0.5rem;
-    margin: 1em 0;
+    margin: 1em auto;
 }
 
 .conversation-list {
@@ -435,11 +438,6 @@ body {
         0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
-.markdown-content img {
-    margin: 1rem 0;
-    border-radius: 0.5rem;
-}
-
 .spinner {
     width: 1.25rem;
     height: 1.25rem;
@@ -520,9 +518,8 @@ body {
 }
 
 .tool-content .markdown-content img {
-    max-width: 10%;
-    height: auto;
-    margin: 1em auto;
+    max-height: 50px;
+    max-width: auto;
 }
 
 .tool-header {
