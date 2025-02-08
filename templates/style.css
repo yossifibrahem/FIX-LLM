@@ -590,8 +590,9 @@ body {
 }
 
 .tool-result.expanded {
-    max-height: 2000px;
+    max-height: 350px; /* Set a fixed maximum height */
     transition: max-height 0.5s ease-in;
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .tool-content a {
