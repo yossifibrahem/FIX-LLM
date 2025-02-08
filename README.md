@@ -128,4 +128,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📞 Support
 For issues or questions, please open a GitHub issue or contact the maintainer.
 
-*This README is written Anthropic's Claude*
+*This README is written by Anthropic's Claude*
