@@ -517,9 +517,11 @@ body {
     transition: max-height 0.3s ease-out;
 }
 
-.tool-content .markdown-content img {
-    max-height: 50px;
+.web-url-content img {
     max-width: auto;
+    height: 50px;
+    display: block;
+    margin: 1rem auto;
 }
 
 .tool-header {
