@@ -517,6 +517,13 @@ body {
     transition: max-height 0.3s ease-out;
 }
 
+.tool-result.expanded {
+    max-height: 400px;
+    transition: max-height 0.5s ease-in;
+    overflow-y: auto; 
+    border: 2px solid #333;
+}
+
 .web-url-content img {
     max-width: auto;
     height: 50px;
@@ -594,12 +601,6 @@ body {
     color: #fff;
 }
 
-.tool-result.expanded {
-    max-height: 350px;
-    transition: max-height 0.5s ease-in;
-    overflow-y: auto; 
-}
-
 .tool-content a {
     color: #3b82f6;
     text-decoration: none;
@@ -627,6 +628,15 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: #2563eb;
+}
+
+/* Add new styles for tool result scrollbars */
+.tool-result::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+.tool-result::-webkit-scrollbar-thumb {
+    border: 2px solid #1e1e1e;
 }
 
 button:disabled{
