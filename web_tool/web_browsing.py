@@ -2,7 +2,7 @@ import json
 import asyncio
 
 from web_tool.duck_duck_go_search import DuckDuckGoSearchManager
-from web_tool.test import scrape_multiple_websites
+from web_tool.scraper import scrape_multiple_websites
 from web_tool.embedding_similarity import find_most_similar_content
 
 ddg = DuckDuckGoSearchManager()
