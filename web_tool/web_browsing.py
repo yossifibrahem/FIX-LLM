@@ -67,13 +67,3 @@ def webpage_scraper(url):
         return result
     except Exception as e:
         return json.dumps({"error": str(e)})
-
-
-# Debug code
-# print(json.dumps(text_search("when will gta 6 release","gta 6 release date", 3, 3), indent=1))
-# print(news_search("Is Sam Altman fired from OpenAI?", 5))
-# print(images_search("puppies", 5))
-# print(videos_search("video tutorial for Excel pivot table", 5))
-# print(maps_search("Italian  restaurant", "berlin", 5))
-# print(webpage_scraper("https://www.bbc.com/news/technology-67514068"))
-# print(results = search_youtube("Python tutorial", 3))
