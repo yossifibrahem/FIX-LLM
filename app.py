@@ -132,7 +132,7 @@ Tools = [{
     "type": "function",
     "function": {
         "name": "yt_url",
-        "description": "get information about a youtube video (title and descrption)",
+        "description": "get information about a youtube video (title, descrption and transcription)",
         "parameters": {
             "type": "object",
             "properties": {

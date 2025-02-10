@@ -216,11 +216,6 @@ def chat_loop():
 
                     if tool_name == "python":
                         result = python(arguments["code"])
-                        messages.append({
-                            "role": "tool",
-                            "content": str(result),
-                            "tool_call_id": tool_call["id"]
-                        })
                     
                     elif tool_name == "web":
                         result = web(
@@ -229,47 +224,24 @@ def chat_loop():
                             arguments.get("number_of_websites", 3),
                             arguments.get("number_of_citations", 5)
                         )
-                        messages.append({
-                            "role": "tool",
-                            "content": str(result),
-                            "tool_call_id": tool_call["id"]
-                        })
                     
                     elif tool_name == "wiki":
                         result = wiki(arguments["query"])
-                        messages.append({
-                            "role": "tool",
-                            "content": str(result),
-                            "tool_call_id": tool_call["id"]
-                        })
 
                     elif tool_name == "web_url":
                         result = web_url(arguments["url"])
-                        messages.append({
-                            "role": "tool",
-                            "content": str(result),
-                            "tool_call_id": tool_call["id"]
-                        })
 
                     elif tool_name == "image":
                         result = image(arguments["query"], arguments.get("number_of_images", 1))
-                        messages.append({
-                            "role": "tool",
-                            "content": str(result),
-                            "tool_call_id": tool_call["id"]
-                        })
+                        
 
                     elif tool_name == "video":
                         result = video(arguments["query"], arguments.get("number_of_videos", 1))
-                        messages.append({
-                            "role": "tool",
-                            "content": str(result),
-                            "tool_call_id": tool_call["id"]
-                        })
                         
                     elif tool_name == "yt_url":
                         result = yt_url(arguments["url"])
-                        messages.append({
+                    
+                    messages.append({
                             "role": "tool",
                             "content": str(result),
                             "tool_call_id": tool_call["id"]
