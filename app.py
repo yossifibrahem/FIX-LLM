@@ -46,7 +46,7 @@ Tools = [{
     "type": "function",
     "function": {
         "name": "web",
-        "description": f"Search the web for relevant information. Current timestamp: {datetime.now()}",
+        "description": f"Search the web for relevant information. Current date and time: {datetime.now()}",
         "parameters": {
             "type": "object",
             "properties": {

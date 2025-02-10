@@ -526,7 +526,7 @@ body {
 
 .web-url-content img {
     max-width: auto;
-    height: 50px;
+    height: 5vh;
     display: block;
     margin: 1rem auto;
 }
