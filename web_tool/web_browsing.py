@@ -17,11 +17,12 @@ def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -
     explicitly news-related. It fetches relevant data from the internet in response to user queries, enhancing GPT's
     knowledge base.
 
-    :param query: The search query string for finding relevant web text results.
-    :param num_results: The maximum number of URLs to return. Defaults to 3 if not provided. (optional)
+    :param query: The search query string.
+    :param prompt: The prompt to compare the search results against.
+    :param num_websites: The number of websites to search for the query. Defaults to 4 if not provided. (optional)
+    :param citations: The number of citations to return. Defaults to 5 if not provided. (optional)
 
-    :return: A JSON-formatted string. Each element in the JSON represents the result of scraping a single URL,
-    containing either the scraped content or an error message.
+    :return: A dictionary containing the URL and citation of the most relevant content.
     """
     try:
         num_websites = min(num_websites, 8)  # Maximum 8 websites
