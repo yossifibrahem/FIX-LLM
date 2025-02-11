@@ -64,6 +64,21 @@ export FLASK_ENV=production
 export FLASK_DEBUG=0
 ```
 
+If you need to change the server host, port, LM Studio URL, API key, or model, set the following environment variables to the desired values like so:
+
+```bash
+# For Windows
+set LMSTUDIO_BASE_URL=YOUR_VALUE_HERE
+set LMSTUDIO_API_KEY=YOUR_VALUE_HERE
+set LMSTUDIO_MODEL=YOUR_VALUE_HERE
+
+# For Unix/MacOS
+export LMSTUDIO_BASE_URL=YOUR_VALUE_HERE
+export LMSTUDIO_API_KEY=YOUR_VALUE_HERE
+export LMSTUDIO_MODEL=YOUR_VALUE_HERE
+```
+
+
 Setup for crawl4ai
 ```bash
 # Run post-installation setup
