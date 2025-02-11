@@ -1,15 +1,17 @@
 # server.py
+import os
 from waitress import serve
 from app import app  # Import your Flask app
 
 if __name__ == '__main__':
     # Configure host and port
-    host = '127.0.0.1'  # localhost
-    port = 8080        # Choose your preferred port
-    
+    host = os.getenv("SERVER_HOST", "0.0.0.0")
+    port = int(os.getenv("SERVER_PORT", 8080))
+
     print(f"Starting Waitress server on {host}:{port}...")
     print(f"http://{host}:{port}")
-    serve(app, host=host, port=port, threads=4)  # Adjust number of threads based on your needs
+    
+    serve(app, host=host, port=port, threads=4)  # Adjust threads based on needs
 
 # Optional production config
 from app import app
