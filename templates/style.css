@@ -12,10 +12,11 @@ body {
 .messages-container {
     flex: 1;
     overflow-y: auto;
-    padding-bottom: 50px;
-    height: calc(100vh - 220px);
+    /* padding-bottom: 50px; */
+    height: calc(100vh - 170px);
     border-bottom: solid 1px #333;
     background-color: #171717;
+    border-radius: 1.25rem;
 }
 
 .message pre {
@@ -99,8 +100,7 @@ body {
     color: #e0e0e0;
 }
 
-.button-group button,
-.button-action {
+.button-group button {
     background: #1e1e1e;
     border: 1px solid #444;
     border-radius: 1rem;
@@ -112,18 +112,20 @@ body {
     box-shadow: 
         0 5px 0 #333,
         0 3px 3px rgba(0, 0, 0, 0.5);
+    width: 48px;
+    height: 48px;
+    margin-bottom: 3px;
 }
 
-.button-group button:hover,
-.button-action:hover {
+
+.button-group button:hover {
     transform: translateY(-1px);
     box-shadow: 
         0 7px 0 #444,
         0 4px 4px rgba(0, 0, 0, 0.5);
 }
 
-.button-group button:active,
-.button-action:active {
+.button-group button:active {
     transform: translateY(1px);
     box-shadow: 
         0 1px 0 #444,

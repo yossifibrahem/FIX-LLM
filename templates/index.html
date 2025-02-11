@@ -62,14 +62,7 @@
                     </h1>
                 </div>
                 <div class="messages-container p-4" id="messages"></div>
-                <div class="action-group flex justify-end space-x-2 p-4">
-                    <button id="deleteLastMessageButton" class="button-action", title="Delete Last Message">
-                        <img src="/static/delete.png" alt="Delete Last Message" width="20" height="20">
-                    </button>
-                    <button id="regenerateResponseButton" class="button-action", title="Regenerate Last Response">
-                        <img src="/static/repeat.png" alt="Regenerate Response" width="20" height="20">
-                    </button>
-                </div>
+                
             </div>
         </div>
     
@@ -81,14 +74,20 @@
                             class="flex-grow focus:outline-none"
                             rows="2"
                             placeholder="Message here"></textarea>
-                        <div class="button-group flex items-center space-x-2">
-                            <button id="sendButton" class="visible transition-opacity p-2 send-btn" title="Send message">
-                                <img src="static\send.png" alt="send" class="w-8 h-8 rounded-full">
-                            </button>
-                            <button id="interruptButton" class="hidden transition-opacity p-2 stop-btn" title="Stop generation">
-                                <img src="static\stop.png" alt="stop" class="w-8 h-8 rounded-full">
-                            </button>
-                        </div>
+                            <div class="button-group flex items-center space-x-2">
+                                <button id="deleteLastMessageButton" class="visible transition-opacity" title="Delete Last Message">
+                                    <img src="static\delete.png" alt="delete">
+                                </button>
+                                <button id="regenerateResponseButton" class="visible transition-opacity" title="Regenerate Last Response">
+                                    <img src="static\repeat.png" alt="regenerate">
+                                </button>
+                                <button id="sendButton" class="visible transition-opacity send-btn" title="Send message">
+                                    <img src="static\send.png" alt="send">
+                                </button>
+                                <button id="interruptButton" class="hidden transition-opacity stop-btn" title="Stop generation">
+                                    <img src="static\stop.png" alt="stop">
+                                </button>
+                            </div>
                     </div>
                 </div>
             </div>
