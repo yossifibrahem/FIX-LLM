@@ -16,9 +16,6 @@ COPY . .
 
 ENV FLASK_ENV=production
 ENV FLASK_DEBUG=0
-ENV LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1"
-ENV LMSTUDIO_API_KEY="lm-studio"
-
 
 EXPOSE 8080
 

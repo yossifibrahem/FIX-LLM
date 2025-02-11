@@ -130,6 +130,7 @@ docker run -p 8080:8080 \
     --add-host=host.docker.internal:host-gateway \
     -e LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1" \
     -e LMSTUDIO_API_KEY="lm-studio" \
+    -e LMSTUDIO_MODEL="lmstudio-community/qwen2.5-7b-instruct" \
     llm_tool_app
 ```
 
@@ -139,8 +140,11 @@ Otherwise if you are on Linux run:
 docker run -p 8080:8080 \
     -e LMSTUDIO_BASE_URL="http://172.17.0.1:1234/v1" \
     -e LMSTUDIO_API_KEY="lm-studio" \
+    -e LMSTUDIO_MODEL="lmstudio-community/qwen2.5-7b-instruct" \
     llm_tool_app
 ```
+
+Obviously, if your LMSTUDIO_BASE_URL, LMSTUDIO_API_KEY and/or LMSTUDIO_MODEL values are different on your setup, change that in the docker run command.
 
 ## 🤝 Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
