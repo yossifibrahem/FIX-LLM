@@ -1,0 +1,10 @@
+numpy
+pandas
+sympy
+flask
+openai
+duckduckgo_search
+pytubefix
+youtube_transcript_api
+waitress
+crawl4ai
