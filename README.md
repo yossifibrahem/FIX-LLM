@@ -150,7 +150,7 @@ python server.py
 or Double-click `serverstart.bat`
 
 ### Access the Application
-Open your browser and navigate to `http://localhost:8080`
+Open your browser and navigate to http://localhost:8080
 
 ## 🤝 Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
