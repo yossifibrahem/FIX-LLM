@@ -102,6 +102,8 @@ docker run -p 8080:8080 -e LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v
 ```
 If your LMSTUDIO_BASE_URL, LMSTUDIO_API_KEY and/or LMSTUDIO_MODEL values are different on your setup, change that in the docker run command.
 
+Open your browser and navigate to http://localhost:8080 😀
+
 ### Option 2: Using Python
 
 1. Install Dependencies
@@ -149,8 +151,8 @@ python server.py
 ```
 or Double-click `serverstart.bat`
 
-### Access the Application
-Open your browser and navigate to http://localhost:8080
+Open your browser and navigate to http://localhost:8080 😀
+
 
 ## 🤝 Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
