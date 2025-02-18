@@ -34,35 +34,6 @@ This is a web application that enables a Large Language Model (LLM) to interact 
 <img width="400" alt="wikipidia" src="https://github.com/user-attachments/assets/be587034-a76e-4785-bcb8-ab9573b5aa35" />
 <img width="400" alt="history" src="https://github.com/user-attachments/assets/8cd972d2-b816-4588-8826-dcb82f1aa8ba" />
 
-## 🛠️ Tools Supported
-
-1. **Python Execution**
-   - Execute Python code
-   - Perform mathematical computations
-   - Automate tasks
-
-2. **Web Search**
-   - Find relevant websites
-   - Extract citations
-   - Configurable search depth
-
-3. **Wikipedia Search**
-   - Fetch article introductions
-   - Quick knowledge retrieval
-
-4. **Web Scraping**
-   - Extract content from specific URLs
-   - Retrieve webpage information
-
-5. **YouTube Integration**
-   - Search videos
-   - Retrieve video metadata
-   - Get video transcriptions
-
-6. **Image Search**
-   - Find and display images
-   - Configurable result count
-
 ## 🔧 Prerequisites
 - Python 3.8+
 - [LM Studio](https://lmstudio.ai/)
@@ -78,8 +49,9 @@ cd LLM-Tool-Calling-Web-Application
 
 ## 🚀 Running the Application
 
-### Option 1: Using Docker
-
+### 🐳 Option 1: Using Docker
+<details>
+<summary>Install using Docker</summary>
 1. Install Docker on your machine (if you haven't already)
 
 2. Ensure LM Studio is running on your machine with the server running.
@@ -101,9 +73,11 @@ Otherwise if you are on Linux run:
 docker run --name Tools-UI -p 8080:8080 -e LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1" -e LMSTUDIO_API_KEY="lm-studio" -e LMSTUDIO_MODEL="lmstudio-community/qwen2.5-7b-instruct" llm_tool_app
 ```
 If your LMSTUDIO_BASE_URL, LMSTUDIO_API_KEY and/or LMSTUDIO_MODEL values are different on your setup, change that in the docker run command.
+</details>
 
-### Option 2: Using Python
-
+### 🐍 Option 2: Using Python
+<details>
+<summary>Run using Python</summary>
 1. Install Dependencies
 ```bash
 pip install -r requirements.txt
@@ -148,6 +122,7 @@ Run the server using
 python server.py
 ```
 or Double-click `serverstart.bat`
+</details>
 
 ### Access the Application
 Open your browser and navigate to http://localhost:8080
