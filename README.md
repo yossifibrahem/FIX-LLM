@@ -61,13 +61,13 @@ cd LLM-Tool-Calling-Web-Application
 docker build -t llm_tool_app .
 ```
 
-4. If on Windows/MacOS run
+4. If on **Windows/MacOS** run
 
 ```bash
 docker run --name Tools-UI -p 8080:8080 --add-host=host.docker.internal:host-gateway -e LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1" -e LMSTUDIO_API_KEY="lm-studio" -e LMSTUDIO_MODEL="lmstudio-community/qwen2.5-7b-instruct" llm_tool_app
 ```
 
-Otherwise if you are on Linux run:
+Otherwise if you are on **Linux** run:
 
 ```bash
 docker run --name Tools-UI -p 8080:8080 -e LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1" -e LMSTUDIO_API_KEY="lm-studio" -e LMSTUDIO_MODEL="lmstudio-community/qwen2.5-7b-instruct" llm_tool_app
