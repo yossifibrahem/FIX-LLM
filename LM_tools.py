@@ -1,7 +1,6 @@
 # Standard library imports
 import json
 from datetime import datetime
-from datetime import datetime
 
 # Third-party imports
 from openai import OpenAI
