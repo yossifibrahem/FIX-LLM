@@ -29,8 +29,8 @@ from youtube_tool.youtube import (
 )
 
 # Constants
-MODEL = "lmstudio-community/qwen2.5-3b-instruct"
-BASE_URL = "http://127.0.0.1:1234/v1"
+MODEL = "qwen2.5-1.5b"
+BASE_URL = "http://127.0.0.1:11434/v1"
 API_KEY = "lm-studio"
 
 # Initialize OpenAI client
@@ -200,7 +200,7 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
             if first_chunk:
                 print()
                 if add_assistant_label:
-                    print("Assistant:", end=" ", flush=True)
+                    print(f"{Fore.BLUE}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
                 first_chunk = False
             print(delta.content, end="", flush=True)
             collected_text += delta.content
@@ -227,18 +227,18 @@ def show_help() -> None:
     """Display available tools and commands."""
     width = get_terminal_width()
     
-    print(f"\n{Back.BLUE}{Fore.WHITE} Available Tools {Style.RESET_ALL}")
+    print(f"\n{Back.BLUE} Available Tools {Style.RESET_ALL}")
     print("─" * width)
     for tool in Tools:
-        name = f"{Fore.CYAN}• {tool['function']['name']}{Style.RESET_ALL}"
+        name = f"{Fore.BLUE}• {tool['function']['name']}{Style.RESET_ALL}"
         desc = tool['function']['description']
-        wrapped_desc = fill(desc, width=width - len(name) + len(Fore.CYAN) + len(Style.RESET_ALL))
+        wrapped_desc = fill(desc, width=width - len(name) + len(Fore.BLUE) + len(Style.RESET_ALL))
         print(f"{name}: {wrapped_desc}")
     
-    print(f"\n{Back.BLUE}{Fore.WHITE} Available Commands {Style.RESET_ALL}")
+    print(f"\n{Back.BLUE} Available Commands {Style.RESET_ALL}")
     print("─" * width)
-    print(f"{Fore.GREEN}• clear{Style.RESET_ALL}: Clear the chat history")
-    print(f"{Fore.GREEN}• help{Style.RESET_ALL}: Show this help message\n")
+    print(f"{Fore.BLUE}• clear{Style.RESET_ALL}: Clear the chat history")
+    print(f"{Fore.BLUE}• help{Style.RESET_ALL}: Show this help message")
 
 def display_welcome_banner() -> None:
     """Display a styled welcome banner."""
@@ -248,8 +248,7 @@ Welcome to AI Assistant
 Type 'help' to see available tools
 Type 'clear' to start new chat"""
 
-    print(f"{Fore.CYAN}{create_centered_box(banner)}{Style.RESET_ALL}")
-    show_help()
+    print(f"{Fore.BLUE}{create_centered_box(banner)}{Style.RESET_ALL}")
 
 def chat_loop() -> None:
     """Main chat interaction loop."""
@@ -258,6 +257,7 @@ def chat_loop() -> None:
     # Clear screen on startup
     os.system('cls' if os.name == "nt" else 'clear')
     display_welcome_banner()
+    show_help()
 
     while True:
         print(f"\n{Fore.GREEN}You{Style.RESET_ALL}: ", end="")
@@ -267,7 +267,7 @@ def chat_loop() -> None:
         if user_input.lower() == "clear":
             messages = []
             os.system('cls' if os.name == "nt" else 'clear')
-            print("Chat history cleared.")
+            display_welcome_banner()
             continue
         if user_input.lower() == "help":
             show_help()
