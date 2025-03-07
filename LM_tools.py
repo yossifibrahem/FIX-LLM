@@ -29,8 +29,8 @@ from youtube_tool.youtube import (
 )
 
 # Constants
-MODEL = "qwen2.5-1.5b"
-BASE_URL = "http://127.0.0.1:11434/v1"
+MODEL = "qwen2.5-1.5b-instruct"
+BASE_URL = "http://127.0.0.1:1234/v1"
 API_KEY = "lm-studio"
 
 # Initialize OpenAI client
@@ -223,6 +223,44 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
                 }
     return collected_text, tool_calls
 
+def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple[str, List[Dict]]:
+    """
+    Handle non-streaming responses from the API.
+    
+    Args:
+        response: The non-streaming response from the API
+        add_assistant_label: Whether to prefix output with 'Assistant:'
+    
+    Returns:
+        Tuple containing response text and tool calls
+    """
+    collected_text = ""
+    tool_calls = []
+    
+    print()
+    if add_assistant_label:
+        print(f"{Fore.BLUE}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
+    
+    # Extract content if present
+    if response.choices[0].message.content:
+        content = response.choices[0].message.content
+        print(content, end="", flush=True)
+        collected_text = content
+    
+    # Extract tool calls if present
+    if hasattr(response.choices[0].message, 'tool_calls') and response.choices[0].message.tool_calls:
+        for tc in response.choices[0].message.tool_calls:
+            tool_calls.append({
+                "id": tc.id,
+                "type": "function",
+                "function": {
+                    "name": tc.function.name,
+                    "arguments": tc.function.arguments
+                }
+            })
+    
+    return collected_text, tool_calls
+
 def show_help() -> None:
     """Display available tools and commands."""
     width = get_terminal_width()
@@ -253,6 +291,7 @@ Type 'clear' to start new chat"""
 def chat_loop() -> None:
     """Main chat interaction loop."""
     messages: List[Dict] = []
+    use_streaming = True  # Set to False for non-streaming mode, True for streaming
 
     # Clear screen on startup
     os.system('cls' if os.name == "nt" else 'clear')
@@ -283,10 +322,15 @@ def chat_loop() -> None:
                 model=MODEL,
                 messages=messages,
                 tools=Tools,
-                stream=True,
+                stream=use_streaming,
                 temperature=0.2
             )
-            response_text, tool_calls = process_stream(response)
+            
+            # Process response based on streaming mode
+            if use_streaming:
+                response_text, tool_calls = process_stream(response)
+            else:
+                response_text, tool_calls = process_non_stream(response)
 
             if not tool_calls:
                 print()
@@ -329,7 +373,6 @@ def chat_loop() -> None:
                     elif tool_name == "image":
                         result = image(arguments["query"], arguments.get("number_of_images", 1))
                         
-
                     elif tool_name == "video":
                         result = video(arguments["query"], arguments.get("number_of_videos", 1))
                         
