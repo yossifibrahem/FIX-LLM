@@ -1,22 +1,45 @@
+"""
+LLM Tool Calling Web Application
+This module provides a chat interface with various tool-calling capabilities.
+"""
+
 # Standard library imports
 import json
+import os
+import shutil
 from datetime import datetime
+from typing import List, Dict, Tuple, Any
+from textwrap import fill
 
 # Third-party imports
 from openai import OpenAI
+from colorama import init, Fore, Back, Style
 
+# Local tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
-from web_tool.web_browsing import text_search as web
+from web_tool.web_browsing import (
+    text_search as web,
+    webpage_scraper as web_url,
+    images_search as image
+)
 from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
-from web_tool.web_browsing import webpage_scraper as web_url
-from web_tool.web_browsing import images_search as image
-from youtube_tool.youtube  import search_youtube as video
-from youtube_tool.youtube import get_video_info as yt_url
+from youtube_tool.youtube import (
+    search_youtube as video,
+    get_video_info as yt_url
+)
 
+# Constants
+MODEL = "lmstudio-community/qwen2.5-3b-instruct"
+BASE_URL = "http://127.0.0.1:1234/v1"
+API_KEY = "lm-studio"
 
-client = OpenAI(base_url="http://127.0.0.1:1234/v1", api_key="lm-studio")
-MODEL = "lmstudio-community/qwen2.5-7b-instruct"
+# Initialize OpenAI client
+client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
+# Initialize colorama
+init()
+
+# Tool definitions
 Tools = [{
     "type": "function",
     "function": {
@@ -131,8 +154,40 @@ Tools = [{
     }
 }]
 
-def process_stream(stream, add_assistant_label=True):
-    """Handle streaming responses from the API"""
+def get_terminal_width() -> int:
+    """Get the current terminal width."""
+    width, _ = shutil.get_terminal_size()
+    return width
+
+def create_centered_box(text: str, padding: int = 4) -> str:
+    """Create a centered box with dynamic width."""
+    width = get_terminal_width()
+    content_width = width - 2  # Account for borders
+    lines = text.split('\n')
+    
+    box = '╔' + '═' * (width - 2) + '╗\n'
+    box += '║' + ' ' * (width - 2) + '║\n'
+    
+    for line in lines:
+        if line.strip():
+            padded_line = line.center(width - 2)
+            box += '║' + padded_line + '║\n'
+    
+    box += '║' + ' ' * (width - 2) + '║\n'
+    box += '╚' + '═' * (width - 2) + '╝'
+    return box
+
+def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, List[Dict]]:
+    """
+    Handle streaming responses from the API.
+    
+    Args:
+        stream: The response stream from the API
+        add_assistant_label: Whether to prefix output with 'Assistant:'
+    
+    Returns:
+        Tuple containing collected text and tool calls
+    """
     collected_text = ""
     tool_calls = []
     first_chunk = True
@@ -168,15 +223,57 @@ def process_stream(stream, add_assistant_label=True):
                 }
     return collected_text, tool_calls
 
-def chat_loop():
-    messages = []
-    print("Assistant: What can I help you with?")
+def show_help() -> None:
+    """Display available tools and commands."""
+    width = get_terminal_width()
+    
+    print(f"\n{Back.BLUE}{Fore.WHITE} Available Tools {Style.RESET_ALL}")
+    print("─" * width)
+    for tool in Tools:
+        name = f"{Fore.CYAN}• {tool['function']['name']}{Style.RESET_ALL}"
+        desc = tool['function']['description']
+        wrapped_desc = fill(desc, width=width - len(name) + len(Fore.CYAN) + len(Style.RESET_ALL))
+        print(f"{name}: {wrapped_desc}")
+    
+    print(f"\n{Back.BLUE}{Fore.WHITE} Available Commands {Style.RESET_ALL}")
+    print("─" * width)
+    print(f"{Fore.GREEN}• clear{Style.RESET_ALL}: Clear the chat history")
+    print(f"{Fore.GREEN}• help{Style.RESET_ALL}: Show this help message\n")
+
+def display_welcome_banner() -> None:
+    """Display a styled welcome banner."""
+    banner = """
+Welcome to AI Assistant
+
+Type 'help' to see available tools
+Type 'clear' to start new chat"""
+
+    print(f"{Fore.CYAN}{create_centered_box(banner)}{Style.RESET_ALL}")
+    show_help()
+
+def chat_loop() -> None:
+    """Main chat interaction loop."""
+    messages: List[Dict] = []
+
+    # Clear screen on startup
+    os.system('cls' if os.name == "nt" else 'clear')
+    display_welcome_banner()
 
     while True:
-        user_input = input("\nYou: ").strip()
-        if user_input.lower() == "quit":
-            break
+        print(f"\n{Fore.GREEN}You{Style.RESET_ALL}: ", end="")
+        user_input = input().strip()
+        
+        # Handle commands
+        if user_input.lower() == "clear":
+            messages = []
+            os.system('cls' if os.name == "nt" else 'clear')
+            print("Chat history cleared.")
+            continue
+        if user_input.lower() == "help":
+            show_help()
+            continue
 
+        # Process user input
         messages.append({"role": "user", "content": user_input})
         continue_tool_execution = True
 
@@ -202,14 +299,13 @@ def chat_loop():
             # Handle tool calls if any
             if tool_calls:
                 tool_name = tool_calls[0]["function"]["name"]
-                print()
-                if not text_in_response:
-                    print("Assistant:", end=" ", flush=True)
-                print(f"Calling Tool: {tool_name}")
-                messages.append({"role": "assistant", "tool_calls": tool_calls})
-
+                width = get_terminal_width()
+                print(f"\n{Fore.YELLOW}[Tool Call]{Style.RESET_ALL}")
+                print("─" * width)
+                
                 # Execute tool calls
                 for tool_call in tool_calls:
+                    print(f"{Fore.YELLOW}⚙ Executing{Style.RESET_ALL}: {tool_call['function']['name']}")
                     arguments = json.loads(tool_call["function"]["arguments"])
                     tool_name = tool_call["function"]["name"]
 
@@ -245,6 +341,9 @@ def chat_loop():
                             "content": str(result),
                             "tool_call_id": tool_call["id"]
                         })
+                    print(f"{Fore.GREEN}✓ Complete{Style.RESET_ALL}")
+                
+                print("─" * width)
 
                 # Continue checking for more tool calls after tool execution
                 continue_tool_execution = True
@@ -252,4 +351,7 @@ def chat_loop():
                 continue_tool_execution = False
 
 if __name__ == "__main__":
-    chat_loop()
+    try:
+        chat_loop()
+    except KeyboardInterrupt:
+        print(f"\n\n{Fore.YELLOW}Goodbye!{Style.RESET_ALL}")
