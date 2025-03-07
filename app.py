@@ -219,7 +219,7 @@ def get_conversation_name(messages):
                 "content": (conv)
             }
         ],
-        temperature = 2
+        temperature = 1
     )
 
         return response.choices[0].message.content.strip()[:40]
