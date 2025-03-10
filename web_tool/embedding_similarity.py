@@ -9,7 +9,7 @@ import os
 # Initialize the OpenAI client
 client = OpenAI(
     base_url=os.getenv("LMSTUDIO_BASE_URL", "http://127.0.0.1:1234/v1"),
-    api_key=os.getenv("LMSTUDIO_API_KEY", "lm-studio")
+    api_key=os.getenv("LMSTUDIO_API_KEY", "dummy_key")
 )
 
 @lru_cache(maxsize=1000)

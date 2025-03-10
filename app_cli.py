@@ -200,7 +200,7 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
             if first_chunk:
                 print()
                 if add_assistant_label:
-                    print(f"{Fore.BLUE}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
+                    print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
                 first_chunk = False
             print(delta.content, end="", flush=True)
             collected_text += delta.content
@@ -265,7 +265,7 @@ def show_help() -> None:
     """Display available tools and commands."""
     width = get_terminal_width()
     
-    print(f"\n{CUSTOM_ORANGE}{BOLD}{Back.WHITE} Available Tools {Style.RESET_ALL}")
+    print(f"\n{CUSTOM_ORANGE}{BOLD} Available Tools {Style.RESET_ALL}")
     print("─" * width)
     for tool in Tools:
         name = f"{CUSTOM_ORANGE}• {tool['function']['name']}{Style.RESET_ALL}"
@@ -273,7 +273,7 @@ def show_help() -> None:
         wrapped_desc = fill(desc, width=width - len(name) + len(Fore.BLUE) + len(Style.RESET_ALL))
         print(f"{name}: {wrapped_desc}")
     
-    print(f"\n{CUSTOM_ORANGE}{BOLD}{Back.WHITE} Available Commands {Style.RESET_ALL}")
+    print(f"\n{CUSTOM_ORANGE}{BOLD} Available Commands {Style.RESET_ALL}")
     print("─" * width)
     print(f"{CUSTOM_ORANGE}• clear{Style.RESET_ALL}: Clear the chat history")
     print(f"{CUSTOM_ORANGE}• help{Style.RESET_ALL}: Show this help message")
@@ -281,12 +281,12 @@ def show_help() -> None:
 
 def display_welcome_banner() -> None:
     banner = """
-     █████╗ ██╗    █████╗ ███████╗███████╗██╗███████╗████████╗ █████╗ ███╗   ██╗████████╗
-    ██╔══██╗██║   ██╔══██╗██╔════╝██╔════╝██║██╔════╝╚══██╔══╝██╔══██╗████╗  ██║╚══██╔══╝
-    ███████║██║   ███████║███████╗███████╗██║███████╗   ██║   ███████║██╔██╗ ██║   ██║   
-    ██╔══██║██║   ██╔══██║╚════██║╚════██║██║╚════██║   ██║   ██╔══██║██║╚██╗██║   ██║   
-    ██║  ██║██║   ██║  ██║███████║███████║██║███████║   ██║   ██║  ██║██║ ╚████║   ██║   
-    ╚═╝  ╚═╝╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   
+ ██████╗██╗  ██╗ █████╗ ████████╗
+██╔════╝██║  ██║██╔══██╗╚══██╔══╝
+██║     ███████║███████║   ██║   
+██║     ██╔══██║██╔══██║   ██║   
+╚██████╗██║  ██║██║  ██║   ██║   
+ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
 
 Type 'help' to see available tools
 Type 'clear' to start new chat
@@ -304,7 +304,7 @@ def chat_loop() -> None:
     show_help()
 
     while True:
-        print(f"\n{Fore.GREEN}You:{Style.RESET_ALL} ", end="")
+        print(f"\n{Fore.CYAN}You:{Style.RESET_ALL} ", end="")
         user_input = input().strip()
 
         if not user_input:
