@@ -3,7 +3,6 @@ LLM Tool Calling Web Application
 This module provides a chat interface with various tool-calling capabilities.
 """
 
-# Standard library imports
 import json
 import os
 import shutil
@@ -11,11 +10,13 @@ from datetime import datetime
 from typing import List, Dict, Tuple, Any
 from textwrap import fill
 
-# Third-party imports
 from openai import OpenAI
 from colorama import init, Fore, Back, Style
+# Custom Styles
+CUSTOM_ORANGE = '\x1b[38;5;216m'
+BOLD = '\033[1m'
 
-# Local tool imports
+# tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
 from web_tool.web_browsing import (
     text_search as web,
@@ -29,9 +30,9 @@ from youtube_tool.youtube import (
 )
 
 # Constants
-MODEL = "qwen2.5-1.5b-instruct"
+MODEL = "qwen2.5-3b-instruct"
 BASE_URL = "http://127.0.0.1:1234/v1"
-API_KEY = "lm-studio"
+API_KEY = "dummy_key"
 
 # Initialize OpenAI client
 client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
@@ -162,7 +163,6 @@ def get_terminal_width() -> int:
 def create_centered_box(text: str, padding: int = 4) -> str:
     """Create a centered box with dynamic width."""
     width = get_terminal_width()
-    content_width = width - 2  # Account for borders
     lines = text.split('\n')
     
     box = '╔' + '═' * (width - 2) + '╗\n'
@@ -265,28 +265,33 @@ def show_help() -> None:
     """Display available tools and commands."""
     width = get_terminal_width()
     
-    print(f"\n{Back.BLUE} Available Tools {Style.RESET_ALL}")
+    print(f"\n{CUSTOM_ORANGE}{BOLD}{Back.WHITE} Available Tools {Style.RESET_ALL}")
     print("─" * width)
     for tool in Tools:
-        name = f"{Fore.BLUE}• {tool['function']['name']}{Style.RESET_ALL}"
+        name = f"{CUSTOM_ORANGE}• {tool['function']['name']}{Style.RESET_ALL}"
         desc = tool['function']['description']
         wrapped_desc = fill(desc, width=width - len(name) + len(Fore.BLUE) + len(Style.RESET_ALL))
         print(f"{name}: {wrapped_desc}")
     
-    print(f"\n{Back.BLUE} Available Commands {Style.RESET_ALL}")
+    print(f"\n{CUSTOM_ORANGE}{BOLD}{Back.WHITE} Available Commands {Style.RESET_ALL}")
     print("─" * width)
-    print(f"{Fore.BLUE}• clear{Style.RESET_ALL}: Clear the chat history")
-    print(f"{Fore.BLUE}• help{Style.RESET_ALL}: Show this help message")
+    print(f"{CUSTOM_ORANGE}• clear{Style.RESET_ALL}: Clear the chat history")
+    print(f"{CUSTOM_ORANGE}• help{Style.RESET_ALL}: Show this help message")
+
 
 def display_welcome_banner() -> None:
-    """Display a styled welcome banner."""
     banner = """
-Welcome to AI Assistant
+     █████╗ ██╗    █████╗ ███████╗███████╗██╗███████╗████████╗ █████╗ ███╗   ██╗████████╗
+    ██╔══██╗██║   ██╔══██╗██╔════╝██╔════╝██║██╔════╝╚══██╔══╝██╔══██╗████╗  ██║╚══██╔══╝
+    ███████║██║   ███████║███████╗███████╗██║███████╗   ██║   ███████║██╔██╗ ██║   ██║   
+    ██╔══██║██║   ██╔══██║╚════██║╚════██║██║╚════██║   ██║   ██╔══██║██║╚██╗██║   ██║   
+    ██║  ██║██║   ██║  ██║███████║███████║██║███████║   ██║   ██║  ██║██║ ╚████║   ██║   
+    ╚═╝  ╚═╝╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   
 
 Type 'help' to see available tools
-Type 'clear' to start new chat"""
-
-    print(f"{Fore.BLUE}{create_centered_box(banner)}{Style.RESET_ALL}")
+Type 'clear' to start new chat
+"""
+    print(f"{CUSTOM_ORANGE}{BOLD}{create_centered_box(banner)}{Style.RESET_ALL}")
 
 def chat_loop() -> None:
     """Main chat interaction loop."""
@@ -299,7 +304,7 @@ def chat_loop() -> None:
     show_help()
 
     while True:
-        print(f"\n{Fore.GREEN}You{Style.RESET_ALL}: ", end="")
+        print(f"\n{Fore.GREEN}You:{Style.RESET_ALL} ", end="")
         user_input = input().strip()
         
         # Handle commands
