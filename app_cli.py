@@ -306,6 +306,9 @@ def chat_loop() -> None:
     while True:
         print(f"\n{Fore.GREEN}You:{Style.RESET_ALL} ", end="")
         user_input = input().strip()
+
+        if not user_input:
+            continue
         
         # Handle commands
         if user_input.lower() == "clear":
