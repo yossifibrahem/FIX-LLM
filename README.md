@@ -51,7 +51,7 @@ cd LLM-Tool-Calling-Web-Application
 
 ### 🐳 Option 1: Using Docker
 <details>
-<summary>Install using Docker</summary>
+<summary>Click here</summary>
 1. Install Docker on your machine (if you haven't already)
 
 2. Ensure LM Studio is running on your machine with the server running.
@@ -77,7 +77,7 @@ If your LMSTUDIO_BASE_URL, LMSTUDIO_API_KEY and/or LMSTUDIO_MODEL values are dif
 
 ### 🐍 Option 2: Using Python
 <details>
-<summary>Run using Python</summary>
+<summary>Click here</summary>
 1. Install Dependencies
 
 ```bash
