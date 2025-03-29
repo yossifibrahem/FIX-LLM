@@ -40,7 +40,7 @@ This is a web application that enables a Large Language Model (LLM) to interact 
 - Recommended Model: [Qwen2.5 7B Instruct](https://huggingface.co/lmstudio-community/Qwen2.5-7B-Instruct-GGUF)
 
 ## 📦 Installation
-
+Ensure LM Studio is running on your machine with the server running.
 ### Clone the Repository
 ```bash
 git clone https://github.com/yossifibrahem/LLM-Tool-Calling-Web-Application.git
@@ -55,14 +55,12 @@ cd LLM-Tool-Calling-Web-Application
   
 1. Install Docker on your machine (if you haven't already)
 
-2. Ensure LM Studio is running on your machine with the server running.
-
-3. Build the docker container with 
+2. Build the docker container with 
 ```bash
 docker build -t llm_tool_app .
 ```
 
-4. If on **Windows/MacOS** run
+3. If on **Windows/MacOS** run
 
 ```bash
 docker run --name Tools-UI -p 8080:8080 --add-host=host.docker.internal:host-gateway -e LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1" -e LMSTUDIO_API_KEY="lm-studio" -e LMSTUDIO_MODEL="lmstudio-community/qwen2.5-7b-instruct" llm_tool_app
