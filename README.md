@@ -40,7 +40,7 @@ This is a web application that enables a Large Language Model (LLM) to interact 
 - Recommended Model: [Qwen2.5 7B Instruct](https://huggingface.co/lmstudio-community/Qwen2.5-7B-Instruct-GGUF)
 
 ## 📦 Installation
-
+Ensure LM Studio is running on your machine with the server running.
 ### Clone the Repository
 ```bash
 git clone https://github.com/yossifibrahem/LLM-Tool-Calling-Web-Application.git
@@ -51,17 +51,16 @@ cd LLM-Tool-Calling-Web-Application
 
 ### 🐳 Option 1: Using Docker
 <details>
-<summary>Install using Docker</summary>
-1. Install Docker on your machine (if you haven't already)
+<summary>Click here</summary>
+  
+1. Install [Docker](https://www.docker.com/) on your machine (if you haven't already)
 
-2. Ensure LM Studio is running on your machine with the server running.
-
-3. Build the docker container with 
+2. Build the docker container with 
 ```bash
 docker build -t llm_tool_app .
 ```
 
-4. If on **Windows/MacOS** run
+3. If on **Windows/MacOS** run
 
 ```bash
 docker run --name Tools-UI -p 8080:8080 --add-host=host.docker.internal:host-gateway -e LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1" -e LMSTUDIO_API_KEY="lm-studio" -e LMSTUDIO_MODEL="lmstudio-community/qwen2.5-7b-instruct" llm_tool_app
@@ -77,14 +76,26 @@ If your LMSTUDIO_BASE_URL, LMSTUDIO_API_KEY and/or LMSTUDIO_MODEL values are dif
 
 ### 🐍 Option 2: Using Python
 <details>
-<summary>Run using Python</summary>
+<summary>Click here</summary>
+  
 1. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 2. post-installation setup
-Set Environment Variables
+
+**Setup crawl4ai**
+```bash
+# Run post-installation setup
+crawl4ai-setup
+
+# Verify your installation
+crawl4ai-doctor
+```
+
+**Set Environment Variables**
 ```bash
 # For Windows
 set FLASK_ENV=production
@@ -95,7 +106,7 @@ export FLASK_ENV=production
 export FLASK_DEBUG=0
 ```
 
-If you need to change the server host, port, LM Studio URL, API key, or model, set the following environment variables to the desired values like so:
+**(optional)** If you need to change the server host, port, LM Studio URL, API key, or model, set the following environment variables to the desired values like so:
 
 ```bash
 # For Windows
@@ -109,14 +120,6 @@ export LMSTUDIO_API_KEY=YOUR_VALUE_HERE
 export LMSTUDIO_MODEL=YOUR_VALUE_HERE
 ```
 
-Setup crawl4ai
-```bash
-# Run post-installation setup
-crawl4ai-setup
-
-# Verify your installation
-crawl4ai-doctor
-```
 Run the server using
 ```bash
 python server.py
