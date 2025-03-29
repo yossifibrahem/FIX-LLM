@@ -30,7 +30,7 @@ from youtube_tool.youtube import (
 )
 
 # Constants
-MODEL = "llama3.2"
+MODEL = "qwen2.5:3b"
 BASE_URL = "http://127.0.0.1:11434/v1"
 API_KEY = "dummy_key"
 
@@ -241,7 +241,9 @@ def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple
     
     print()
     if add_assistant_label:
-        print(f"{Fore.BLUE}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
+        print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
+    else:
+        print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
     
     # Extract content if present
     if response.choices[0].message.content:
