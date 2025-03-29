@@ -30,8 +30,8 @@ from youtube_tool.youtube import (
 )
 
 # Constants
-MODEL = "qwen2.5-3b-instruct"
-BASE_URL = "http://127.0.0.1:1234/v1"
+MODEL = "llama3.2"
+BASE_URL = "http://127.0.0.1:11434/v1"
 API_KEY = "dummy_key"
 
 # Initialize OpenAI client
@@ -200,6 +200,8 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
             if first_chunk:
                 print()
                 if add_assistant_label:
+                    print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
+                else:
                     print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
                 first_chunk = False
             print(delta.content, end="", flush=True)
@@ -296,7 +298,7 @@ Type 'clear' to start new chat
 def chat_loop() -> None:
     """Main chat interaction loop."""
     messages: List[Dict] = []
-    use_streaming = True  # Set to False for non-streaming mode, True for streaming
+    use_streaming = False  # Set to False for non-streaming mode, True for streaming
 
     # Clear screen on startup
     os.system('cls' if os.name == "nt" else 'clear')
