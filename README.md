@@ -79,6 +79,7 @@ If your LMSTUDIO_BASE_URL, LMSTUDIO_API_KEY and/or LMSTUDIO_MODEL values are dif
 <details>
 <summary>Run using Python</summary>
 1. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -95,7 +96,7 @@ export FLASK_ENV=production
 export FLASK_DEBUG=0
 ```
 
-If you need to change the server host, port, LM Studio URL, API key, or model, set the following environment variables to the desired values like so:
+(optional) If you need to change the server host, port, LM Studio URL, API key, or model, set the following environment variables to the desired values like so:
 
 ```bash
 # For Windows
