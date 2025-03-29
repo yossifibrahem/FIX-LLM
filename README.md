@@ -53,7 +53,7 @@ cd LLM-Tool-Calling-Web-Application
 <details>
 <summary>Click here</summary>
   
-1. Install Docker on your machine (if you haven't already)
+1. Install [Docker](https://www.docker.com/) on your machine (if you haven't already)
 
 2. Build the docker container with 
 ```bash
