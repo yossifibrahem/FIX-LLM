@@ -85,7 +85,17 @@ pip install -r requirements.txt
 ```
 
 2. post-installation setup
-Set Environment Variables
+
+**Setup crawl4ai**
+```bash
+# Run post-installation setup
+crawl4ai-setup
+
+# Verify your installation
+crawl4ai-doctor
+```
+
+**Set Environment Variables**
 ```bash
 # For Windows
 set FLASK_ENV=production
@@ -96,7 +106,7 @@ export FLASK_ENV=production
 export FLASK_DEBUG=0
 ```
 
-(optional) If you need to change the server host, port, LM Studio URL, API key, or model, set the following environment variables to the desired values like so:
+**(optional)** If you need to change the server host, port, LM Studio URL, API key, or model, set the following environment variables to the desired values like so:
 
 ```bash
 # For Windows
@@ -110,14 +120,6 @@ export LMSTUDIO_API_KEY=YOUR_VALUE_HERE
 export LMSTUDIO_MODEL=YOUR_VALUE_HERE
 ```
 
-Setup crawl4ai
-```bash
-# Run post-installation setup
-crawl4ai-setup
-
-# Verify your installation
-crawl4ai-doctor
-```
 Run the server using
 ```bash
 python server.py
