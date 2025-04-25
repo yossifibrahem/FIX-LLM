@@ -314,32 +314,12 @@
         async function deleteLastMessage() {
             try {
                 const response = await fetch('/delete-last', { method: 'POST' });
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    const messagesContainer = els.messages;
-                    const messageElements = Array.from(messagesContainer.children);
-                    
-                    // Find the last user message
-                    let lastUserIndex = -1;
-                    for (let i = messageElements.length - 1; i >= 0; i--) {
-                        if (messageElements[i].querySelector('.user-message')) {
-                            lastUserIndex = i;
-                            break;
-                        }
-                    }
-                    
-                    // If we found a user message, remove it and its response
-                    if (lastUserIndex !== -1) {
-                        // Remove all messages from lastUserIndex onwards
-                        const numToRemove = messageElements.length - lastUserIndex;
-                        for (let i = 0; i < numToRemove; i++) {
-                            messagesContainer.removeChild(messagesContainer.lastChild);
-                        }
-                    }
+                if (response.ok) {
+                    // Only update the UI, do NOT call handleMessage() or sendMessage()
+                    await loadConversation(currentConversationId);
                 }
             } catch (error) {
-                console.error('Error deleting messages:', error);
+                // handle error
             }
         }
 

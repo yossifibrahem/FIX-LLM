@@ -299,7 +299,7 @@ Type 'clear' to start new chat
 
 def chat_loop() -> None:
     """Main chat interaction loop."""
-    messages: List[Dict] = []
+    messages: List[Dict] = [{"role": "system", "content": "Enable deep thinking subroutine."}]
     use_streaming = True  # Set to False for non-streaming mode, True for streaming
 
     # Clear screen on startup
@@ -316,7 +316,7 @@ def chat_loop() -> None:
         
         # Handle commands
         if user_input.lower() == "clear":
-            messages = []
+            messages = [{"role": "system", "content": "Enable deep thinking subroutine."}]
             os.system('cls' if os.name == "nt" else 'clear')
             display_welcome_banner()
             continue
