@@ -146,13 +146,21 @@ Tools = [
         }
     ]
 
+system_message = {"role": "system", "content": (
+    "You are a helpful assistant. You can use tools to answer questions. "
+    "You can use the following tools: "
+    f"{', '.join([tool['function']['name'] for tool in Tools])}. "
+    f"the current date and time is {datetime.now()}. "
+    )
+}
+
 # --- Conversation Storage ---
 CONVERSATIONS_DIR = os.path.expanduser("~/.conversations")
 os.makedirs(CONVERSATIONS_DIR, exist_ok=True)
 
 # --- State Management ---
 current_conversation_id = None
-chat_messages = []
+chat_messages = [system_message]
 interrupt_flag = False
 
 # --- Utility Functions ---
@@ -342,7 +350,7 @@ def get_conversation(conversation_id):
 def new_conversation():
     global current_conversation_id, chat_messages
     current_conversation_id = str(uuid.uuid4())
-    chat_messages = []
+    chat_messages = [system_message]
     return jsonify({
         "status": "success",
         "conversation_id": current_conversation_id,
@@ -358,7 +366,7 @@ def delete_conversation(conversation_id):
             global current_conversation_id, chat_messages
             if current_conversation_id == conversation_id:
                 current_conversation_id = None
-                chat_messages = []
+                chat_messages = [system_message]
             return jsonify({"status": "success"})
         else:
             return jsonify({"status": "error", "message": "Conversation not found"}), 404
