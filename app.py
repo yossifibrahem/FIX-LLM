@@ -152,16 +152,16 @@ if not os.path.exists(CONVERSATIONS_DIR):
     os.makedirs(CONVERSATIONS_DIR)
 
 current_conversation_id = None
-chat_messages = []
+chat_messages = [{"role": "system", "content": "Enable deep thinking subroutine."}]
 interrupt_flag = False
 
-def save_conversation():
+def save_conversation(rename=True):
     if current_conversation_id:
         conversation_data = {
             "id": current_conversation_id,
             "last_updated": datetime.now().isoformat(),
             "messages": chat_messages,
-            "name": get_conversation_name(chat_messages) if chat_messages else "New Conversation"
+            "name": get_conversation_name(chat_messages) if rename and chat_messages else "New Conversation"
         }
         with open(f"{CONVERSATIONS_DIR}/{current_conversation_id}.json", "w") as f:
             json.dump(conversation_data, f , indent=2)
@@ -357,7 +357,7 @@ def get_conversation(conversation_id):
 def new_conversation():
     global current_conversation_id, chat_messages
     current_conversation_id = str(uuid.uuid4())
-    chat_messages = []
+    chat_messages = [{"role": "system", "content": "Enable deep thinking subroutine."}]
     return jsonify({
         "status": "success", 
         "conversation_id": current_conversation_id,
@@ -373,7 +373,7 @@ def delete_conversation(conversation_id):
             global current_conversation_id, chat_messages
             if current_conversation_id == conversation_id:
                 current_conversation_id = None
-                chat_messages = []
+                chat_messages = [{"role": "system", "content": "Enable deep thinking subroutine."}]
             return jsonify({"status": "success"})
         else:
             return jsonify({"status": "error", "message": "Conversation not found"}), 404
@@ -450,7 +450,7 @@ def delete_last_message():
         if last_user_index is not None:
             # Remove all messages after and including the last user message
             chat_messages = chat_messages[:last_user_index]
-            save_conversation()
+            save_conversation(rename=False)
             return jsonify({"status": "success"})
             
     return jsonify({"status": "error", "message": "No messages to delete"}), 400
@@ -470,7 +470,7 @@ def regenerate_response():
         
         if last_user_message:
             chat_messages = chat_messages[:-messages_to_remove]
-            save_conversation()
+            save_conversation(rename=False)
             return jsonify({"status": "success", "message": last_user_message})
             
     return jsonify({"status": "error", "message": "No message to regenerate"}), 400
