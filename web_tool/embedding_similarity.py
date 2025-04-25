@@ -8,12 +8,12 @@ import os
 
 # Initialize the OpenAI client
 client = OpenAI(
-    base_url=os.getenv("LMSTUDIO_BASE_URL", "http://127.0.0.1:11434/v1"),
+    base_url=os.getenv("LMSTUDIO_BASE_URL", "http://127.0.0.1:1234/v1"),
     api_key=os.getenv("LMSTUDIO_API_KEY", "dummy_key")
 )
 
 @lru_cache(maxsize=1000)
-def get_embedding(text: str, model: str = "nomic-embed-text") -> List[float]:
+def get_embedding(text: str, model: str = "text-embedding-nomic-embed-text-v1.5") -> List[float]:
     """
     Get embedding for text with caching to improve performance.
     """
@@ -54,7 +54,7 @@ def clean_markdown_content(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
-def split_by_semantic_units(text: str, max_chunk_size: int = 250, min_chunk_size: int = 100) -> List[str]:
+def split_by_semantic_units(text: str, max_chunk_size: int = 500, min_chunk_size: int = 50) -> List[str]:
     """
     Split text into chunks based on semantic units (sentences and paragraphs).
     """

@@ -23,8 +23,16 @@ def clean_markdown_content(text: str) -> str:
     text = LINK_PATTERN.sub(r'\1', text)
     return text.strip()
 
+
+crawl_config = CrawlerRunConfig(
+    exclude_external_images=True,         # Exclude external images
+        exclude_all_images=True,  # Exclude all images
+        exclude_external_links=True,          # No links outside primary domain
+        exclude_social_media_links=True       # Skip recognized social media domains
+    )
+
 async def scrape_website_with_crawler(crawler, url):
-    result = await crawler.arun(url=url)
+    result = await crawler.arun(url=url, config=crawl_config)
     return {
         "url": url,
         "title": result.metadata["title"],

@@ -30,8 +30,8 @@ from youtube_tool.youtube import (
 )
 
 # Constants
-MODEL = "qwen2.5:3b"
-BASE_URL = "http://127.0.0.1:11434/v1"
+MODEL = "qwen2.5-7b-instruct"
+BASE_URL = "http://192.168.1.21:1234/v1"
 API_KEY = "dummy_key"
 
 # Initialize OpenAI client
@@ -300,12 +300,12 @@ Type 'clear' to start new chat
 def chat_loop() -> None:
     """Main chat interaction loop."""
     messages: List[Dict] = []
-    use_streaming = False  # Set to False for non-streaming mode, True for streaming
+    use_streaming = True  # Set to False for non-streaming mode, True for streaming
 
     # Clear screen on startup
     os.system('cls' if os.name == "nt" else 'clear')
     display_welcome_banner()
-    show_help()
+    # show_help()
 
     while True:
         print(f"\n{Fore.CYAN}You:{Style.RESET_ALL} ", end="")
