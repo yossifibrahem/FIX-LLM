@@ -146,13 +146,17 @@ Tools = [
         }
     ]
 
-system_message = {"role": "system", "content": (
+system = {"role": "system", "content": (
     "You are a helpful assistant. You can use tools to answer questions. "
     "You can use the following tools: "
     f"{', '.join([tool['function']['name'] for tool in Tools])}. "
     f"the current date and time is {datetime.now()}. "
     )
 }
+
+cogito = {"role": "system", "content": "Enable deep thinking subroutine."}
+
+system_message = cogito
 
 # --- Conversation Storage ---
 CONVERSATIONS_DIR = os.path.expanduser("~/.conversations")
