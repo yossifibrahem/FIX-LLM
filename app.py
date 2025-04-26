@@ -156,7 +156,7 @@ system = {"role": "system", "content": (
 
 cogito = {"role": "system", "content": "Enable deep thinking subroutine."}
 
-system_message = cogito
+system_message = system
 
 # --- Conversation Storage ---
 CONVERSATIONS_DIR = os.path.expanduser("~/.conversations")
@@ -207,6 +207,8 @@ def get_all_conversations():
 def get_conversation_name(messages):
     user_messages = [msg for msg in messages if msg["role"] == "user"]
     assistant_messages = [msg for msg in messages if msg["role"] == "assistant"]
+    if messages[0]["role"] == "system":
+        messages = messages[1:]
     if len(user_messages) > 2:
         try:
             with open(conversation_file_path(current_conversation_id), "r") as f:
