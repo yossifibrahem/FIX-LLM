@@ -212,6 +212,8 @@ def get_conversation_name(messages):
             with open(conversation_file_path(current_conversation_id), "r") as f:
                 return json.load(f)["name"]
         except Exception:
+            print("Error loading conversation name")
+            print(Exception)
             return "New Conversation"
     number_of_messages = len(user_messages) + len(assistant_messages)
     conv = json.dumps(messages[:number_of_messages] if number_of_messages else messages)

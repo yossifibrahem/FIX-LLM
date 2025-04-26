@@ -113,6 +113,20 @@
         xhtml: false
     });
 
+        // Helper: wrap <think>...</think> in a collapsible block (expanded by default)
+        function wrapThinkBlocks(text) {
+            return text.replace(/<think>([\s\S]*?)<\/think>/g, function(_, inner) {
+                return `
+<div class="think-block-collapsible">
+    <button class="think-toggle expanded" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
+        🧠 Deep Thinking
+    </button>
+    <div class="think-content">${inner}</div>
+</div>
+`;
+            });
+        }
+
         function renderMath(text) {
             const codeBlocks = new Map();
             let counter = 0;
@@ -163,6 +177,9 @@
             codeBlocks.forEach((value, key) => {
                 text = text.replace(key, value);
             });
+
+            // Wrap <think>...</think> blocks
+            text = wrapThinkBlocks(text);
 
             return text;
         }
@@ -562,7 +579,51 @@
             container.appendChild(resultDiv);
         }
 
-        // Update the processStreamMessage function
+        // Streaming-aware <think> block handling
+        let thinkBlockOpen = false;
+        let thinkProcessed = ''; // holds the processed HTML so far
+        let lastThinkIndex = 0;  // index in currentResponse up to which we've processed
+
+        function processThinkBlocksStreaming(fullText) {
+            // Only process new text since last call
+            let text = fullText.slice(lastThinkIndex);
+            let result = '';
+            let idx = 0;
+            while (idx < text.length) {
+                if (!thinkBlockOpen) {
+                    const openIdx = text.indexOf('<think>', idx);
+                    if (openIdx === -1) {
+                        result += text.slice(idx);
+                        idx = text.length;
+                    } else {
+                        result += text.slice(idx, openIdx);
+                        result += `
+<div class="think-block-collapsible">
+    <button class="think-toggle expanded" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
+        🧠 Deep Thinking
+    </button>
+    <div class="think-content">
+`;
+                        thinkBlockOpen = true;
+                        idx = openIdx + 7;
+                    }
+                } else {
+                    const closeIdx = text.indexOf('</think>', idx);
+                    if (closeIdx === -1) {
+                        result += text.slice(idx);
+                        idx = text.length;
+                    } else {
+                        result += text.slice(idx, closeIdx);
+                        result += '</div></div>';
+                        thinkBlockOpen = false;
+                        idx = closeIdx + 8;
+                    }
+                }
+            }
+            lastThinkIndex = fullText.length;
+            return result;
+        }
+
         function processStreamMessage(line) {
             if (!line.startsWith('data: ')) return;
             
@@ -582,7 +643,10 @@
                             markdownDiv.className = 'markdown-content';
                             container.insertBefore(markdownDiv, container.firstChild);
                         }
-                        markdownDiv.innerHTML = marked.parse(renderMath(currentResponse));
+                        // --- changed: process <think> tags as streaming ---
+                        let processed = processThinkBlocksStreaming(currentResponse);
+                        markdownDiv.innerHTML = marked.parse(renderMath(thinkProcessed + processed));
+                        thinkProcessed += processed;
                         highlightCodeBlocks(markdownDiv);
                         break;
                         
@@ -623,6 +687,9 @@
 
             currentMessageElement = createMessageElement(false);
             currentResponse = '';
+            thinkBlockOpen = false;
+            thinkProcessed = '';
+            lastThinkIndex = 0;
 
             try {
                 const response = await fetch('/chat', {
