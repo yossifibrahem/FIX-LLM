@@ -118,10 +118,10 @@
             return text.replace(/<think>([\s\S]*?)<\/think>/g, function(_, inner) {
                 return `
 <div class="think-block-collapsible">
-    <button class="think-toggle expanded" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
+    <button class="think-toggle" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
         💭 Deep Thinking
     </button>
-    <div class="think-content">${inner}</div>
+    <div class="think-content hidden">${inner}</div>
 </div>
 `;
             });
@@ -171,6 +171,26 @@
                 } catch (e) {
                     console.error('KaTeX error:', e);
                     return math;
+                }
+            });
+
+            // Add support for single $ inline math
+            text = text.replace(/\$([^$\n]+?)\$/g, (_, math) => {
+                try {
+                    return katex.renderToString(math.trim(), { displayMode: false });
+                } catch (e) {
+                    console.error('KaTeX error:', e);
+                    return `$${math}$`;
+                }
+            });
+
+            // Add support for double $$ display math
+            text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => {
+                try {
+                    return katex.renderToString(math.trim(), { displayMode: true });
+                } catch (e) {
+                    console.error('KaTeX error:', e);
+                    return `$$${math}$$`;
                 }
             });
 
@@ -599,10 +619,10 @@
                         result += text.slice(idx, openIdx);
                         result += `
 <div class="think-block-collapsible">
-    <button class="think-toggle expanded" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
+    <button class="think-toggle" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
         💭 Deep Thinking
     </button>
-    <div class="think-content">
+    <div class="think-content hidden">
 `;
                         thinkBlockOpen = true;
                         idx = openIdx + 7;
