@@ -221,6 +221,8 @@ def get_conversation_name(messages):
             print(Exception)
             return "New Conversation"
     number_of_messages = len(user_messages) + len(assistant_messages)
+    # messages of user and assistant only
+    messages = [msg for msg in messages if msg["role"] in ["user", "assistant"]]
     conv = json.dumps(messages[:number_of_messages] if number_of_messages else messages)
     try:
         client = get_openai_client()
