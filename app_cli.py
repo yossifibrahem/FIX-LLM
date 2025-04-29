@@ -335,7 +335,7 @@ def chat_loop() -> None:
                 messages=messages,
                 tools=Tools,
                 stream=use_streaming,
-                temperature=0.2
+                temperature=0.7
             )
             
             # Process response based on streaming mode

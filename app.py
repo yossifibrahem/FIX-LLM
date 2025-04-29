@@ -272,7 +272,7 @@ def chat():
                     messages=chat_messages,
                     tools=Tools,
                     stream=True,
-                    temperature=0.2
+                    temperature=0.7,
                 )
                 current_message = ""
                 tool_calls = []
