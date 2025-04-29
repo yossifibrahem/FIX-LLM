@@ -20,10 +20,10 @@ marked.setOptions({
         return text.replace(/<think>([\s\S]*?)<\/think>/g, function(_, inner) {
             return `
 <div class="think-block-collapsible">
-<button class="think-toggle" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
+<button class="think-toggle expanded" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
     💭 Deep Thinking
 </button>
-<div class="think-content hidden">${inner}</div>
+<div class="think-content">${inner}</div>
 </div>
 `;
         });
@@ -521,10 +521,10 @@ marked.setOptions({
                     result += text.slice(idx, openIdx);
                     result += `
 <div class="think-block-collapsible">
-<button class="think-toggle" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
+<button class="think-toggle expanded" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('expanded');">
     💭 Deep Thinking
 </button>
-<div class="think-content hidden">
+<div class="think-content">
 `;
                     thinkBlockOpen = true;
                     idx = openIdx + 7;
