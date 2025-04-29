@@ -27,7 +27,7 @@ def get_openai_client():
         api_key=os.getenv("LMSTUDIO_API_KEY", "lm-studio")
     )
 
-MODEL = os.getenv("LMSTUDIO_MODEL", "lmstudio-community/qwen2.5-7b-instruct")
+MODEL = os.getenv("LMSTUDIO_MODEL", "qwen3-8b")
 
 # --- Tool Definitions ---
 Tools = [
@@ -225,6 +225,9 @@ def get_conversation_name(messages):
             model=MODEL,
             messages=[
                 {
+                "role": "system", "content": "/no_think" if MODEL[:5] == "qwen3" else {}
+                },
+                {
                     "role": "system",
                     "content": (
                         "You are an AI assistant specializing in creating concise conversation titles. "
@@ -237,7 +240,7 @@ def get_conversation_name(messages):
             ],
             temperature=1
         )
-        return response.choices[0].message.content.strip()[:40]
+        return response.choices[0].message.content.strip()[:50]
     except Exception as e:
         print(f"Error generating conversation name: {e}")
         return "New Conversation"
