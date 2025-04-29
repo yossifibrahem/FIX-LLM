@@ -653,33 +653,31 @@ button:disabled{
 /* the outer */
 .think-block-collapsible {
     margin-bottom: 1em;
-    border: 1px solid #222;
+    border: 2px dotted #555;
     border-radius: 0.75em;
-    background: #222;
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 /* the thikning content */
 .think-content {
-    font-size: 90%;
-    padding: 0.5em 1em;
+    font-size: 80%;
+    padding: 1em;
     color: #ffffff80;
 }
 
 /* the button */
 .think-toggle {
     width: 100%;
-    background: #333;
     color: #e0e0e0;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #555;
     padding: 0.5em 1em;
     text-align: left;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5em;
-    font-size: 90%;
+    font-size: 80%;
 }
 
 .think-toggle::before {
