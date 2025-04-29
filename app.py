@@ -8,9 +8,9 @@ from openai import OpenAI
 
 # Tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
-from web_tool.web_browsing import text_search as web, webpage_scraper as web_url, images_search as image
+from web_tool.web_browsing import text_search as web, webpage_scraper as URL, images_search as image
 from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
-from youtube_tool.youtube import search_youtube as video, get_video_info as yt_url
+from youtube_tool.youtube import search_youtube as youtube, get_video_info as watch
 
 # --- Flask App Setup ---
 app = Flask(__name__)
@@ -87,7 +87,7 @@ Tools = [
         }, {
             "type": "function",
             "function": {
-                "name": "web_url",
+                "name": "URL",
                 "description": "Scrape a website for its content",
                 "parameters": {
                     "type": "object",
@@ -118,7 +118,7 @@ Tools = [
         }, {
             "type": "function",
             "function": {
-                "name": "video",
+                "name": "youtube",
                 "description": f"Search youtube videos and retrive the urls.",
                 "parameters": {
                     "type": "object",
@@ -136,7 +136,7 @@ Tools = [
         }, {
             "type": "function",
             "function": {
-                "name": "yt_url",
+                "name": "watch",
                 "description": "get information about a youtube video (title, descrption and transcription)",
                 "parameters": {
                     "type": "object",
@@ -321,14 +321,14 @@ def chat():
                             )
                         elif tool_name == "wiki":
                             result = wiki(arguments["query"])
-                        elif tool_name == "web_url":
-                            result = web_url(arguments["url"])
+                        elif tool_name == "URL":
+                            result = URL(arguments["url"])
                         elif tool_name == "image":
                             result = image(arguments["query"], arguments.get("number_of_images", 1))
-                        elif tool_name == "video":
-                            result = video(arguments["query"], arguments.get("number_of_videos", 1))
-                        elif tool_name == "yt_url":
-                            result = yt_url(arguments["url"])
+                        elif tool_name == "youtube":
+                            result = youtube(arguments["query"], arguments.get("number_of_videos", 1))
+                        elif tool_name == "watch":
+                            result = watch(arguments["url"])
                         else:
                             result = {"error": "Unknown tool"}
                         chat_messages.append({
