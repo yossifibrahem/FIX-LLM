@@ -19,6 +19,9 @@ app.static_folder = "templates"
 @app.route('/style.css')
 def serve_css():
     return send_from_directory('templates', 'style.css')
+@app.route('/main.js')
+def serve_js():
+    return send_from_directory('templates', 'main.js')
 
 # --- OpenAI Client Setup ---
 def get_openai_client():
