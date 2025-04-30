@@ -332,13 +332,13 @@ marked.setOptions({
                 <div class="spinner"></div>
                 <span>Searching Wikipedia for ${tool_info.args.query}</span>
             `;
-        }else if (tool_info.name === 'web_url') {
+        }else if (tool_info.name === 'URL') {
             div.innerHTML = `
                 <div class="spinner"></div>
                 <span>Scraping content from the website</span>
             `;
         }
-        else if (tool_info.name === 'video') {
+        else if (tool_info.name === 'youtube') {
             div.innerHTML = `
                 <div class="spinner"></div>
                 <span>Searhcing youtube for  ${tool_info.args.query}</span>
@@ -348,7 +348,7 @@ marked.setOptions({
                 <div class="spinner"></div>
                 <span>Searching images about ${tool_info.args.query}</span>
             `;
-        }else if (tool_info.name === 'yt_url') {
+        }else if (tool_info.name === 'watch') {
             div.innerHTML = `
                 <div class="spinner"></div>
                 <span>Getting Youtube video information<span>
@@ -400,7 +400,7 @@ marked.setOptions({
                     `).join('')}
                 </div>`
             }),
-            video: () => ({
+            youtube: () => ({
                 title: args.query, icon: '▶️',
                 content: `<div class="space-y-4">${(Array.isArray(data) ? data : [data]).map(item => {
                     const vidId = (item.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/) || [])[1];
@@ -430,7 +430,7 @@ marked.setOptions({
                 content: `<div class="text-sm text-gray-300">${data.content}</div>`,
                 className: 'bg-gray-900'
             }),
-            yt_url: () => ({
+            watch: () => ({
                 title: data.title, icon: '🎥',
                 content: `<div class="space-y-4">
                             <div><div class="text-sm text-gray-400 mb-1">Description</div>
@@ -440,7 +440,7 @@ marked.setOptions({
                         </div>`,
                 className: 'bg-gray-900'
             }),
-            web_url: () => ({
+            URL: () => ({
                 title: data.title || "Unable to open URL", icon: '🔗',
                 content: `<div class="text-sm text-gray-300 web-url-content">${marked.parse(renderMath(data.content))}</div>`,
                 className: 'bg-gray-900'
