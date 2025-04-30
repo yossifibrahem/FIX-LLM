@@ -30,7 +30,7 @@ from youtube_tool.youtube import (
 )
 
 # Constants
-MODEL = "qwen2.5-7b-instruct"
+MODEL = "qwen3-0.6b"
 BASE_URL = "http://127.0.0.1:1234/v1"
 API_KEY = "dummy_key"
 
@@ -54,30 +54,30 @@ Tools = [{
             "required": ["code"]
         }
     }
-}, {
-    "type": "function",
-    "function": {
-        "name": "web",
-        "description": f"Search the web for relevant information. Current timestamp: {datetime.now()}",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string", "description": "Search query for websites"},
-                "embedding_matcher": {"type": "string", "description": "Used for finding relevant citations"},
-                "number_of_websites": {
-                    "type": "integer",
-                    "description": "Maximum websites to visit",
-                    "default": 4,
-                },
-                "number_of_citations": {
-                    "type": "integer",
-                    "description": "Maximum citations to scrape (250 words each)",
-                    "default": 5,
-                }
-            },
-            "required": ["query", "embedding_matcher"]
-        }
-    }
+# }, {
+#     "type": "function",
+#     "function": {
+#         "name": "web",
+#         "description": f"Search the web for relevant information. Current timestamp: {datetime.now()}",
+#         "parameters": {
+#             "type": "object",
+#             "properties": {
+#                 "query": {"type": "string", "description": "Search query for websites"},
+#                 "embedding_matcher": {"type": "string", "description": "Used for finding relevant citations"},
+#                 "number_of_websites": {
+#                     "type": "integer",
+#                     "description": "Maximum websites to visit",
+#                     "default": 4,
+#                 },
+#                 "number_of_citations": {
+#                     "type": "integer",
+#                     "description": "Maximum citations to scrape (250 words each)",
+#                     "default": 5,
+#                 }
+#             },
+#             "required": ["query", "embedding_matcher"]
+#         }
+#     }
 }, {
     "type": "function",
     "function": {
@@ -308,7 +308,7 @@ def chat_loop() -> None:
     # show_help()
 
     while True:
-        print(f"\n{Fore.CYAN}You:{Style.RESET_ALL} ", end="")
+        print(f"\n{CUSTOM_ORANGE}➤ {Style.RESET_ALL} ", end="")
         user_input = input().strip()
 
         if not user_input:
@@ -397,6 +397,8 @@ def chat_loop() -> None:
                             "tool_call_id": tool_call["id"]
                         })
                     print(f"{Fore.GREEN}✓ Complete{Style.RESET_ALL}")
+                    print(f"{Fore.LIGHTCYAN_EX}Tool Call Arguments:{Style.RESET_ALL} {tool_call['function']['arguments']}")
+                    print(f"{Fore.LIGHTCYAN_EX}Tool Call Result:{Style.RESET_ALL} {result}")
                 
                 print("─" * width)
 
