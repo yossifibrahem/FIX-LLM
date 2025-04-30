@@ -31,7 +31,7 @@ from youtube_tool.youtube import (
 
 # Constants
 MODEL = "qwen2.5-7b-instruct"
-BASE_URL = "http://192.168.1.21:1234/v1"
+BASE_URL = "http://127.0.0.1:1234/v1"
 API_KEY = "dummy_key"
 
 # Initialize OpenAI client
