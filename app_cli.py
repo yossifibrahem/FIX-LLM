@@ -20,13 +20,13 @@ BOLD = '\033[1m'
 from Python_tool.PythonExecutor_secure import execute_python_code as python
 from web_tool.web_browsing import (
     text_search as web,
-    webpage_scraper as web_url,
+    webpage_scraper as URL,
     images_search as image
 )
 from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
 from youtube_tool.youtube import (
-    search_youtube as video,
-    get_video_info as yt_url
+    search_youtube as youtube,
+    get_video_info as watch
 )
 
 # Constants
@@ -94,7 +94,7 @@ Tools = [{
 }, {
     "type": "function",
     "function": {
-        "name": "web_url",
+        "name": "URL",
         "description": "Scrape a website for its content",
         "parameters": {
             "type": "object",
@@ -125,7 +125,7 @@ Tools = [{
 }, {
     "type": "function",
     "function": {
-        "name": "video",
+        "name": "youtube",
         "description": f"Search youtube videos and retrive the urls.",
         "parameters": {
             "type": "object",
@@ -143,7 +143,7 @@ Tools = [{
 }, {
     "type": "function",
     "function": {
-        "name": "yt_url",
+        "name": "watch",
         "description": "get information about a youtube video (title and descrption)",
         "parameters": {
             "type": "object",
@@ -299,7 +299,7 @@ Type 'clear' to start new chat
 
 def chat_loop() -> None:
     """Main chat interaction loop."""
-    messages: List[Dict] = [{"role": "system", "content": "Enable deep thinking subroutine."}]
+    messages: List[Dict] = []
     use_streaming = True  # Set to False for non-streaming mode, True for streaming
 
     # Clear screen on startup
@@ -316,7 +316,7 @@ def chat_loop() -> None:
         
         # Handle commands
         if user_input.lower() == "clear":
-            messages = [{"role": "system", "content": "Enable deep thinking subroutine."}]
+            messages = []
             os.system('cls' if os.name == "nt" else 'clear')
             display_welcome_banner()
             continue
@@ -379,17 +379,17 @@ def chat_loop() -> None:
                     elif tool_name == "wiki":
                         result = wiki(arguments["query"])
 
-                    elif tool_name == "web_url":
-                        result = web_url(arguments["url"])
+                    elif tool_name == "URL":
+                        result = URL(arguments["url"])
 
                     elif tool_name == "image":
                         result = image(arguments["query"], arguments.get("number_of_images", 1))
                         
-                    elif tool_name == "video":
-                        result = video(arguments["query"], arguments.get("number_of_videos", 1))
+                    elif tool_name == "youtube":
+                        result = youtube(arguments["query"], arguments.get("number_of_videos", 1))
                         
-                    elif tool_name == "yt_url":
-                        result = yt_url(arguments["url"])
+                    elif tool_name == "watch":
+                        result = watch(arguments["url"])
                     
                     messages.append({
                             "role": "tool",
