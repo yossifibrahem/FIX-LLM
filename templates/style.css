@@ -12,7 +12,6 @@ body {
 .messages-container {
     flex: 1;
     overflow-y: auto;
-    /* padding-bottom: 50px; */
     height: calc(100vh - 170px);
     border-bottom: solid 1px #333;
     background-color: #171717;
