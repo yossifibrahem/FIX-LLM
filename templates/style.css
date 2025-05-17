@@ -71,10 +71,6 @@ body {
     transition: padding-left 0.3s ease;
 }
 
-.input-container.shifted {
-    padding-left: 300px;
-}
-
 .input-group {
     background: #1e1e1e;
     border: 1px solid #555;
@@ -402,10 +398,6 @@ body {
 
 .content-wrapper {
     transition: margin-left 0.3s ease;
-}
-
-.content-wrapper.shifted {
-    margin-left: 300px;
 }
 
 .toggle-conversations {
