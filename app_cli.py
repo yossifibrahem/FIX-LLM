@@ -164,12 +164,19 @@ def get_terminal_width() -> int:
     width, _ = shutil.get_terminal_size()
     return width
 
-def create_centered_box(text: str, padding: int = 4) -> str:
+def create_centered_box(text: str, header: str = '', padding: int = 4) -> str:
     """Create a centered box with dynamic width."""
     width = get_terminal_width()
     lines = text.split('\n')
+    if not header == '': header = ' ' + header + ' '
     
-    box = '╔' + '═' * (width - 2) + '╗\n'
+    # Create header
+    header_padding = '═' * ((width - len(header) - 2) // 2)
+    top_line = '╔' + header_padding + header + header_padding
+    if len(top_line) < width - 1: top_line += '═'
+    top_line += '╗\n'
+    
+    box = top_line
     box += '║' + ' ' * (width - 2) + '║\n'
     
     for line in lines:
@@ -244,10 +251,6 @@ def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple
     tool_calls = []
     
     print()
-    if add_assistant_label:
-        print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
-    else:
-        print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
     
     # Extract content if present
     if response.choices[0].message.content:
@@ -259,7 +262,7 @@ def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple
             content = content[:start] + content[end:]
 
 
-        print(content, end="", flush=True)
+        print(f"{Fore.GREEN}{create_centered_box(content, MODEL)}{Style.RESET_ALL}", end="", flush=True)
         collected_text = content
     
     # Extract tool calls if present
@@ -320,6 +323,8 @@ def chat_loop() -> None:
     while True:
         print(f"\n{CUSTOM_ORANGE}➤ {Style.RESET_ALL} ", end="")
         user_input = input().strip()
+        if not use_streaming:
+            print(f"{Fore.CYAN}{create_centered_box(user_input, 'You')}{Style.RESET_ALL}")
 
         if not user_input:
             continue
