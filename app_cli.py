@@ -262,7 +262,7 @@ def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple
             content = content[:start] + content[end:]
 
 
-        print(f"{Fore.GREEN}{create_centered_box(content, MODEL)}{Style.RESET_ALL}", end="", flush=True)
+        print(f"{Fore.WHITE}{BOLD}{create_centered_box(content, MODEL)}{Style.RESET_ALL}", end="", flush=True)
         collected_text = content
     
     # Extract tool calls if present
@@ -336,7 +336,7 @@ def chat_loop() -> None:
 
         # Show user input in a box
         if not use_streaming:
-            print(f"{Fore.CYAN}{create_centered_box(user_input, 'You')}{Style.RESET_ALL}")
+            print(f"{CUSTOM_ORANGE}{BOLD}{create_centered_box(user_input, 'You')}{Style.RESET_ALL}")
 
         # Process user input
         messages.append({"role": "user", "content": user_input})
@@ -368,12 +368,12 @@ def chat_loop() -> None:
             if tool_calls:
                 tool_name = tool_calls[0]["function"]["name"]
                 width = get_terminal_width()
-                print(f"\n{Fore.YELLOW}[Tool Call]{Style.RESET_ALL}")
-                print("─" * width)
+                
                 
                 # Execute tool calls
                 for tool_call in tool_calls:
-                    print(f"{Fore.YELLOW}⚙ Executing{Style.RESET_ALL}: {tool_call['function']['name']}")
+                    message = tool_call["function"]["name"] + tool_call["function"]["arguments"]
+                    print(f"{Fore.YELLOW}{create_centered_box(message, 'Tool Call')}{Style.RESET_ALL}")
                     arguments = json.loads(tool_call["function"]["arguments"])
                     tool_name = tool_call["function"]["name"]
                     
@@ -408,12 +408,8 @@ def chat_loop() -> None:
                             "content": str(result),
                             "tool_call_id": tool_call["id"]
                         })
-                    print(f"{Fore.GREEN}✓ Complete{Style.RESET_ALL}")
-                    print(f"{Fore.LIGHTCYAN_EX}Tool Call Arguments:{Style.RESET_ALL} {tool_call['function']['arguments']}")
-                    print(f"{Fore.LIGHTCYAN_EX}Tool Call Result:{Style.RESET_ALL} {result}")
-                
-                print("─" * width)
-
+                    print(f"{Fore.YELLOW}{create_centered_box(str(result), 'Tool Call Result')}{Style.RESET_ALL}")
+            
                 # Continue checking for more tool calls after tool execution
                 continue_tool_execution = True
             else:
