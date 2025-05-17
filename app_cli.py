@@ -34,6 +34,10 @@ MODEL = "qwen3-0.6b"
 BASE_URL = "http://127.0.0.1:1234/v1"
 API_KEY = "dummy_key"
 
+# Configuration
+use_streaming = False  # Set to False for non-streaming mode
+show_thinking = False  # Set to False to disable thinking mask
+
 # Initialize OpenAI client
 client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
@@ -300,7 +304,6 @@ Type 'clear' to start new chat
 def chat_loop() -> None:
     """Main chat interaction loop."""
     messages: List[Dict] = []
-    use_streaming = True  # Set to False for non-streaming mode, True for streaming
 
     # Clear screen on startup
     os.system('cls' if os.name == "nt" else 'clear')
