@@ -58,30 +58,30 @@ Tools = [{
             "required": ["code"]
         }
     }
-# }, {
-#     "type": "function",
-#     "function": {
-#         "name": "web",
-#         "description": f"Search the web for relevant information. Current timestamp: {datetime.now()}",
-#         "parameters": {
-#             "type": "object",
-#             "properties": {
-#                 "query": {"type": "string", "description": "Search query for websites"},
-#                 "embedding_matcher": {"type": "string", "description": "Used for finding relevant citations"},
-#                 "number_of_websites": {
-#                     "type": "integer",
-#                     "description": "Maximum websites to visit",
-#                     "default": 4,
-#                 },
-#                 "number_of_citations": {
-#                     "type": "integer",
-#                     "description": "Maximum citations to scrape (250 words each)",
-#                     "default": 5,
-#                 }
-#             },
-#             "required": ["query", "embedding_matcher"]
-#         }
-#     }
+}, {
+    "type": "function",
+    "function": {
+        "name": "web",
+        "description": f"Search the web for relevant information. Current timestamp: {datetime.now()}",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Search query for websites"},
+                "embedding_matcher": {"type": "string", "description": "Used for finding relevant citations"},
+                "number_of_websites": {
+                    "type": "integer",
+                    "description": "Maximum websites to visit",
+                    "default": 4,
+                },
+                "number_of_citations": {
+                    "type": "integer",
+                    "description": "Maximum citations to scrape (250 words each)",
+                    "default": 5,
+                }
+            },
+            "required": ["query", "embedding_matcher"]
+        }
+    }
 }, {
     "type": "function",
     "function": {
@@ -165,28 +165,74 @@ def get_terminal_width() -> int:
     return width
 
 def create_centered_box(text: str, header: str = '', padding: int = 4) -> str:
-    """Create a centered box with dynamic width."""
+    """
+    Create a centered box with dynamic width and centered header.
+    
+    Args:
+        text (str): The text to be displayed in the box
+        header (str): Optional header text to show at top of box
+        padding (int): Number of spaces for padding on each side
+    
+    Returns:
+        str: Formatted box with the text
+    """
+    # Get terminal width
     width = get_terminal_width()
-    lines = text.split('\n')
-    if not header == '': header = ' ' + header + ' '
     
-    # Create header
-    header_padding = '═' * ((width - len(header) - 2) // 2)
-    top_line = '╔' + header_padding + header + header_padding
-    if len(top_line) < width - 1: top_line += '═'
-    top_line += '╗\n'
+    # Create box characters
+    TOP_LEFT = "╭"
+    TOP_RIGHT = "╮"
+    BOTTOM_LEFT = "╰"
+    BOTTOM_RIGHT = "╯"
+    HORIZONTAL = "─"
+    VERTICAL = "│"
     
-    box = top_line
-    box += '║' + ' ' * (width - 2) + '║\n'
+    # Calculate content width
+    content_width = width - (2 * padding) - 2  # -2 for the vertical borders
     
+    # Split text into lines that fit the content width
+    lines = []
+    for line in text.split('\n'):
+        while len(line) > content_width:
+            split_point = line[:content_width].rfind(' ')
+            if split_point == -1:
+                split_point = content_width
+            lines.append(line[:split_point])
+            line = line[split_point:].strip()
+        if line:
+            lines.append(line)
+    
+    # Create the box
+    result = []
+    
+    # Top border with centered header if provided
+    if header:
+        header_text = f" {header} "
+        header_length = len(header_text)
+        left_padding = (width - header_length) // 2
+        right_padding = width - left_padding - header_length
+        top_border = (
+            f"{TOP_LEFT}"
+            f"{HORIZONTAL * (left_padding - 1)}"
+            f"{header_text}"
+            f"{HORIZONTAL * (right_padding - 1)}"
+            f"{TOP_RIGHT}"
+        )
+        result.append(top_border)
+    else:
+        result.append(f"{TOP_LEFT}{HORIZONTAL * (width - 2)}{TOP_RIGHT}")
+    
+    # Content
     for line in lines:
-        if line.strip():
-            padded_line = line.center(width - 2)
-            box += '║' + padded_line + '║\n'
+        padding_left = (content_width - len(line)) // 2
+        padding_right = content_width - len(line) - padding_left
+        padded_line = " " * padding_left + line + " " * padding_right
+        result.append(f"{VERTICAL}{' ' * padding}{padded_line}{' ' * padding}{VERTICAL}")
     
-    box += '║' + ' ' * (width - 2) + '║\n'
-    box += '╚' + '═' * (width - 2) + '╝'
-    return box
+    # Bottom border
+    result.append(f"{BOTTOM_LEFT}{HORIZONTAL * (width - 2)}{BOTTOM_RIGHT}")
+    
+    return "\n".join(result)
 
 def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, List[Dict]]:
     """
