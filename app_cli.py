@@ -263,7 +263,7 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
         # Handle regular text output
         if delta.content:
             if first_chunk:
-                print()
+                # print()
                 if add_assistant_label:
                     print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
                 else:
@@ -304,7 +304,7 @@ def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple
     collected_text = ""
     tool_calls = []
     
-    print()
+    # print()
     
     # Extract content if present
     if response.choices[0].message.content:
@@ -411,7 +411,7 @@ def chat_loop() -> None:
                 response_text, tool_calls = process_non_stream(response)
 
             if not tool_calls:
-                print()
+                # print()
                 continue_tool_execution = False
 
             text_in_response = len(response_text) > 0
@@ -427,7 +427,7 @@ def chat_loop() -> None:
                 # Execute tool calls
                 for tool_call in tool_calls:
                     message = tool_call["function"]["name"] + tool_call["function"]["arguments"]
-                    print(f"{Fore.YELLOW}{create_centered_box(message, 'Tool Call')}{Style.RESET_ALL}")
+                    # print(f"{Fore.YELLOW}{create_centered_box(message, 'Tool Call')}{Style.RESET_ALL}")
                     arguments = json.loads(tool_call["function"]["arguments"])
                     tool_name = tool_call["function"]["name"]
                     
@@ -462,7 +462,7 @@ def chat_loop() -> None:
                             "content": str(result),
                             "tool_call_id": tool_call["id"]
                         })
-                    print(f"{Fore.YELLOW}{create_centered_box(str(result), 'Tool Call Result')}{Style.RESET_ALL}")
+                    # print(f"{Fore.YELLOW}{create_centered_box(str(result), 'Tool Call Result')}{Style.RESET_ALL}")
             
                 # Continue checking for more tool calls after tool execution
                 continue_tool_execution = True
