@@ -10,6 +10,11 @@ from datetime import datetime
 from typing import List, Dict, Tuple, Any
 from textwrap import fill
 
+import sys
+import threading
+import itertools
+import time
+
 from openai import OpenAI
 from colorama import init, Fore, Back, Style
 # Custom Styles
@@ -160,6 +165,37 @@ Tools = [
         }
     }
 ]
+
+class ThinkingAnimation:
+    """Display a thinking animation while processing."""
+    def __init__(self):
+        self._running = False
+        self._thread = None
+        self._frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
+
+    def start(self):
+        """Start the thinking animation."""
+        self._running = True
+        self._thread = threading.Thread(target=self._animate)
+        self._thread.start()
+
+    def stop(self):
+        """Stop the thinking animation."""
+        self._running = False
+        if self._thread:
+            self._thread.join()
+        # Clear the animation line
+        sys.stdout.write("\r" + " " * 20 + "\r")
+        sys.stdout.flush()
+
+    def _animate(self):
+        """Animation loop."""
+        for frame in itertools.cycle(self._frames):
+            if not self._running:
+                break
+            sys.stdout.write(f"\r{Fore.white}thinking {frame}{Style.RESET_ALL}")
+            sys.stdout.flush()
+            time.sleep(0.1)
 
 def get_terminal_width() -> int:
     """Get the current terminal width."""
@@ -319,9 +355,7 @@ def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple
     """
     collected_text = ""
     tool_calls = []
-    
-    # print()
-    
+        
     # Extract content if present
     if response.choices[0].message.content:
         content = response.choices[0].message.content
@@ -427,7 +461,6 @@ def chat_loop() -> None:
                 response_text, tool_calls = process_non_stream(response)
 
             if not tool_calls:
-                # print()
                 continue_tool_execution = False
 
             text_in_response = len(response_text) > 0
