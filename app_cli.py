@@ -315,17 +315,12 @@ def chat_loop() -> None:
     """Main chat interaction loop."""
     messages: List[Dict] = []
 
-    # Clear screen on startup
     os.system('cls' if os.name == "nt" else 'clear')
     display_welcome_banner()
-    # show_help()
 
     while True:
         print(f"\n{CUSTOM_ORANGE}➤ {Style.RESET_ALL} ", end="")
         user_input = input().strip()
-        if not use_streaming:
-            print(f"{Fore.CYAN}{create_centered_box(user_input, 'You')}{Style.RESET_ALL}")
-
         if not user_input:
             continue
         
@@ -339,12 +334,15 @@ def chat_loop() -> None:
             show_help()
             continue
 
+        # Show user input in a box
+        if not use_streaming:
+            print(f"{Fore.CYAN}{create_centered_box(user_input, 'You')}{Style.RESET_ALL}")
+
         # Process user input
         messages.append({"role": "user", "content": user_input})
         continue_tool_execution = True
 
         while continue_tool_execution:
-            # Get response
             response = client.chat.completions.create(
                 model=MODEL,
                 messages=messages,
@@ -353,7 +351,6 @@ def chat_loop() -> None:
                 temperature=0.7
             )
             
-            # Process response based on streaming mode
             if use_streaming:
                 response_text, tool_calls = process_stream(response)
             else:
@@ -367,7 +364,7 @@ def chat_loop() -> None:
             if text_in_response:
                 messages.append({"role": "assistant", "content": response_text})
 
-            # Handle tool calls if any
+            # Handle tool calls
             if tool_calls:
                 tool_name = tool_calls[0]["function"]["name"]
                 width = get_terminal_width()
@@ -379,7 +376,7 @@ def chat_loop() -> None:
                     print(f"{Fore.YELLOW}⚙ Executing{Style.RESET_ALL}: {tool_call['function']['name']}")
                     arguments = json.loads(tool_call["function"]["arguments"])
                     tool_name = tool_call["function"]["name"]
-
+                    
                     if tool_name == "python":
                         result = python(arguments["code"])
                     
