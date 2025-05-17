@@ -35,7 +35,7 @@ BASE_URL = "http://127.0.0.1:1234/v1"
 API_KEY = "dummy_key"
 
 # Configuration
-show_stream = False  # Set to False for non-streaming mode
+show_stream = True  # Set to False for non-streaming mode
 show_thinking = False  # Set to False to disable thinking mask
 show_tool_calls = True  # Set to False to disable tool call display
 
@@ -257,21 +257,36 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
     collected_text = ""
     tool_calls = []
     first_chunk = True
+    thinking_buffer = ""
+    in_thinking = False
 
     for chunk in stream:
         delta = chunk.choices[0].delta
 
         # Handle regular text output
         if delta.content:
-            if first_chunk:
-                # print()
-                if add_assistant_label:
-                    print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
-                else:
-                    print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
-                first_chunk = False
-            print(delta.content, end="", flush=True)
-            collected_text += delta.content
+            content = delta.content
+            
+            # Check for opening think tag
+            if "<think>" in content:
+                in_thinking = True
+                content = content.split("<think>")[0]
+            
+            # Check for closing think tag
+            if "</think>" in content:
+                in_thinking = False
+                content = content.split("</think>")[1]
+            
+            # Only process content if we're not in thinking mode
+            if not in_thinking and content:
+                if first_chunk:
+                    if add_assistant_label:
+                        print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
+                    else:
+                        print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
+                    first_chunk = False
+                print(content, end="", flush=True)
+                collected_text += content
 
         # Handle tool calls
         elif delta.tool_calls:
