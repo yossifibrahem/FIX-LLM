@@ -252,6 +252,13 @@ def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple
     # Extract content if present
     if response.choices[0].message.content:
         content = response.choices[0].message.content
+
+        while "<think>" in content and "</think>" in content and not show_thinking:
+            start = content.find("<think>")
+            end = content.find("</think>") + len("</think>")
+            content = content[:start] + content[end:]
+
+
         print(content, end="", flush=True)
         collected_text = content
     
