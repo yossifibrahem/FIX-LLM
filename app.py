@@ -34,120 +34,120 @@ MODEL = os.getenv("LMSTUDIO_MODEL", "qwen3-8b")
 
 # --- Tool Definitions ---
 Tools = [
-        {
-            "type": "function",
-            "function": {
-                "name": "python",
-                "description": "Execute Python code and return the execution results. Use for math problems or task automation.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "code": {"type": "string", "description": "Complete Python code to execute. Must return a value."}
-                    },
-                    "required": ["code"]
-                }
-            }
-        }, {
-            "type": "function",
-            "function": {
-                "name": "web",
-                "description": f"Search the web for relevant realtime information. Current date and time: {datetime.now()}",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {"type": "string", "description": "Search query for websites"},
-                        "citation_finder": {"type": "string", "description": "Used for finding relevant citations"},
-                        "number_of_websites": {
-                            "type": "integer",
-                            "description": "Maximum websites to visit",
-                            "default": 4,
-                        },
-                        "number_of_citations": {
-                            "type": "integer",
-                            "description": "Maximum citations to scrape",
-                            "default": 5,
-                        }
-                    },
-                    "required": ["query"]
-                }
-            }
-        }, {
-            "type": "function",
-            "function": {
-                "name": "wiki",
-                "description": "Search Wikipedia for the most relevant article introduction",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {"type": "string", "description": "Search query for Wikipedia article"}
-                    },
-                    "required": ["query"]
-                }
-            }
-        }, {
-            "type": "function",
-            "function": {
-                "name": "URL",
-                "description": "Scrape a website for its content",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "url": {"type": "string", "description": "URL of the website to scrape"}
-                    },
-                    "required": ["url"]
-                }
-            }
-        }, {
-            "type": "function",
-            "function": {
-                "name": "image",
-                "description": f"Search the web for images.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {"type": "string", "description": "Search query for images"},
-                        "number_of_images": {
-                            "type": "integer",
-                            "description": "Maximum images to get",
-                            "default": 1,
-                        },
-                    },
-                    "required": ["query"]
-                }
-            }
-        }, {
-            "type": "function",
-            "function": {
-                "name": "youtube",
-                "description": f"Search youtube videos and retrive the urls.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {"type": "string", "description": "Search query for vidoes"},
-                        "number_of_videos": {
-                            "type": "integer",
-                            "description": "Maximum videos to get",
-                            "default": 1,
-                        },
-                    },
-                    "required": ["query"]
-                }
-            }
-        }, {
-            "type": "function",
-            "function": {
-                "name": "watch",
-                "description": "get information about a youtube video (title, descrption and transcription)",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "url": {"type": "string", "description": "URL of the youtube video"},
-                    },
-                    "required": ["url"]
-                }
+    {
+        "type": "function",
+        "function": {
+            "name": "python",
+            "description": "Execute Python code and return the execution results. Use for math problems or task automation.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "code": {"type": "string", "description": "Complete Python code to execute. Must return a value."}
+                },
+                "required": ["code"]
             }
         }
-    ]
+    }, {
+        "type": "function",
+        "function": {
+            "name": "web",
+            "description": f"Search the web for relevant realtime information. Current date and time: {datetime.now()}",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query for websites"},
+                    "citation_finder": {"type": "string", "description": "Used for finding relevant citations"},
+                    "number_of_websites": {
+                        "type": "integer",
+                        "description": "Maximum websites to visit",
+                        "default": 4,
+                    },
+                    "number_of_citations": {
+                        "type": "integer",
+                        "description": "Maximum citations to scrape",
+                        "default": 5,
+                    }
+                },
+                "required": ["query"]
+            }
+        }
+    }, {
+        "type": "function",
+        "function": {
+            "name": "wiki",
+            "description": "Search Wikipedia for the most relevant article introduction",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query for Wikipedia article"}
+                },
+                "required": ["query"]
+            }
+        }
+    }, {
+        "type": "function",
+        "function": {
+            "name": "URL",
+            "description": "Scrape a website for its content",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "URL of the website to scrape"}
+                },
+                "required": ["url"]
+            }
+        }
+    }, {
+        "type": "function",
+        "function": {
+            "name": "image",
+            "description": f"Search the web for images.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query for images"},
+                    "number_of_images": {
+                        "type": "integer",
+                        "description": "Maximum images to get",
+                        "default": 1,
+                    },
+                },
+                "required": ["query"]
+            }
+        }
+    }, {
+        "type": "function",
+        "function": {
+            "name": "youtube",
+            "description": f"Search youtube videos and retrive the urls.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query for vidoes"},
+                    "number_of_videos": {
+                        "type": "integer",
+                        "description": "Maximum videos to get",
+                        "default": 1,
+                    },
+                },
+                "required": ["query"]
+            }
+        }
+    }, {
+        "type": "function",
+        "function": {
+            "name": "watch",
+            "description": "get information about a youtube video (title, descrption and transcription)",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "URL of the youtube video"},
+                },
+                "required": ["url"]
+            }
+        }
+    }
+]
 
 default_prompt = {"role": "system", "content": (
     "You are a helpful assistant. You can use tools to answer questions. "
