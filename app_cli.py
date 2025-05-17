@@ -164,7 +164,7 @@ def get_terminal_width() -> int:
     width, _ = shutil.get_terminal_size()
     return width
 
-def create_centered_box(text: str, header: str = '', padding: int = 4) -> str:
+def create_centered_box(text: str, header: str = '', padding: int = 4, center_align: bool = False) -> str:
     """
     Create a centered box with dynamic width and centered header.
     
@@ -172,6 +172,7 @@ def create_centered_box(text: str, header: str = '', padding: int = 4) -> str:
         text (str): The text to be displayed in the box
         header (str): Optional header text to show at top of box
         padding (int): Number of spaces for padding on each side
+        center_align (bool): Whether to center the text (True) or left-align it (False)
     
     Returns:
         str: Formatted box with the text
@@ -224,9 +225,15 @@ def create_centered_box(text: str, header: str = '', padding: int = 4) -> str:
     
     # Content
     for line in lines:
-        padding_left = (content_width - len(line)) // 2
-        padding_right = content_width - len(line) - padding_left
-        padded_line = " " * padding_left + line + " " * padding_right
+        if center_align:
+            # Center alignment
+            padding_left = (content_width - len(line)) // 2
+            padding_right = content_width - len(line) - padding_left
+            padded_line = " " * padding_left + line + " " * padding_right
+        else:
+            # Left alignment
+            padded_line = line + " " * (content_width - len(line))
+        
         result.append(f"{VERTICAL}{' ' * padding}{padded_line}{' ' * padding}{VERTICAL}")
     
     # Bottom border
@@ -355,7 +362,7 @@ def display_welcome_banner() -> None:
 Type 'help' to see available tools
 Type 'clear' to start new chat
 """
-    print(f"{CUSTOM_ORANGE}{BOLD}{create_centered_box(banner)}{Style.RESET_ALL}")
+    print(f"{CUSTOM_ORANGE}{BOLD}{create_centered_box(banner, center_align=True)}{Style.RESET_ALL}")
 
 def chat_loop() -> None:
     """Main chat interaction loop."""
