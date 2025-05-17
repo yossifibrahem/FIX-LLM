@@ -35,7 +35,7 @@ BASE_URL = "http://127.0.0.1:1234/v1"
 API_KEY = "dummy_key"
 
 # Configuration
-show_stream = True  # Set to False for non-streaming mode
+show_stream = False  # Set to False for non-streaming mode
 show_thinking = False  # Set to False to disable thinking mask
 show_tool_calls = True  # Set to False to disable tool call display
 
