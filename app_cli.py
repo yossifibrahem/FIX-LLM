@@ -35,8 +35,9 @@ BASE_URL = "http://127.0.0.1:1234/v1"
 API_KEY = "dummy_key"
 
 # Configuration
-use_streaming = False  # Set to False for non-streaming mode
+show_stream = False  # Set to False for non-streaming mode
 show_thinking = False  # Set to False to disable thinking mask
+show_tool_calls = True  # Set to False to disable tool call display
 
 # Initialize OpenAI client
 client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
@@ -395,7 +396,7 @@ def chat_loop() -> None:
             continue
 
         # Show user input in a box
-        if not use_streaming:
+        if not show_stream:
             print(f"{CUSTOM_ORANGE}{BOLD}{create_centered_box(user_input, 'You')}{Style.RESET_ALL}")
 
         # Process user input
@@ -407,11 +408,11 @@ def chat_loop() -> None:
                 model=MODEL,
                 messages=messages,
                 tools=Tools,
-                stream=use_streaming,
+                stream=show_stream,
                 temperature=0.7
             )
             
-            if use_streaming:
+            if show_stream:
                 response_text, tool_calls = process_stream(response)
             else:
                 response_text, tool_calls = process_non_stream(response)
@@ -433,7 +434,7 @@ def chat_loop() -> None:
                 # Execute tool calls
                 for tool_call in tool_calls:
                     message = tool_call["function"]["name"] + tool_call["function"]["arguments"]
-                    # print(f"{Fore.YELLOW}{create_centered_box(message, 'Tool Call')}{Style.RESET_ALL}")
+                    print(f"{Fore.YELLOW}{create_centered_box(message, 'Tool Call')}{Style.RESET_ALL}") if show_tool_calls else None
                     arguments = json.loads(tool_call["function"]["arguments"])
                     tool_name = tool_call["function"]["name"]
                     
@@ -468,7 +469,7 @@ def chat_loop() -> None:
                             "content": str(result),
                             "tool_call_id": tool_call["id"]
                         })
-                    # print(f"{Fore.YELLOW}{create_centered_box(str(result), 'Tool Call Result')}{Style.RESET_ALL}")
+                    print(f"{Fore.YELLOW}{create_centered_box(str(result), 'Tool Call Result')}{Style.RESET_ALL}") if show_tool_calls else None
             
                 # Continue checking for more tool calls after tool execution
                 continue_tool_execution = True
