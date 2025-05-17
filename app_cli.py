@@ -262,15 +262,21 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
 
         # Handle regular text output
         if delta.content:
-            if first_chunk:
-                # print()
-                if add_assistant_label:
-                    print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
-                else:
-                    print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
-                first_chunk = False
-            print(delta.content, end="", flush=True)
-            collected_text += delta.content
+            # Hide <think>...</think> if show_thinking is False
+            content = delta.content
+            while "<think>" in content and "</think>" in content and not show_thinking:
+                start = content.find("<think>")
+                end = content.find("</think>") + len("</think>")
+                content = content[:start] + content[end:]
+            if content:
+                if first_chunk:
+                    if add_assistant_label:
+                        print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
+                    else:
+                        print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
+                    first_chunk = False
+                print(content, end="", flush=True)
+                collected_text += content
 
         # Handle tool calls
         elif delta.tool_calls:
