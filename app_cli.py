@@ -42,13 +42,70 @@ API_KEY = "dummy_key"
 # Configuration
 show_stream = False  # Set to False for non-streaming mode
 show_thinking = False  # Set to False to disable thinking mask
-show_tool_calls = True  # Set to False to disable tool call display
+show_tool_calls = False  # Set to False to disable tool call display
+show_LLM_label = False  # Set to False to disable assistant label in streaming mode
 
 # Initialize OpenAI client
 client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
 # Initialize colorama
 init()
+
+prompt = """
+You are an AI assistant with access to powerful tools that help you perform various tasks efficiently. Your purpose is to assist users with their questions and requests through conversation.
+
+## Core Identity and Capabilities
+
+- You are helpful, respectful, and informative.
+- You can access real-time information using various tools to provide the most current and accurate responses.
+- Your responses should be concise but thorough, focusing on directly addressing the user's needs.
+- Current date and time: {current_datetime}
+
+## Available Tools
+
+You have access to the following tools to enhance your capabilities:
+
+1. **Python Execution (python)**: Run Python code to perform calculations, solve problems, or automate tasks.
+2. **Web Search (web)**: Search the internet for recent information on any topic.
+3. **Wikipedia (wiki)**: Retrieve detailed information from Wikipedia articles.
+4. **URL Scraper (URL)**: Extract content from specific web pages.
+5. **Image Search (image)**: Find images related to specific queries.
+6. **YouTube Search (youtube)**: Discover relevant videos on YouTube.
+7. **YouTube Video Info (watch)**: Get detailed information about specific YouTube videos, including transcripts.
+
+## Available Commands
+
+Users can type these special commands:
+- **help**: Displays information about available tools and commands
+- **clear**: Clears the chat history and starts a new conversation
+
+## Response Guidelines
+
+- Be truthful and acknowledge when you don't know something.
+- When using tools, explain what you're doing and why.
+- Format your responses for readability using appropriate formatting.
+- If a question is ambiguous, ask for clarification before using tools.
+- When providing code, explain how it works.
+- When searching the web or other sources, cite your sources appropriately.
+
+## Ethical Guidelines
+
+- Do not generate harmful, illegal, unethical or deceptive content.
+- Respect user privacy and confidentiality.
+- Do not execute code that could be harmful or malicious.
+- Avoid making definitive claims in areas requiring professional expertise (medical, legal, financial).
+- If asked to perform tasks beyond your capabilities, explain your limitations clearly.
+
+## Interaction Style
+
+- Maintain a conversational, friendly tone.
+- Be concise but thorough in your responses.
+- Use plain language when possible, but technical language when appropriate.
+- Adapt your communication style to the user's needs and preferences.
+- Use examples to illustrate complex concepts.
+
+Remember that your primary goal is to provide valuable assistance to the user through accurate information and helpful tools.
+"""
 
 Tools = [
     {
@@ -166,26 +223,27 @@ Tools = [
     }
 ]
 
-class ThinkingAnimation:
-    """Display a thinking animation while processing."""
-    def __init__(self):
+class LoadingAnimation:
+    """Display a custom animation while processing."""
+    def __init__(self, message):
         self._running = False
         self._thread = None
         self._frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
+        self._message = message
 
     def start(self):
-        """Start the thinking animation."""
+        """Start the animation."""
         self._running = True
         self._thread = threading.Thread(target=self._animate)
         self._thread.start()
 
     def stop(self):
-        """Stop the thinking animation."""
+        """Stop the animation."""
         self._running = False
         if self._thread:
             self._thread.join()
         # Clear the animation line
-        sys.stdout.write("\r" + " " * 20 + "\r")
+        sys.stdout.write("\r" + " " * 50 + "\r")  # Increased clearing space for longer messages
         sys.stdout.flush()
 
     def _animate(self):
@@ -193,7 +251,7 @@ class ThinkingAnimation:
         for frame in itertools.cycle(self._frames):
             if not self._running:
                 break
-            sys.stdout.write(f"\r{Fore.WHITE}💭 Thinking {frame}{Style.RESET_ALL}")
+            sys.stdout.write(f"\r{Fore.WHITE}{self._message} {frame}{Style.RESET_ALL}")
             sys.stdout.flush()
             time.sleep(0.1)
 
@@ -202,7 +260,7 @@ def get_terminal_width() -> int:
     width, _ = shutil.get_terminal_size()
     return width
 
-def create_centered_box(text: str, header: str = '', padding: int = 4, center_align: bool = False) -> str:
+def create_centered_box(text: str, header: str = '', padding: int = 2, center_align: bool = False) -> str:
     """
     Create a centered box with dynamic width and centered header.
     
@@ -279,14 +337,13 @@ def create_centered_box(text: str, header: str = '', padding: int = 4, center_al
     
     return "\n".join(result)
 
-def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, List[Dict]]:
+def process_stream(stream: Any) -> Tuple[str, List[Dict]]:
     """
     Handle streaming responses from the API.
     
     Args:
         stream: The response stream from the API
-        add_assistant_label: Whether to prefix output with 'Assistant:'
-    
+
     Returns:
         Tuple containing collected text and tool calls
     """
@@ -316,7 +373,7 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
             # Only process content if we're not in thinking mode
             if not in_thinking and content:
                 if first_chunk:
-                    if add_assistant_label:
+                    if show_LLM_label:
                         print(f"{Fore.LIGHTRED_EX}{MODEL}:{Style.RESET_ALL}", end=" ", flush=True)
                     else:
                         print(f"{Fore.LIGHTRED_EX}Assistant:{Style.RESET_ALL}", end=" ", flush=True)
@@ -342,13 +399,12 @@ def process_stream(stream: Any, add_assistant_label: bool = True) -> Tuple[str, 
                 }
     return collected_text, tool_calls
 
-def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple[str, List[Dict]]:
+def process_non_stream(response: Any) -> Tuple[str, List[Dict]]:
     """
     Handle non-streaming responses from the API.
     
     Args:
         response: The non-streaming response from the API
-        add_assistant_label: Whether to prefix output with 'Assistant:'
     
     Returns:
         Tuple containing response text and tool calls
@@ -365,8 +421,10 @@ def process_non_stream(response: Any, add_assistant_label: bool = True) -> Tuple
             end = content.find("</think>") + len("</think>")
             content = content[:start] + content[end:]
 
-
-        print(f"{Fore.WHITE}{BOLD}{create_centered_box(content, MODEL)}{Style.RESET_ALL}", end="", flush=True)
+        if show_LLM_label:
+            print(f"{Fore.WHITE}{BOLD}{create_centered_box(content, MODEL)}{Style.RESET_ALL}", end="", flush=True)
+        else:
+            print(f"{Fore.WHITE}{BOLD}{create_centered_box(content, 'Assistant')}{Style.RESET_ALL}", end="", flush=True)
         collected_text = content
     
     # Extract tool calls if present
@@ -418,7 +476,9 @@ Type 'clear' to start new chat
 def chat_loop() -> None:
     """Main chat interaction loop."""
     messages: List[Dict] = []
-    thinking = ThinkingAnimation()
+    messages.append({"role": "system", "content": prompt.format(current_datetime=datetime.now())})
+    thinking = LoadingAnimation("Thinking")
+    loading = LoadingAnimation("Executing Tool")
 
     os.system('cls' if os.name == "nt" else 'clear')
     display_welcome_banner()
@@ -432,6 +492,7 @@ def chat_loop() -> None:
         # Handle commands
         if user_input.lower() == "clear":
             messages = []
+            messages.append({"role": "system", "content": prompt.format(current_datetime=datetime.now())})
             os.system('cls' if os.name == "nt" else 'clear')
             display_welcome_banner()
             continue
@@ -470,16 +531,13 @@ def chat_loop() -> None:
                 messages.append({"role": "assistant", "content": response_text})
 
             # Handle tool calls
-            if tool_calls:
-                tool_name = tool_calls[0]["function"]["name"]                
-                
+            if tool_calls:                
                 # Execute tool calls
                 for tool_call in tool_calls:
-                    message = tool_call["function"]["name"] + tool_call["function"]["arguments"]
-                    print(f"{Fore.YELLOW}{create_centered_box(message, 'Tool Call')}{Style.RESET_ALL}") if show_tool_calls else None
                     arguments = json.loads(tool_call["function"]["arguments"])
                     tool_name = tool_call["function"]["name"]
-                    
+                    print(f"{Fore.YELLOW}{create_centered_box(str(arguments), (str(tool_name)).upper(), center_align=True)}{Style.RESET_ALL}")
+                    loading.start()
                     if tool_name == "python":
                         result = python(arguments["code"])
                     
@@ -505,14 +563,17 @@ def chat_loop() -> None:
                         
                     elif tool_name == "watch":
                         result = watch(arguments["url"])
+                    else:
+                        result = f"Unknown tool: {tool_name}"
                     
                     messages.append({
                             "role": "tool",
                             "content": str(result),
                             "tool_call_id": tool_call["id"]
                         })
-                    print(f"{Fore.YELLOW}{create_centered_box(str(result), 'Tool Call Result')}{Style.RESET_ALL}") if show_tool_calls else None
-            
+                    loading.stop()
+                    if show_tool_calls: print(f"{Fore.GREEN}{create_centered_box(str(result), 'Tool Call Result')}{Style.RESET_ALL}")
+                    
                 # Continue checking for more tool calls after tool execution
                 continue_tool_execution = True
             else:
