@@ -193,7 +193,7 @@ class ThinkingAnimation:
         for frame in itertools.cycle(self._frames):
             if not self._running:
                 break
-            sys.stdout.write(f"\r{Fore.white}thinking {frame}{Style.RESET_ALL}")
+            sys.stdout.write(f"\r{Fore.WHITE}💭 Thinking {frame}{Style.RESET_ALL}")
             sys.stdout.flush()
             time.sleep(0.1)
 
@@ -418,6 +418,7 @@ Type 'clear' to start new chat
 def chat_loop() -> None:
     """Main chat interaction loop."""
     messages: List[Dict] = []
+    thinking = ThinkingAnimation()
 
     os.system('cls' if os.name == "nt" else 'clear')
     display_welcome_banner()
@@ -447,6 +448,7 @@ def chat_loop() -> None:
         continue_tool_execution = True
 
         while continue_tool_execution:
+            thinking.start() if not show_stream else None
             response = client.chat.completions.create(
                 model=MODEL,
                 messages=messages,
@@ -454,7 +456,7 @@ def chat_loop() -> None:
                 stream=show_stream,
                 temperature=0.7
             )
-            
+            thinking.stop() if not show_stream else None
             if show_stream:
                 response_text, tool_calls = process_stream(response)
             else:
@@ -469,9 +471,7 @@ def chat_loop() -> None:
 
             # Handle tool calls
             if tool_calls:
-                tool_name = tool_calls[0]["function"]["name"]
-                width = get_terminal_width()
-                
+                tool_name = tool_calls[0]["function"]["name"]                
                 
                 # Execute tool calls
                 for tool_call in tool_calls:
