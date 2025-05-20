@@ -56,7 +56,7 @@ Tools = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query for websites"},
-                    "citation_finder": {"type": "string", "description": "Used for finding relevant citations"},
+                    "citation_finder": {"type": "string", "description": "Key word used for finding relevant citations"},
                     "number_of_websites": {
                         "type": "integer",
                         "description": "Maximum websites to visit",
