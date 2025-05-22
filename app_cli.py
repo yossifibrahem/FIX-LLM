@@ -29,7 +29,8 @@ from Python_tool.PythonExecutor_secure import execute_python_code as python
 from web_tool.web_browsing import (
     text_search as web,
     webpage_scraper as URL,
-    images_search as image
+    images_search as image,
+    deep_search
 )
 from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
 from youtube_tool.youtube import (
@@ -80,7 +81,7 @@ Tools = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query for websites"},
-                    "citation_finder": {"type": "string", "description": "Key word used for finding relevant citations"},
+                    "Key_word": {"type": "string", "description": "Key word used for finding relevant citations"},
                     "number_of_websites": {
                         "type": "integer",
                         "description": "Maximum websites to visit",
@@ -168,6 +169,24 @@ Tools = [
                     "url": {"type": "string", "description": "URL of the youtube video"},
                 },
                 "required": ["url"]
+            }
+        }
+    }, {
+        "type": "function",
+        "function": {
+            "name": "deep_search",
+            "description": "Perform a deep search of web content with detailed summaries of search results",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query for detailed web search"},
+                    "number_of_results": {
+                        "type": "integer",
+                        "description": "Maximum number of search results to analyze",
+                        "default": 5
+                    }
+                },
+                "required": ["query"]
             }
         }
     }
@@ -493,9 +512,17 @@ def chat_loop() -> None:
                     elif tool_name == "web":
                         result = web(
                             arguments["query"],
-                            arguments.get("citation_finder", arguments["query"]),
+                            arguments.get("Key_word", arguments["query"]),
                             arguments.get("number_of_websites", 3),
                             arguments.get("number_of_citations", 5)
+                        )
+
+                    elif tool_name == "deep_search":
+                        result = deep_search(
+                            arguments["query"],
+                            arguments.get("number_of_results", 10),
+                            client,
+                            MODEL
                         )
                     
                     elif tool_name == "wiki":

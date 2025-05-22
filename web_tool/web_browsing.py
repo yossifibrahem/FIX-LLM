@@ -4,9 +4,9 @@ import asyncio
 from web_tool.duck_duck_go_search import DuckDuckGoSearchManager
 from web_tool.scraper import scrape_multiple_websites
 from web_tool.embedding_similarity import find_most_similar_content
+from web_tool.deep_search import deep_search as DeepSearchManager
 
 ddg = DuckDuckGoSearchManager()
-
 
 def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -> str:
     """Conducts a general web text search and retrieves information from the internet in response to user queries.
@@ -35,6 +35,9 @@ def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -
         return {"url": "error", "citation": str(e)}
     return filtered_data
 
+def deep_search(query: str, num_results: int, client, MODEL) -> list:
+    deep_search_results = asyncio.run(DeepSearchManager(query, num_results, client, MODEL))
+    return deep_search_results
 
 def images_search(query, num_results=3):
     """Performs the image search for a specific query. For example, "puppies". If possible, the output should be in Markdown format.

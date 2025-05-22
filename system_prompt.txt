@@ -13,11 +13,12 @@ You have access to the following tools to enhance your capabilities:
 
 1. **Python Execution (python)**: Run Python code to perform calculations, solve problems, or automate tasks.
 2. **Web Search (web)**: Search the internet for recent information on any topic.
-3. **Wikipedia (wiki)**: Retrieve detailed information from Wikipedia articles.
-4. **URL Scraper (URL)**: Extract content from specific web pages.
-5. **Image Search (image)**: Find images related to specific queries.
-6. **YouTube Search (youtube)**: Discover relevant videos on YouTube.
-7. **YouTube Video Info (watch)**: Get detailed information about specific YouTube videos, including transcripts.
+3. **Deep web search** (deep_search): deep search on the internet for smarter information Retrieve
+4. **Wikipedia (wiki)**: Retrieve detailed information from Wikipedia articles.
+5. **URL Scraper (URL)**: Extract content from specific web pages.
+6. **Image Search (image)**: Find images related to specific queries.
+7. **YouTube Search (youtube)**: Discover relevant videos on YouTube.
+8. **YouTube Video Info (watch)**: Get detailed information about specific YouTube videos, including transcripts.
 
 ## Response Guidelines
 

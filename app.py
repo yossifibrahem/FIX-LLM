@@ -56,7 +56,7 @@ Tools = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query for websites"},
-                    "citation_finder": {"type": "string", "description": "Key word used for finding relevant citations"},
+                    "Key_word": {"type": "string", "description": "Key word used for finding relevant citations"},
                     "number_of_websites": {
                         "type": "integer",
                         "description": "Maximum websites to visit",
@@ -317,7 +317,7 @@ def chat():
                         elif tool_name == "web":
                             result = web(
                                 arguments["query"],
-                                arguments.get("citation_finder", arguments["query"]),
+                                arguments.get("Key_word", arguments["query"]),
                                 arguments.get("number_of_websites", 3),
                                 arguments.get("number_of_citations", 5)
                             )
