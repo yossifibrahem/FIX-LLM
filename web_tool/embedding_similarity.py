@@ -125,8 +125,7 @@ def find_most_similar_content(data: List[Dict[str, Any]], prompt: str, top_n: in
     Returns a list of dictionaries containing url, title, and citation for the most similar chunks.
     """
     # Clean and prepare the prompt
-    cleaned_prompt = prompt
-    query_embedding = get_embedding(cleaned_prompt)
+    query_embedding = get_embedding(prompt)
     
     # Process all content items in parallel
     with concurrent.futures.ThreadPoolExecutor() as executor:

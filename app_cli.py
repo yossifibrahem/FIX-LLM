@@ -86,7 +86,7 @@ Tools = [
                     "number_of_citations": {
                         "type": "integer",
                         "description": "Maximum citations to scrape",
-                        "default": 5,
+                        "default": 4,
                     }
                 },
                 "required": ["query"]
@@ -180,7 +180,9 @@ Tools = [
                     "number_of_results": {
                         "type": "integer",
                         "description": "Maximum number of search results to analyze",
-                        "default": 10
+                        "default": 5,
+                        "minimum": 3,
+                        "maximum": 10
                     }
                 },
                 "required": ["query", "prompt"]
