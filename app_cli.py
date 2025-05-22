@@ -17,9 +17,12 @@ import time
 
 from openai import OpenAI
 from colorama import init, Fore, Back, Style
+
 # Custom Styles
 CUSTOM_ORANGE = '\x1b[38;5;216m'
 BOLD = '\033[1m'
+# Initialize colorama
+init()
 
 # tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
@@ -39,17 +42,14 @@ MODEL = "qwen3-0.6b"
 BASE_URL = "http://127.0.0.1:1234/v1"
 API_KEY = "dummy_key"
 
+# Initialize OpenAI client
+client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
+
 # Configuration
 show_stream = False  # Set to False for non-streaming mode
 show_thinking = False  # Set to False to disable thinking mask
 show_tool_calls = False  # Set to False to disable tool call display
 show_LLM_label = False  # Set to False to disable assistant label in streaming mode
-
-# Initialize OpenAI client
-client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
-
-# Initialize colorama
-init()
 
 # Load system prompt
 script_dir = os.path.dirname(os.path.abspath(__file__))
