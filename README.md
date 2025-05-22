@@ -12,6 +12,7 @@ This is a web application that enables a Large Language Model (LLM) to interact 
 - 🖼️ **Image Search**: Find and display images related to your queries
 - 🎥 **YouTube Search**: Search and retrieve YouTube video information
 - 🔗 **Web Scraping**: Extract content from specific websites
+- 🔍 **Deep Search**: Perform a smart deep web search to extract most Information
 
 ### Advanced Conversation Management
 - 💬 **Persistent Conversations**: Save and load chat histories
