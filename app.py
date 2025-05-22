@@ -231,7 +231,6 @@ def get_conversation_name(messages, rename=True):
             print(Exception)
             return "New Conversation"
     
-    print(f"\nmessages: {messages}")
     conv = str(messages)
     try:
         client = get_openai_client()
