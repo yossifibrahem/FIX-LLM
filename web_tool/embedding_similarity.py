@@ -119,13 +119,18 @@ def process_content(item: Dict[str, Any]) -> List[Dict[str, Any]]:
         "citation": chunk
     } for chunk in chunks]
 
-def find_most_similar_content(data: List[Dict[str, Any]], prompt: str, top_n: int = 3) -> List[Dict[str, Any]]:
+def find_most_similar_content(data: List[Dict[str, Any]], 
+                                        keywords: List[str], 
+                                        top_n: int = 3,
+                                        min_match_keywords: int = 1) -> List[Dict[str, Any]]:
     """
-    Find the most similar content to a given query from a list of data using parallel processing.
-    Returns a list of dictionaries containing url, title, and citation for the most similar chunks.
+    Find content that matches multiple keywords using embeddings.
     """
-    # Clean and prepare the prompt
-    query_embedding = get_embedding(prompt)
+    # Clean and prepare the keywords
+    keyword_embeddings = []
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        keyword_futures = [executor.submit(get_embedding, kw) for kw in keywords]
+        keyword_embeddings = [future.result() for future in concurrent.futures.as_completed(keyword_futures)]
     
     # Process all content items in parallel
     with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -134,23 +139,28 @@ def find_most_similar_content(data: List[Dict[str, Any]], prompt: str, top_n: in
         for future in concurrent.futures.as_completed(chunk_futures):
             all_chunks.extend(future.result())
     
-    # Calculate similarities in parallel
+    # Calculate similarities in parallel for each chunk against all keywords
+    chunk_scores = []
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        similarity_futures = [
-            executor.submit(
-                lambda x: (x, cosine_similarity(query_embedding, get_embedding(x["citation"]))),
-                chunk
-            )
-            for chunk in all_chunks
-        ]
-        
-        similarities = [
-            future.result()
-            for future in concurrent.futures.as_completed(similarity_futures)
-        ]
+        for chunk in all_chunks:
+            chunk_embedding = get_embedding(chunk["citation"])
+            keyword_matches = 0
+            total_similarity = 0
+            
+            # Calculate similarity with each keyword
+            for kw_embedding in keyword_embeddings:
+                similarity = cosine_similarity(chunk_embedding, kw_embedding)
+                if similarity > 0.5:  # Threshold for considering a keyword match
+                    keyword_matches += 1
+                total_similarity += similarity
+            
+            # Calculate average similarity
+            avg_similarity = total_similarity / len(keywords)
+            
+            if keyword_matches >= min_match_keywords:
+                chunk_scores.append((chunk, avg_similarity, keyword_matches))
     
-    # Sort by similarity and select top_n
-    similarities.sort(key=lambda x: x[1], reverse=True)
-    most_similar = [item[0] for item in similarities[:top_n]]
+    # Sort by number of keyword matches first, then by average similarity
+    chunk_scores.sort(key=lambda x: (x[2], x[1]), reverse=True)
     
-    return most_similar
+    return [item[0] for item in chunk_scores[:top_n]]
