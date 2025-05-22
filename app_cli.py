@@ -7,7 +7,6 @@ import json
 import os
 from datetime import datetime
 from typing import List, Dict, Tuple, Any
-from textwrap import fill
 
 from openai import OpenAI
 from colorama import init, Fore, Back, Style

@@ -2,14 +2,28 @@
 import os
 from waitress import serve
 from app import app  # Import your Flask app
+from utilities import create_centered_box
+
+def display_welcome_banner(host, port) -> None:
+    banner = f"""
+███████╗██╗██╗  ██╗    ██╗     ███╗   ███╗
+ ██╔════╝██║╚██╗██╔╝    ██║     ████╗ ████║
+ █████╗  ██║ ╚███╔╝     ██║     ██╔████╔██║
+ ██╔══╝  ██║ ██╔██╗     ██║     ██║╚██╔╝██║
+ ██║     ██║██╔╝ ██╗    ███████╗██║ ╚═╝ ██║
+ ╚═╝     ╚═╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝
+
+Starting Waitress server on {host}:{port}
+Open this URL in you browser: http://127.0.0.1:{port}
+"""
+    print(create_centered_box(banner, center_align=True))
 
 if __name__ == '__main__':
     # Configure host and port
     host = os.getenv("SERVER_HOST", "0.0.0.0")
     port = int(os.getenv("SERVER_PORT", 8080))
 
-    print(f"Starting Waitress server on {host}:{port}...")
-    print(f"Open: http://127.0.0.1:{port}")
+    display_welcome_banner(host, port)
     
     serve(app, host=host, port=port, threads=4)  # Adjust threads based on needs
 
