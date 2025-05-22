@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context, send_from_directory
 from openai import OpenAI
+from utilities import system_message
 
 # Tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
@@ -171,13 +172,7 @@ Tools = [
     }
 ]
 
-# Load system prompt
-script_dir = os.path.dirname(os.path.abspath(__file__))
-prompt_path = os.path.join(script_dir, 'system_prompt.txt')
-with open(prompt_path, 'r', encoding='utf-8') as f:
-    prompt = f.read()
-
-system_message = {"role": "system", "content": prompt.format(current_datetime=datetime.now())}
+system_message = {"role": "system", "content": system_message.format(current_datetime=datetime.now())}
 
 # --- Conversation Storage ---
 CONVERSATIONS_DIR = os.path.expanduser("~/.conversations")

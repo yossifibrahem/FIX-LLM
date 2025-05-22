@@ -12,7 +12,7 @@ from textwrap import fill
 from openai import OpenAI
 from colorama import init, Fore, Back, Style
 
-from utilities import LoadingAnimation, create_centered_box
+from utilities import LoadingAnimation, create_centered_box, system_message
 
 # Custom Styles
 CUSTOM_ORANGE = '\x1b[38;5;216m'
@@ -47,12 +47,6 @@ show_stream = False  # Set to False for non-streaming mode
 show_thinking = False  # Set to False to disable thinking mask
 show_tool_calls = True  # Set to False to disable tool call display
 show_LLM_label = False  # Set to False to disable assistant label in streaming mode
-
-# Load system prompt
-script_dir = os.path.dirname(os.path.abspath(__file__))
-prompt_path = os.path.join(script_dir, 'system_prompt.txt')
-with open(prompt_path, 'r', encoding='utf-8') as f:
-    prompt = f.read()
 
 Tools = [
     {
@@ -322,7 +316,7 @@ Type 'clear' to start new chat
 def chat_loop() -> None:
     """Main chat interaction loop."""
     messages: List[Dict] = []
-    messages.append({"role": "system", "content": prompt.format(current_datetime=datetime.now())})
+    messages.append({"role": "system", "content": system_message.format(current_datetime=datetime.now())})
     thinking = LoadingAnimation("Thinking")
     loading = LoadingAnimation("Executing Tool")
 
@@ -337,7 +331,7 @@ def chat_loop() -> None:
         # Handle commands
         if user_input.lower() == "clear":
             messages = []
-            messages.append({"role": "system", "content": prompt.format(current_datetime=datetime.now())})
+            messages.append({"role": "system", "content": system_message.format(current_datetime=datetime.now())})
             os.system('cls' if os.name == "nt" else 'clear')
             display_welcome_banner()
             continue
