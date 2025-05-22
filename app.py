@@ -8,20 +8,21 @@ from openai import OpenAI
 
 # Tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
-from web_tool.web_browsing import text_search as web, webpage_scraper as URL, images_search as image
+from web_tool.web_browsing import (
+    text_search as web,
+    webpage_scraper as URL,
+    images_search as image,
+    deep_search
+)
 from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
-from youtube_tool.youtube import search_youtube as youtube, get_video_info as watch
+from youtube_tool.youtube import (
+    search_youtube as youtube,
+    get_video_info as watch
+)
 
 # --- Flask App Setup ---
 app = Flask(__name__)
 app.static_folder = "templates"
-
-@app.route('/style.css')
-def serve_css():
-    return send_from_directory('templates', 'style.css')
-@app.route('/script.js')
-def serve_js():
-    return send_from_directory('templates', 'script.js')
 
 # --- OpenAI Client Setup ---
 def get_openai_client():
@@ -51,12 +52,12 @@ Tools = [
         "type": "function",
         "function": {
             "name": "web",
-            "description": f"Search the web for relevant realtime information. Current date and time: {datetime.now()}",
+            "description": f"Perform a quick web search for relevant realtime information.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query for websites"},
-                    "Key_word": {"type": "string", "description": "Key word used for finding relevant citations"},
+                    "Key_words": {"type": "list", "description": "list of Key word used for finding relevant citations"},
                     "number_of_websites": {
                         "type": "integer",
                         "description": "Maximum websites to visit",
@@ -65,10 +66,10 @@ Tools = [
                     "number_of_citations": {
                         "type": "integer",
                         "description": "Maximum citations to scrape",
-                        "default": 5,
+                        "default": 4,
                     }
                 },
-                "required": ["query"]
+                "required": ["query", "Key_words"]
             }
         }
     }, {
@@ -146,20 +147,37 @@ Tools = [
                 "required": ["url"]
             }
         }
+    }, {
+        "type": "function",
+        "function": {
+            "name": "deep_search",
+            "description": "Perform a deep web search for content with detailed summaries of search results",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query for web search"},
+                    "prompt": {"type": "string", "description": "Explain the what the user is looking for"},
+                    "number_of_results": {
+                        "type": "integer",
+                        "description": "Maximum number of search results to analyze",
+                        "default": 5,
+                        "minimum": 3,
+                        "maximum": 10
+                    }
+                },
+                "required": ["query", "prompt"]
+            }
+        }
     }
 ]
 
-default_prompt = {"role": "system", "content": (
-    "You are a helpful assistant. You can use tools to answer questions. "
-    "You can use the following tools: "
-    f"{', '.join([tool['function']['name'] for tool in Tools])}. "
-    f"the current date and time is {datetime.now()}. "
-    )
-}
+# Load system prompt
+script_dir = os.path.dirname(os.path.abspath(__file__))
+prompt_path = os.path.join(script_dir, 'system_prompt.txt')
+with open(prompt_path, 'r', encoding='utf-8') as f:
+    prompt = f.read()
 
-cogito = {"role": "system", "content": "Enable deep thinking subroutine."}
-
-system_message = default_prompt
+system_message = {"role": "system", "content": prompt.format(current_datetime=datetime.now())}
 
 # --- Conversation Storage ---
 CONVERSATIONS_DIR = os.path.expanduser("~/.conversations")
@@ -181,7 +199,7 @@ def save_conversation(rename=True):
         "id": current_conversation_id,
         "last_updated": datetime.now().isoformat(),
         "messages": chat_messages,
-        "name": get_conversation_name(chat_messages) if rename and chat_messages else "New Conversation"
+        "name": get_conversation_name(chat_messages, rename) if chat_messages else "New Conversation"
     }
     with open(conversation_file_path(current_conversation_id), "w") as f:
         json.dump(conversation_data, f, indent=2)
@@ -207,12 +225,9 @@ def get_all_conversations():
                 })
     return sorted(conversations, key=lambda x: x["last_updated"], reverse=True)
 
-def get_conversation_name(messages):
-    user_messages = [msg for msg in messages if msg["role"] == "user"]
-    assistant_messages = [msg for msg in messages if msg["role"] == "assistant"]
-    if messages[0]["role"] == "system":
-        messages = messages[1:]
-    if len(user_messages) > 2:
+def get_conversation_name(messages, rename=True):
+    messages = [msg for msg in messages if msg["role"] == "user" or msg["role"] == "assistant" and "content" in msg]
+    if len(messages) > 4 or not rename:
         try:
             with open(conversation_file_path(current_conversation_id), "r") as f:
                 return json.load(f)["name"]
@@ -220,18 +235,14 @@ def get_conversation_name(messages):
             print("Error loading conversation name")
             print(Exception)
             return "New Conversation"
-    number_of_messages = len(user_messages) + len(assistant_messages)
-    # messages of user and assistant only
-    messages = [msg for msg in messages if msg["role"] in ["user", "assistant"]]
-    conv = json.dumps(messages[:number_of_messages] if number_of_messages else messages)
+    
+    print(f"\nmessages: {messages}")
+    conv = str(messages)
     try:
         client = get_openai_client()
         response = client.chat.completions.create(
             model=MODEL,
             messages=[
-                {
-                "role": "system", "content": "/no_think" if MODEL[:5] == "qwen3" else {}
-                },
                 {
                     "role": "system",
                     "content": (
@@ -239,6 +250,7 @@ def get_conversation_name(messages):
                         "Create a brief, relevant title (maximum 25 characters) for this conversation "
                         "based on the 1-3 user messages and assistant responses. "
                         "Return only the title, no quotes or extra text."
+                        "/no_think" if MODEL[:5] == "qwen3" else ""
                     )
                 },
                 {"role": "user", "content": conv}
@@ -254,6 +266,12 @@ def get_conversation_name(messages):
 @app.route('/')
 def home():
     return render_template('index.html')
+@app.route('/style.css')
+def serve_css():
+    return send_from_directory('templates', 'style.css')
+@app.route('/script.js')
+def serve_js():
+    return send_from_directory('templates', 'script.js')
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -265,7 +283,7 @@ def chat():
     client = get_openai_client()
 
     def generate_response():
-        nonlocal client
+        # nonlocal client
         continue_tool_execution = True
         while continue_tool_execution:
             try:
@@ -320,6 +338,14 @@ def chat():
                                 arguments.get("Key_word", arguments["query"]),
                                 arguments.get("number_of_websites", 3),
                                 arguments.get("number_of_citations", 5)
+                            )
+                        elif tool_name == "deep_search":
+                            result = deep_search(
+                                arguments["query"],
+                                arguments["prompt"],
+                                arguments.get("number_of_results", 5),
+                                client,
+                                MODEL
                             )
                         elif tool_name == "wiki":
                             result = wiki(arguments["query"])
