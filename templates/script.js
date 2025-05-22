@@ -319,39 +319,44 @@ function createLoadingIndicator(tool_info) {
     }else if (tool_info.name === 'coding') {
         div.innerHTML = `
             <div class="spinner"></div>
-            <span>Writing python code</span>
+            <span>🐍 Writing python code</span>
         `;
     }
     else if (tool_info.name === 'web') {
         div.innerHTML = `
             <div class="spinner"></div>
-            <span>Searching the web for ${tool_info.args.query}</span>
+            <span>🔍 Searching the web for ${tool_info.args.query}</span>
+        `;
+    }else if (tool_info.name === 'deep_search') {
+        div.innerHTML = `
+            <div class="spinner"></div>
+            <span>🔭 Deep search for ${tool_info.args.query}</span>
         `;
     }else if (tool_info.name === 'wiki') {
         div.innerHTML = `
             <div class="spinner"></div>
-            <span>Searching Wikipedia for ${tool_info.args.query}</span>
+            <span>📖 Searching Wikipedia for ${tool_info.args.query}</span>
         `;
     }else if (tool_info.name === 'URL') {
         div.innerHTML = `
             <div class="spinner"></div>
-            <span>Scraping content from the website</span>
+            <span>🕷️ Scraping content from the website</span>
         `;
     }
     else if (tool_info.name === 'youtube') {
         div.innerHTML = `
             <div class="spinner"></div>
-            <span>Searhcing youtube for  ${tool_info.args.query}</span>
+            <span>📺 Searhcing youtube for  ${tool_info.args.query}</span>
         `;
     }else if (tool_info.name === 'image') {
         div.innerHTML = `
             <div class="spinner"></div>
-            <span>Searching images about ${tool_info.args.query}</span>
+            <span>📷 Searching images about ${tool_info.args.query}</span>
         `;
     }else if (tool_info.name === 'watch') {
         div.innerHTML = `
             <div class="spinner"></div>
-            <span>Getting Youtube video information<span>
+            <span>📝 Getting Youtube video information<span>
         `;
     }
     else {
@@ -401,7 +406,7 @@ function addResult(name, data, args) {
             </div>`
         }),
         youtube: () => ({
-            title: args.query, icon: '▶️',
+            title: args.query, icon: '📺',
             content: `<div class="space-y-4">${(Array.isArray(data) ? data : [data]).map(item => {
                 const vidId = (item.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/) || [])[1];
                 return vidId ? 
@@ -416,17 +421,31 @@ function addResult(name, data, args) {
             className: 'bg-gray-900'
         }),
         web: () => ({
-            title: args.query, icon: '🌐',
+            title: args.query, icon: '🔍',
             content: Array.isArray(data) ? 
-                `<div class="space-y-4">${data.map(r => 
-                    `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-400 hover:underline mb-2 block">${r.title}</a>
-                    <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${r.citation}</div></div>`
-                ).join('')}</div>` : 
-                `<div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${data}</div>`,
+                `<div class="space-y-4">
+                    <div class="text-sm text-gray-400 p-3 rounded-lg" style" style="text-align:center">${args.Key_words}</div></div>
+                    ${data.map(r => 
+                        `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-400 hover:underline mb-2 block">${r.title}</a>
+                        <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${r.citation}</div></div>`
+                    ).join('')}</div>` : 
+                    `<div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${data}</div>`,
+            className: 'bg-gray-900'
+        }),
+        deep_search: () => ({
+            title: args.query, icon: '🔭',
+            content: Array.isArray(data) ? 
+                `<div class="space-y-4">
+                    <div class="text-sm text-gray-400 p-3 rounded-lg" style" style="text-align:center">${args.prompt}</div></div>
+                    ${data.map(r => 
+                        `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-400 hover:underline mb-2 block">${r.title}</a>
+                        <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${r.summary}</div></div>`
+                    ).join('')}</div>` : 
+                    `<div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${data}</div>`,
             className: 'bg-gray-900'
         }),
         wiki: () => ({
-            title: data.title, icon: '📚',
+            title: data.title, icon: '📖',
             content: `<div class="text-sm text-gray-300">${data.content}</div>`,
             className: 'bg-gray-900'
         }),
@@ -441,7 +460,7 @@ function addResult(name, data, args) {
             className: 'bg-gray-900'
         }),
         URL: () => ({
-            title: data.title || "Unable to open URL", icon: '🔗',
+            title: data.title || "Unable to open URL", icon: '🕸️',
             content: `<div class="text-sm text-gray-300 web-url-content">${marked.parse(renderMath(data.content))}</div>`,
             className: 'bg-gray-900'
         })
