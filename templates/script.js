@@ -793,6 +793,9 @@ document.querySelector('.toggle-conversations').onclick = () => {
     toggleBtn.dataset.expanded = (!isExpanded).toString();            
     const menuImg = toggleBtn.querySelector('img');
     menuImg.style.transform = isExpanded ? '' : 'scaleX(-1)';
+
+    // Save state to localStorage
+    localStorage.setItem('conversationListExpanded', (!isExpanded).toString());
 };
 
 function highlightCodeBlocks(element) {
@@ -852,8 +855,27 @@ function copyCode(button) {
     });
 }
 
+function restoreConversationListState() {
+    const expanded = localStorage.getItem('conversationListExpanded') === 'true';
+    const conversationList = document.querySelector('.conversation-list');
+    const toggleBtn = document.querySelector('.toggle-conversations');
+    if (!conversationList || !toggleBtn) return;
+    if (expanded) {
+        conversationList.classList.add('visible');
+        toggleBtn.dataset.expanded = 'true';
+        const menuImg = toggleBtn.querySelector('img');
+        if (menuImg) menuImg.style.transform = 'scaleX(-1)';
+    } else {
+        conversationList.classList.remove('visible');
+        toggleBtn.dataset.expanded = 'false';
+        const menuImg = toggleBtn.querySelector('img');
+        if (menuImg) menuImg.style.transform = '';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadConversations();
+    restoreConversationListState();
     try {
         const response = await fetch('/messages');
         const messages = await response.json();
