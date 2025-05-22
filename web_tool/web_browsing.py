@@ -35,8 +35,8 @@ def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -
         return {"url": "error", "citation": str(e)}
     return filtered_data
 
-def deep_search(query: str, num_results: int, client, MODEL) -> list:
-    deep_search_results = asyncio.run(DeepSearchManager(query, num_results, client, MODEL))
+def deep_search(query: str, prompt, num_results: int, client, MODEL) -> list:
+    deep_search_results = asyncio.run(DeepSearchManager(query, prompt, num_results, client, MODEL))
     return deep_search_results
 
 def images_search(query, num_results=3):

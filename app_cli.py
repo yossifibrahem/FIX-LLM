@@ -72,7 +72,7 @@ Tools = [
         "type": "function",
         "function": {
             "name": "web",
-            "description": f"Search the web for relevant realtime information.",
+            "description": f"Perform a quick web search for relevant realtime information.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -171,7 +171,7 @@ Tools = [
         "type": "function",
         "function": {
             "name": "deep_search",
-            "description": "Perform a deep search of web content with detailed summaries of search results",
+            "description": "Perform a deep web search for content with detailed summaries of search results",
             "parameters": {
                 "type": "object",
                 "properties": {

@@ -17,14 +17,14 @@ class SearchResult:
 
 class DeepSearchManager:
     SYSTEM_PROMPT = """You are a professional content analyst. Given website content, provide a clear, factual summary that:
-    - Extracts the main points relevant to the query
+    - Extracts the main points relevant to the prompt
     - Maintains accuracy and context
     - Excludes redundant information
     - Uses concise, objective language
     - Avoids personal opinions or subjective interpretations
-    - if the information is not exactly relevant to the query, please say "No relevant information found"
+    - if the information is not exactly relevant to the prompt, please say "No relevant information found"
     
-    Query context: {query}
+    prompt context: {prompt}
     
     Provide the summary in 3-5 sentences focusing on the most relevant information."""
 
@@ -38,7 +38,7 @@ class DeepSearchManager:
         content: str, 
         title: str, 
         url: str, 
-        query: str
+        prompt: str
     ) -> Optional[SearchResult]:
         """Generate a summary for a single piece of content using the LLM."""
         try:
@@ -48,7 +48,7 @@ class DeepSearchManager:
                 messages=[
                     {
                         "role": "system",
-                        "content": self.SYSTEM_PROMPT.format(query=query)
+                        "content": self.SYSTEM_PROMPT.format(prompt=prompt)
                     },
                     {
                         "role": "user",
@@ -57,6 +57,12 @@ class DeepSearchManager:
                 ],
                 temperature=0.5
             )
+
+            while "<think>" in response and "</think>" in response:
+                start = response.find("<think>")
+                end = response.find("</think>") + len("</think>")
+                response = response[:start] + response[end:]
+
             return SearchResult(
                 title=title,
                 url=url,
@@ -66,7 +72,7 @@ class DeepSearchManager:
             # logger.error(f"Error generating summary for {url}: {str(e)}")
             return None
 
-    async def deep_search(self, query: str, client, MODEL, num_results: int = 10) -> List[SearchResult]:
+    async def deep_search(self, query: str, prompt: str, client, MODEL, num_results: int = 10) -> List[SearchResult]:
         """Perform a deep search and generate summaries for the results."""
         try:
             # Get search results
@@ -91,7 +97,7 @@ class DeepSearchManager:
                         content=content,
                         title=data.get("title", ""),
                         url=data.get("url", ""),
-                        query=query
+                        prompt=prompt
                     )
                     tasks.append(task)
 
@@ -107,7 +113,7 @@ class DeepSearchManager:
 deep_search_manager = DeepSearchManager()
 
 # Main function to be called by other modules
-async def deep_search(query: str, num_results: int, client, MODEL) -> List[Dict]:
+async def deep_search(query: str, prompt: str, num_results: int, client, MODEL) -> List[Dict]:
     """Public interface for deep search functionality."""
-    results = await deep_search_manager.deep_search(query, client, MODEL, num_results)
+    results = await deep_search_manager.deep_search(query, prompt, client, MODEL, num_results)
     return [{"title": r.title, "url": r.url, "summary": r.summary} for r in results]
