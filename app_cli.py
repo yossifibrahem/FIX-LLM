@@ -5,18 +5,14 @@ This module provides a chat interface with various tool-calling capabilities.
 
 import json
 import os
-import shutil
 from datetime import datetime
 from typing import List, Dict, Tuple, Any
 from textwrap import fill
 
-import sys
-import threading
-import itertools
-import time
-
 from openai import OpenAI
 from colorama import init, Fore, Back, Style
+
+from utilities import LoadingAnimation, create_centered_box
 
 # Custom Styles
 CUSTOM_ORANGE = '\x1b[38;5;216m'
@@ -76,7 +72,7 @@ Tools = [
         "type": "function",
         "function": {
             "name": "web",
-            "description": f"Search the web for relevant realtime information. Current date and time: {datetime.now()}",
+            "description": f"Search the web for relevant realtime information.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -179,132 +175,19 @@ Tools = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": {"type": "string", "description": "Search query for detailed web search"},
+                    "query": {"type": "string", "description": "Search query for web search"},
+                    "prompt": {"type": "string", "description": "Explain the what the user is looking for"},
                     "number_of_results": {
                         "type": "integer",
                         "description": "Maximum number of search results to analyze",
                         "default": 5
                     }
                 },
-                "required": ["query"]
+                "required": ["query", "prompt"]
             }
         }
     }
 ]
-
-class LoadingAnimation:
-    """Display a custom animation while processing."""
-    def __init__(self, message):
-        self._running = False
-        self._thread = None
-        self._frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
-        self._message = message
-
-    def start(self):
-        """Start the animation."""
-        self._running = True
-        self._thread = threading.Thread(target=self._animate)
-        self._thread.start()
-
-    def stop(self):
-        """Stop the animation."""
-        self._running = False
-        if self._thread:
-            self._thread.join()
-        # Clear the animation line
-        sys.stdout.write("\r" + " " * 50 + "\r")  # Increased clearing space for longer messages
-        sys.stdout.flush()
-
-    def _animate(self):
-        """Animation loop."""
-        for frame in itertools.cycle(self._frames):
-            if not self._running:
-                break
-            sys.stdout.write(f"\r{Fore.WHITE}{self._message} {frame}{Style.RESET_ALL}")
-            sys.stdout.flush()
-            time.sleep(0.1)
-
-def get_terminal_width() -> int:
-    """Get the current terminal width."""
-    width, _ = shutil.get_terminal_size()
-    return width
-
-def create_centered_box(text: str, header: str = '', padding: int = 2, center_align: bool = False) -> str:
-    """
-    Create a centered box with dynamic width and centered header.
-    
-    Args:
-        text (str): The text to be displayed in the box
-        header (str): Optional header text to show at top of box
-        padding (int): Number of spaces for padding on each side
-        center_align (bool): Whether to center the text (True) or left-align it (False)
-    
-    Returns:
-        str: Formatted box with the text
-    """
-    # Get terminal width
-    width = get_terminal_width()
-    
-    # Create box characters
-    TOP_LEFT = "╭"
-    TOP_RIGHT = "╮"
-    BOTTOM_LEFT = "╰"
-    BOTTOM_RIGHT = "╯"
-    HORIZONTAL = "─"
-    VERTICAL = "│"
-    
-    # Calculate content width
-    content_width = width - (2 * padding) - 2  # -2 for the vertical borders
-    
-    # Split text into lines that fit the content width
-    lines = []
-    for line in text.split('\n'):
-        while len(line) > content_width:
-            split_point = line[:content_width].rfind(' ')
-            if split_point == -1:
-                split_point = content_width
-            lines.append(line[:split_point])
-            line = line[split_point:].strip()
-        if line:
-            lines.append(line)
-    
-    # Create the box
-    result = []
-    
-    # Top border with centered header if provided
-    if header:
-        header_text = f" {header} "
-        header_length = len(header_text)
-        left_padding = (width - header_length) // 2
-        right_padding = width - left_padding - header_length
-        top_border = (
-            f"{TOP_LEFT}"
-            f"{HORIZONTAL * (left_padding - 1)}"
-            f"{header_text}"
-            f"{HORIZONTAL * (right_padding - 1)}"
-            f"{TOP_RIGHT}"
-        )
-        result.append(top_border)
-    else:
-        result.append(f"{TOP_LEFT}{HORIZONTAL * (width - 2)}{TOP_RIGHT}")
-    
-    # Content
-    for line in lines:
-        if center_align:
-            # Center alignment
-            padding_left = (content_width - len(line)) // 2
-            padding_right = content_width - len(line) - padding_left
-            padded_line = " " * padding_left + line + " " * padding_right
-        else:
-            # Left alignment
-            padded_line = line + " " * (content_width - len(line))
-        
-        result.append(f"{VERTICAL}{' ' * padding}{padded_line}{' ' * padding}{VERTICAL}")
-    
-    # Bottom border
-    result.append(f"{BOTTOM_LEFT}{HORIZONTAL * (width - 2)}{BOTTOM_RIGHT}")
-    
-    return "\n".join(result)
 
 def process_stream(stream: Any) -> Tuple[str, List[Dict]]:
     """
@@ -412,21 +295,13 @@ def process_non_stream(response: Any) -> Tuple[str, List[Dict]]:
 
 def show_help() -> None:
     """Display available tools and commands."""
-    width = get_terminal_width()
     
-    print(f"\n{CUSTOM_ORANGE}{BOLD} Available Tools {Style.RESET_ALL}")
-    print("─" * width)
+    help_text = ''
     for tool in Tools:
-        name = f"{CUSTOM_ORANGE}• {tool['function']['name']}{Style.RESET_ALL}"
+        name = f"• {tool['function']['name']}"
         desc = tool['function']['description']
-        wrapped_desc = fill(desc, width=width - len(name) + len(Fore.BLUE) + len(Style.RESET_ALL))
-        print(f"{name}: {wrapped_desc}")
-    
-    print(f"\n{CUSTOM_ORANGE}{BOLD} Available Commands {Style.RESET_ALL}")
-    print("─" * width)
-    print(f"{CUSTOM_ORANGE}• clear{Style.RESET_ALL}: Clear the chat history")
-    print(f"{CUSTOM_ORANGE}• help{Style.RESET_ALL}: Show this help message")
-
+        help_text += f"{name}: {desc}\n"
+    print(f"{BOLD}{create_centered_box(help_text, 'Available Tools')}{Style.RESET_ALL}")
 
 def display_welcome_banner() -> None:
     banner = """
@@ -520,6 +395,7 @@ def chat_loop() -> None:
                     elif tool_name == "deep_search":
                         result = deep_search(
                             arguments["query"],
+                            arguments["prompt"],
                             arguments.get("number_of_results", 10),
                             client,
                             MODEL
@@ -560,3 +436,7 @@ if __name__ == "__main__":
         chat_loop()
     except KeyboardInterrupt:
         print(f"\n\n{Fore.YELLOW}Goodbye!{Style.RESET_ALL}")
+    except Exception as e:
+        chat_loop()
+        print(f"\n\n{Fore.RED}An error occurred: {e}{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}Application restarted{Style.RESET_ALL}")
