@@ -54,7 +54,7 @@ def clean_markdown_content(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
-def split_by_semantic_units(text: str, max_chunk_size: int = 500, min_chunk_size: int = 50) -> List[str]:
+def split_by_semantic_units(text: str, max_chunk_size: int = 250, min_chunk_size: int = 100) -> List[str]:
     """
     Split text into chunks based on semantic units (sentences and paragraphs).
     """

@@ -58,15 +58,17 @@ class DeepSearchManager:
                 temperature=0.5
             )
 
-            while "<think>" in response and "</think>" in response:
-                start = response.find("<think>")
-                end = response.find("</think>") + len("</think>")
-                response = response[:start] + response[end:]
+            summary=response.choices[0].message.content
+
+            while "<think>" in summary and "</think>" in summary:
+                start = summary.find("<think>")
+                end = summary.find("</think>") + len("</think>")
+                summary = summary[:start] + summary[end:]
 
             return SearchResult(
                 title=title,
                 url=url,
-                summary=response.choices[0].message.content
+                summary=summary
             )
         except Exception as e:
             # logger.error(f"Error generating summary for {url}: {str(e)}")

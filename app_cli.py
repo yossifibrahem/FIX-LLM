@@ -45,7 +45,7 @@ client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 # Configuration
 show_stream = False  # Set to False for non-streaming mode
 show_thinking = False  # Set to False to disable thinking mask
-show_tool_calls = False  # Set to False to disable tool call display
+show_tool_calls = True  # Set to False to disable tool call display
 show_LLM_label = False  # Set to False to disable assistant label in streaming mode
 
 # Load system prompt
@@ -180,7 +180,7 @@ Tools = [
                     "number_of_results": {
                         "type": "integer",
                         "description": "Maximum number of search results to analyze",
-                        "default": 5
+                        "default": 10
                     }
                 },
                 "required": ["query", "prompt"]
