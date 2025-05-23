@@ -565,13 +565,6 @@ function processThinkBlocksStreaming(fullText) {
     return result;
 }
 
-// Add these variables at the top with other declarations
-let streamBuffer = '';
-let streamTimeout = null;
-const CHUNK_INTERVAL = 50; // ms between chunks
-const MIN_CHUNK_LENGTH = 10; // minimum characters per chunk
-
-// Modified processStreamMessage function
 function processStreamMessage(line) {
     if (!line.startsWith('data: ')) return;
     
@@ -582,49 +575,37 @@ function processStreamMessage(line) {
         const parsed = JSON.parse(data);
         const container = currentMessageElement.querySelector('.assistant-content');
         const existingLoader = container.querySelector('.tool-loading');
-        
         switch (parsed.type) {
             case 'content':
-                // Add to buffer instead of immediately updating
-                streamBuffer += parsed.content;
-                
-                // Clear any existing timeout
-                if (streamTimeout) clearTimeout(streamTimeout);
-                
-                // Set new timeout to process buffer
-                streamTimeout = setTimeout(() => {
-                    if (streamBuffer.length > 0) {
-                        const chunkToProcess = streamBuffer;
-                        streamBuffer = '';
-                        currentResponse += chunkToProcess;
-                        
-                        let markdownDiv = container.querySelector('.markdown-content');
-                        if (!markdownDiv) {
-                            markdownDiv = document.createElement('div');
-                            markdownDiv.className = 'markdown-content';
-                            container.insertBefore(markdownDiv, container.firstChild);
-                        }
-                        
-                        let processed = processThinkBlocksStreaming(currentResponse);
-                        markdownDiv.innerHTML = marked.parse(renderMath(thinkProcessed + processed));
-                        thinkProcessed += processed;
-                        
-                        highlightCodeBlocks(markdownDiv);
-                        scrollToBottomIfNeeded();
-                    }
-                }, CHUNK_INTERVAL);
+                currentResponse += parsed.content;
+                let markdownDiv = container.querySelector('.markdown-content');
+                if (!markdownDiv) {
+                    markdownDiv = document.createElement('div');
+                    markdownDiv.className = 'markdown-content';
+                    container.insertBefore(markdownDiv, container.firstChild);
+                }
+                // --- changed: process <think> tags as streaming ---
+                let processed = processThinkBlocksStreaming(currentResponse);
+                markdownDiv.innerHTML = marked.parse(renderMath(thinkProcessed + processed));
+                thinkProcessed += processed;
+                highlightCodeBlocks(markdownDiv);
                 break;
                 
             case 'tool':
-                if (existingLoader) existingLoader.remove();
+                if (existingLoader) {
+                    existingLoader.remove();
+                }
                 addResult(parsed.name, parsed.content, parsed.args);
                 break;
                 
             case 'tool-start':
-                if (existingLoader) existingLoader.remove();
+                if (existingLoader) {
+                    existingLoader.remove();
+                }
                 container.appendChild(createLoadingIndicator(parsed));
                 break;
         }
+        
     } catch (error) {
         console.error('Parse error:', error, 'Data:', data);
     }
