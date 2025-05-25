@@ -8,7 +8,7 @@ from web_tool.deep_search import deep_search as DeepSearchManager
 
 ddg = DuckDuckGoSearchManager()
 
-def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -> str:
+def text_search(query: str, prompt, num_websites: int = 4, num_citations: int = 5) -> str:
     """Conducts a general web text search and retrieves information from the internet in response to user queries.
 
     This function is best used when the user's query is seeking broad information available on various websites. It
@@ -26,11 +26,11 @@ def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -
     """
     try:
         num_websites = min(num_websites, 8)  # Maximum 8 websites
-        citations = min(citations, 10)        # Maximum 10 citations
+        num_citations = min(num_citations, 10)        # Maximum 10 citations
         
         urls = ddg.text_search(query, int(num_websites))
         scraped_data = asyncio.run(scrape_multiple_websites(urls))
-        filtered_data = find_most_similar_content(scraped_data, prompt, citations)
+        filtered_data = find_most_similar_content(scraped_data, prompt, num_citations)
     except Exception as e:
         return {"url": "error", "citation": str(e)}
     return filtered_data
