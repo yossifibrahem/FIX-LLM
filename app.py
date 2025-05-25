@@ -277,7 +277,6 @@ def chat():
     client = get_openai_client()
 
     def generate_response():
-        # nonlocal client
         continue_tool_execution = True
         while continue_tool_execution:
             try:
