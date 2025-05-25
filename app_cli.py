@@ -11,7 +11,7 @@ from typing import List, Dict, Tuple, Any
 from openai import OpenAI
 from colorama import init, Fore, Back, Style
 
-from utilities import LoadingAnimation, create_centered_box, system_message
+from utilities.utilities import LoadingAnimation, create_centered_box, system_message
 
 # Custom Styles
 CUSTOM_ORANGE = '\x1b[38;5;216m'

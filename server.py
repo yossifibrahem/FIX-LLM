@@ -2,7 +2,7 @@
 import os
 from waitress import serve
 from app import app  # Import your Flask app
-from utilities import create_centered_box
+from utilities.utilities import create_centered_box
 
 def display_welcome_banner(host, port) -> None:
     banner = f"""

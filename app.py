@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context, send_from_directory
 from openai import OpenAI
-from utilities import system_message
+from utilities.utilities import system_message
 
 # Tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
