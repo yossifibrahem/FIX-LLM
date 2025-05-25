@@ -161,7 +161,7 @@ Tools = [
                 "properties": {
                     "queries": {
                         "type": "array","items": {"type": "string"},
-                        "description": "List of search queries for web search"
+                        "description": "List of search queries for web search, at least 2 queries are required"
                     },
                     "prompt": {"type": "string", "description": "Explain the what the user is looking for"},
                     "number_of_results": {
