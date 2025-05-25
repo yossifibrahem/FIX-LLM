@@ -58,7 +58,10 @@ Tools = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query for websites"},
-                    "Key_words": {"type": "list", "description": "list of Key word used for finding relevant citations"},
+                    "Key_words": {
+                        "type": "array","items": {"type": "string"}, 
+                        "description": "list of Key word used for finding relevant citations"
+                        },
                     "number_of_websites": {
                         "type": "integer",
                         "description": "Maximum websites to visit",
@@ -156,14 +159,15 @@ Tools = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": {"type": "string", "description": "Search query for web search"},
+                    "queries": {
+                        "type": "array","items": {"type": "string"},
+                        "description": "List of search queries for web search"
+                    },
                     "prompt": {"type": "string", "description": "Explain the what the user is looking for"},
                     "number_of_results": {
                         "type": "integer",
                         "description": "Maximum number of search results to analyze",
-                        "default": 5,
-                        "minimum": 3,
-                        "maximum": 10
+                        "default": 6,
                     }
                 },
                 "required": ["query", "prompt"]
@@ -334,7 +338,7 @@ def chat():
                             )
                         elif tool_name == "deep_search":
                             result = deep_search(
-                                arguments["query"],
+                                arguments["queries"],
                                 arguments["prompt"],
                                 arguments.get("number_of_results", 5),
                                 client,

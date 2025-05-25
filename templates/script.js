@@ -330,7 +330,7 @@ function createLoadingIndicator(tool_info) {
     }else if (tool_info.name === 'deep_search') {
         div.innerHTML = `
             <div class="spinner"></div>
-            <span>🔭 Deep search for ${tool_info.args.query}</span>
+            <span>🔭 Deep search for ${tool_info.args.queries}</span>
         `;
     }else if (tool_info.name === 'wiki') {
         div.innerHTML = `
@@ -433,15 +433,15 @@ function addResult(name, data, args) {
             className: 'bg-gray-900'
         }),
         deep_search: () => ({
-            title: args.query, icon: '🔭',
+            title: args.queries, icon: '🔭',
             content: Array.isArray(data) ? 
                 `<div class="space-y-4">
                     <div class="text-sm text-gray-400 p-3 rounded-lg" style" style="text-align:center">${args.prompt}</div></div>
                     ${data.map(r => 
                         `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-400 hover:underline mb-2 block">${r.title}</a>
-                        <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${r.summary}</div></div>`
+                        <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${marked.parse(r.summary)}</div></div>`
                     ).join('')}</div>` : 
-                    `<div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${data}</div>`,
+                    `<div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${marked.parse(data)}</div>`,
             className: 'bg-gray-900'
         }),
         wiki: () => ({

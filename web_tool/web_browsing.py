@@ -79,9 +79,14 @@ async def generate_summary(
             return None
 
 # Main function to be called by other modules
-def deep_search(query: str, prompt: str, num_results: int, client, MODEL) -> list[dict]:
+def deep_search(queries: List[str], prompt: str, num_results: int, client, MODEL) -> list[dict]:
     """Public interface for deep search functionality."""
-    urls = ddg.text_search(query, num_results)
+    num_results = round(num_results / len(queries))
+    all_urls = set()
+    for query in queries:
+        urls = ddg.text_search(query, num_results)
+        all_urls.update(urls)
+    urls = list(all_urls)
     scraped_data = asyncio.run(scrape_multiple_websites(urls))
 
     async def gather_summaries():
