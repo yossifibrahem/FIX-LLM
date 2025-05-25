@@ -569,7 +569,6 @@ function processThinkBlocksStreaming(fullText) {
 let streamBuffer = '';
 let streamTimeout = null;
 const CHUNK_INTERVAL = 50; // ms between chunks
-const MIN_CHUNK_LENGTH = 10; // minimum characters per chunk
 
 // Modified processStreamMessage function
 function processStreamMessage(line) {
