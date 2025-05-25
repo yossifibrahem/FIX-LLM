@@ -4,11 +4,12 @@ import asyncio
 from web_tool.duck_duck_go_search import DuckDuckGoSearchManager
 from web_tool.scraper import scrape_multiple_websites
 from web_tool.embedding_similarity import find_most_similar_content
-from web_tool.deep_search import deep_search as DeepSearchManager
+from typing import List, Dict, Any
+from utilities.utilities import SEARCH_SYSTEM_PROMPT
 
 ddg = DuckDuckGoSearchManager()
 
-def text_search(query: str, prompt, num_websites: int = 4, num_citations: int = 5) -> str:
+def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -> str:
     """Conducts a general web text search and retrieves information from the internet in response to user queries.
 
     This function is best used when the user's query is seeking broad information available on various websites. It
@@ -26,18 +27,80 @@ def text_search(query: str, prompt, num_websites: int = 4, num_citations: int = 
     """
     try:
         num_websites = min(num_websites, 8)  # Maximum 8 websites
-        num_citations = min(num_citations, 10)        # Maximum 10 citations
+        citations = min(citations, 10)        # Maximum 10 citations
         
         urls = ddg.text_search(query, int(num_websites))
         scraped_data = asyncio.run(scrape_multiple_websites(urls))
-        filtered_data = find_most_similar_content(scraped_data, prompt, num_citations)
+        filtered_data = find_most_similar_content(scraped_data, prompt, citations)
+        return filtered_data
     except Exception as e:
         return {"url": "error", "citation": str(e)}
-    return filtered_data
+    
 
-def deep_search(query: str, prompt, num_results: int, client, MODEL) -> list:
-    deep_search_results = asyncio.run(DeepSearchManager(query, prompt, num_results, client, MODEL))
-    return deep_search_results
+async def generate_summary(
+        client,
+        MODEL,
+        content: str, 
+        title: str, 
+        url: str, 
+        prompt: str
+    ) -> List[Dict[str, Any]]:
+        """Generate a summary for a single piece of content using the LLM."""
+        try:
+            response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model=MODEL,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": SEARCH_SYSTEM_PROMPT.format(prompt=prompt)
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Title: {title}\nURL: {url}\nContent: {content}"
+                    }
+                ],
+                temperature=0.5
+            )
+
+            summary=response.choices[0].message.content
+
+            while "<think>" in summary and "</think>" in summary:
+                start = summary.find("<think>")
+                end = summary.find("</think>") + len("</think>")
+                summary = summary[:start] + summary[end:]
+
+            return {
+                "title": title,
+                "url": url,
+                "summary": summary.strip()
+            }
+        except Exception as e:
+            return None
+
+# Main function to be called by other modules
+def deep_search(query: str, prompt: str, num_results: int, client, MODEL) -> list[dict]:
+    """Public interface for deep search functionality."""
+    urls = ddg.text_search(query, num_results)
+    scraped_data = asyncio.run(scrape_multiple_websites(urls))
+
+    async def gather_summaries():
+        tasks = [
+            generate_summary(
+                client=client,
+                MODEL=MODEL,
+                content=data.get("content"),
+                title=data.get("title"),
+                url=data.get("url"),
+                prompt=prompt
+            )
+            for data in scraped_data if data.get("content")
+        ]
+        # Await all tasks and filter out None results
+        results = await asyncio.gather(*tasks)
+        return [r for r in results if r is not None]
+
+    return asyncio.run(gather_summaries())
 
 def images_search(query, num_results=3):
     """Performs the image search for a specific query. For example, "puppies". If possible, the output should be in Markdown format.
@@ -55,7 +118,6 @@ def images_search(query, num_results=3):
     except Exception as e:
         return {"image": "error", "thumbnail": str(e)}
     
-
 
 def webpage_scraper(url):
     """Scrape a webpage for its text content.
