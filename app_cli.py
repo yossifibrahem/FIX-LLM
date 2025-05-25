@@ -65,12 +65,15 @@ Tools = [
         "type": "function",
         "function": {
             "name": "web",
-            "description": f"Perform a quick web search for relevant realtime information.",
+            "description": f"Perform a quick simple web search for relevant realtime information.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query for websites"},
-                    "Key_words": {"type": "list", "description": "list of Key word used for finding relevant citations"},
+                    "Key_words": {
+                        "type": "array","items": {"type": "string"}, 
+                        "description": "list of Key word used for finding relevant citations"
+                        },
                     "number_of_websites": {
                         "type": "integer",
                         "description": "Maximum websites to visit",
@@ -164,18 +167,19 @@ Tools = [
         "type": "function",
         "function": {
             "name": "deep_search",
-            "description": "Perform a deep web search for content with detailed summaries of search results",
+            "description": "Perform a deep and smart web search for complex tasks, with detailed summaries from search results",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": {"type": "string", "description": "Search query for web search"},
+                    "queries": {
+                        "type": "array","items": {"type": "string"},
+                        "description": "List of search queries for web search, at least 2 queries are required"
+                    },
                     "prompt": {"type": "string", "description": "Explain the what the user is looking for"},
                     "number_of_results": {
                         "type": "integer",
                         "description": "Maximum number of search results to analyze",
-                        "default": 5,
-                        "minimum": 3,
-                        "maximum": 10
+                        "default": 6,
                     }
                 },
                 "required": ["query", "prompt"]
@@ -389,7 +393,7 @@ def chat_loop() -> None:
 
                     elif tool_name == "deep_search":
                         result = deep_search(
-                            arguments["query"],
+                            arguments["queries"],
                             arguments["prompt"],
                             arguments.get("number_of_results", 10),
                             client,
