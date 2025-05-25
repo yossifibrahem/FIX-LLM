@@ -155,7 +155,7 @@ Tools = [
         "type": "function",
         "function": {
             "name": "deep_search",
-            "description": "Perform a deep and smart web search for content with detailed summaries of search results",
+            "description": "Perform a deep and smart web search for complex tasks, with detailed summaries from search results",
             "parameters": {
                 "type": "object",
                 "properties": {
