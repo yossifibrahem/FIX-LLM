@@ -115,7 +115,6 @@ const els = {
 };
 
 let currentResponse = '';
-let currentMessageElement = null;
 let currentConversationId = null;
 const DEFAULT_ROWS = 1;
 let conversationToDelete = null;
@@ -221,8 +220,7 @@ function renderMessages(messages) {
             
             if (msg.tool_results && msg.tool_results.length > 0) {
                 msg.tool_results.forEach(result => {
-                    currentMessageElement = messageEl;
-                    addResult(result.name, result.content, result.args);
+                    addResult(result.name, result.content, result.args, messageEl);
                 });
             }
             
@@ -374,7 +372,8 @@ function createLoadingIndicator(tool_info) {
     return div;
 }
 
-function addResult(name, data, args) {
+// Update addResult signature to accept messageElement parameter
+function addResult(name, data, args, messageElement) {
     const escapeHtml = (unsafe) => {
         return unsafe
             .replace(/&/g, "&amp;")
@@ -478,7 +477,7 @@ function addResult(name, data, args) {
         content: `<pre><code>${escapeHtml(JSON.stringify(data, null, 2))}</code></pre>`
     })))();
 
-    const container = currentMessageElement.querySelector('.assistant-content');
+    const container = messageElement.querySelector('.assistant-content');
     if (!container) return;
 
     // Create or get the tool icons row
@@ -582,7 +581,7 @@ function processStreamMessage(line) {
     
     try {
         const parsed = JSON.parse(data);
-        const container = currentMessageElement.querySelector('.assistant-content');
+        const container = els.messages.lastElementChild.querySelector('.assistant-content');
         const existingLoader = container.querySelector('.tool-loading');
         switch (parsed.type) {
             case 'content':
@@ -604,7 +603,7 @@ function processStreamMessage(line) {
                 if (existingLoader) {
                     existingLoader.remove();
                 }
-                addResult(parsed.name, parsed.content, parsed.args);
+                addResult(parsed.name, parsed.content, parsed.args, els.messages.lastElementChild);
                 break;
                 
             case 'tool-start':
@@ -635,7 +634,8 @@ async function handleMessage(existingMessage = null) {
     document.getElementById('regenerateResponseButton').disabled = true;
     document.getElementById('deleteLastMessageButton').disabled = true;
 
-    currentMessageElement = createMessageElement(false);
+    // Store message element in local scope
+    const messageElement = createMessageElement(false);
     currentResponse = '';
     thinkBlockOpen = false;
     thinkProcessed = '';
@@ -665,7 +665,7 @@ async function handleMessage(existingMessage = null) {
         await loadConversations();
     } catch (error) {
         console.error('Error:', error);
-        currentMessageElement.querySelector('.assistant-content').innerHTML += 
+        messageElement.querySelector('.assistant-content').innerHTML += 
             `<p class="text-red-500">Error: ${error.message}</p>`;
     } finally {
         els.sendButton.classList.remove('hidden');
@@ -710,8 +710,9 @@ els.interruptButton.onclick = async () => {
         els.userInput.disabled = false;
         document.querySelectorAll('.tool-loading').forEach(el => el.remove());
 
-        if (currentMessageElement) {
-            const assistantContent = currentMessageElement.querySelector('.assistant-content');
+        const lastMessage = els.messages.lastElementChild;
+        if (lastMessage) {
+            const assistantContent = lastMessage.querySelector('.assistant-content');
             if (assistantContent) {
                 let markdownDiv = assistantContent.querySelector('.markdown-content');
                 
@@ -735,7 +736,6 @@ els.interruptButton.onclick = async () => {
         }
         
         currentResponse = '';
-        currentMessageElement = null;
         els.userInput.focus();
     }
 };
