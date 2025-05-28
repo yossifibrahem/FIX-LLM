@@ -40,14 +40,14 @@
 
 <body class="main">
     <button class="toggle-conversations" data-expanded="false">
-        <img src="static\menu.png" height="20", width="20">
+        <img src="static/menu.png" height="20", width="20">
     </button>
 
     <div class="conversation-list">
         <h2 class="text-l font-bold text-gray-100 p-4">Chat History</h2>
         <div class="conversation-content">
             <button id="newButton" class="text-l transition-opacity p-2 clear-btn text-gray-100" title="New chat">
-                <img src="static\new.png" height="25", width="25">Start New Chat
+                <img src="static/new.png" height="25", width="25">Start New Chat
             </button>
             <div id="conversationsList"></div>
         </div>
@@ -58,7 +58,7 @@
             <div class="messages-header">
                 <div class="p-4 border-b border-gray-700">
                     <h1 class="font-bold flex items-center justify-center">
-                        Chat with AI <img src="static\conversation.png" height="25" width="25" class="ml-2">
+                        Chat with AI <img src="static/conversation.png" height="25" width="25" class="ml-2">
                     </h1>
                 </div>
                 <div class="messages-container p-4" id="messages"></div>
@@ -72,20 +72,20 @@
                     <div class="flex items-start space-x-3">
                         <textarea id="userInput"
                             class="flex-grow focus:outline-none"
-                            rows="2"
+                            rows="1"
                             placeholder="Message here"></textarea>
                             <div class="button-group flex items-center space-x-2">
                                 <button id="deleteLastMessageButton" class="visible transition-opacity" title="Delete Last Message">
-                                    <img src="static\delete.png" alt="delete">
+                                    <img src="static/delete.png" alt="delete">
                                 </button>
                                 <button id="regenerateResponseButton" class="visible transition-opacity" title="Regenerate Last Response">
-                                    <img src="static\repeat.png" alt="regenerate">
+                                    <img src="static/repeat.png" alt="regenerate">
                                 </button>
                                 <button id="sendButton" class="visible transition-opacity send-btn" title="Send message">
-                                    <img src="static\send.png" alt="send">
+                                    <img src="static/send.png" alt="send">
                                 </button>
                                 <button id="interruptButton" class="hidden transition-opacity stop-btn" title="Stop generation">
-                                    <img src="static\stop.png" alt="stop">
+                                    <img src="static/stop.png" alt="stop">
                                 </button>
                             </div>
                     </div>

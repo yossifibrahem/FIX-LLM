@@ -68,7 +68,6 @@ body {
     right: 0;
     padding-bottom: 1rem;
     backdrop-filter: blur(10px);
-    transition: padding-left 0.3s ease;
 }
 
 .input-group {
@@ -518,8 +517,9 @@ body {
 }
 
 .web-url-content img {
-    max-width: auto;
-    height: 5vh;
+    max-width: 100%;
+    width: auto;
+    height: 15vh;
     display: block;
     margin: 1rem auto;
 }

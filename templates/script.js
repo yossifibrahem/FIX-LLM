@@ -171,13 +171,75 @@ async function loadConversations() {
         console.error('Error loading conversations:', error);
     }
 }
+
+function groupMessages(messages) {
+    return messages.reduce((acc, msg) => {
+        if (msg.isUser) {
+            acc.push(msg);
+        } else {
+            if (msg.content || (msg.tool_results && msg.tool_results.length > 0)) {
+                if (acc.length > 0 && !acc[acc.length - 1].isUser) {
+                    const lastMsg = acc[acc.length - 1];
+                    if (msg.content) {
+                        lastMsg.content = lastMsg.content ? 
+                            `${lastMsg.content}\n\n${msg.content}` : msg.content;
+                    }
+                    if (msg.tool_results) {
+                        lastMsg.tool_results = (lastMsg.tool_results || [])
+                            .concat(msg.tool_results);
+                    }
+                } else {
+                    acc.push({
+                        isUser: false,
+                        content: msg.content || '',
+                        tool_results: msg.tool_results || []
+                    });
+                }
+            }
+        }
+        return acc;
+    }, []);
+}
+
+function renderMessages(messages) {
+    els.messages.innerHTML = '';
+    const groupedMessages = groupMessages(messages);
+    
+    groupedMessages.forEach(msg => {
+        const messageEl = createMessageElement(msg.isUser, msg.content);
+        
+        if (!msg.isUser) {
+            const container = messageEl.querySelector('.assistant-content');
+            
+            if (container && msg.content) {
+                const markdownDiv = document.createElement('div');
+                markdownDiv.className = 'markdown-content';
+                markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
+                container.insertBefore(markdownDiv, container.firstChild);
+                highlightCodeBlocks(markdownDiv);
+            }
+            
+            if (msg.tool_results && msg.tool_results.length > 0) {
+                msg.tool_results.forEach(result => {
+                    currentMessageElement = messageEl;
+                    addResult(result.name, result.content, result.args);
+                });
+            }
+            
+            highlightCodeBlocks(messageEl);
+        }
+    });
+    
+    highlightCodeBlocks(els.messages);
+    scrollToBottomIfNeeded();
+}
+
 async function loadConversation(conversationId) {
     try {
         const response = await fetch(`/conversation/${conversationId}`);
         const data = await response.json();
         currentConversationId = conversationId;
 
-        els.messages.innerHTML = '';
         document.querySelectorAll('.conversation-item').forEach(item => {
             item.classList.remove('active');
             if (item.dataset.id === conversationId) {
@@ -187,68 +249,12 @@ async function loadConversation(conversationId) {
         
         const messagesResponse = await fetch('/messages');
         const formattedMessages = await messagesResponse.json();
+        renderMessages(formattedMessages);
         
-        const groupedMessages = formattedMessages.reduce((acc, msg) => {
-            if (msg.isUser) {
-                acc.push(msg);
-            } else {
-                if (msg.content || (msg.tool_results && msg.tool_results.length > 0)) {
-                    if (acc.length > 0 && !acc[acc.length - 1].isUser) {
-                        const lastMsg = acc[acc.length - 1];
-                        if (msg.content) {
-                            lastMsg.content = lastMsg.content ? 
-                                `${lastMsg.content}\n\n${msg.content}` : msg.content;
-                        }
-                        if (msg.tool_results) {
-                            lastMsg.tool_results = (lastMsg.tool_results || [])
-                                .concat(msg.tool_results);
-                        }
-                    } else {
-                        acc.push({
-                            isUser: false,
-                            content: msg.content || '',
-                            tool_results: msg.tool_results || []
-                        });
-                    }
-                }
-            }
-            return acc;
-        }, []);
-
-        groupedMessages.forEach(msg => {
-            const messageEl = createMessageElement(msg.isUser, msg.content);
-            
-            if (!msg.isUser) {
-                const container = messageEl.querySelector('.assistant-content');
-                
-                if (container && msg.content) {
-                    const markdownDiv = document.createElement('div');
-                    markdownDiv.className = 'markdown-content';
-                    markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
-                    container.insertBefore(markdownDiv, container.firstChild);
-                    highlightCodeBlocks(markdownDiv);
-                }
-                
-                if (msg.tool_results && msg.tool_results.length > 0) {
-                    msg.tool_results.forEach(result => {
-                        currentMessageElement = messageEl; 
-                        addResult(result.name, result.content, result.args);
-                        const resultContent = messageEl.querySelector('.assistant-content');
-                        if (resultContent) {
-                            highlightCodeBlocks(resultContent);
-                        }
-                    });
-                }
-            }
-        });
-        
-        scrollToBottomIfNeeded();
     } catch (error) {
         console.error('Error loading conversation:', error);
     }
 }
-
-window.currentMessageElement = null;
 
 async function deleteLastMessage() {
     try {
@@ -424,7 +430,7 @@ function addResult(name, data, args) {
             title: args.query, icon: '🔍',
             content: Array.isArray(data) ? 
                 `<div class="space-y-4">
-                    <div class="text-sm text-gray-400 p-3 rounded-lg" style" style="text-align:center">${args.Key_words}</div></div>
+                    <div class="text-sm text-gray-400 p-3 rounded-lg" style" style="text-align:center">${args.keywords}</div></div>
                     ${data.map(r => 
                         `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-400 hover:underline mb-2 block">${r.title}</a>
                         <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${marked.parse(r.citation)}</div></div>`
@@ -667,7 +673,6 @@ async function handleMessage(existingMessage = null) {
         els.userInput.focus();
         document.getElementById('regenerateResponseButton').disabled = false;
         document.getElementById('deleteLastMessageButton').disabled = false;
-        document.querySelectorAll('pre code').forEach(block => Prism.highlightElement(block));
     }
 }
 
@@ -880,62 +885,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('/messages');
         const messages = await response.json();
-        
-        const groupedMessages = messages.reduce((acc, msg) => {
-            if (msg.isUser) {
-                acc.push(msg);
-            } else {
-                if (msg.content || (msg.tool_results && msg.tool_results.length > 0)) {
-                    if (acc.length > 0 && !acc[acc.length - 1].isUser) {
-                        const lastMsg = acc[acc.length - 1];
-                        if (msg.content) {
-                            lastMsg.content = lastMsg.content ? 
-                                `${lastMsg.content}\n\n${msg.content}` : msg.content;
-                        }
-                        if (msg.tool_results) {
-                            lastMsg.tool_results = (lastMsg.tool_results || [])
-                                .concat(msg.tool_results);
-                        }
-                    } else {
-                        acc.push({
-                            isUser: false,
-                            content: msg.content || '',
-                            tool_results: msg.tool_results || []
-                        });
-                    }
-                }
-            }
-            return acc;
-        }, []);
-        
-        groupedMessages.forEach(msg => {
-            const messageEl = createMessageElement(msg.isUser, msg.content);
-            
-            if (!msg.isUser) {
-                const container = messageEl.querySelector('.assistant-content');
-                
-                if (container && msg.content) {
-                    const markdownDiv = document.createElement('div');
-                    markdownDiv.className = 'markdown-content';
-                    markdownDiv.innerHTML = marked.parse(renderMath(msg.content));
-                    container.insertBefore(markdownDiv, container.firstChild);
-                    highlightCodeBlocks(markdownDiv);
-                }
-                
-                if (msg.tool_results && msg.tool_results.length > 0) {
-                    msg.tool_results.forEach(result => {
-                        currentMessageElement = messageEl;
-                        addResult(result.name, result.content, result.args);
-                    });
-                }
-                
-                highlightCodeBlocks(messageEl);
-            }
-        });
-        
-        highlightCodeBlocks(els.messages);
-        
-        scrollToBottomIfNeeded();
+        renderMessages(messages);
     } catch (error) {
         console.error('Error loading messages:', error);
     }
