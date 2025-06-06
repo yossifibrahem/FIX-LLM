@@ -56,7 +56,7 @@ Tools = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "code": {"type": "string", "description": "Complete Python code to execute. Must return a value."}
+                    "code": {"type": "string", "description": "Complete Python script to execute. Must return a value."}
                 },
                 "required": ["code"]
             }
@@ -179,7 +179,7 @@ Tools = [
                     "number_of_results": {
                         "type": "integer",
                         "description": "Maximum number of search results to analyze",
-                        "default": 6,
+                        "default": 10,
                     }
                 },
                 "required": ["query", "prompt"]
