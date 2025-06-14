@@ -1,0 +1,522 @@
+Chapter One
+Introduction
+
+A. Information about the College or the Faculty
+
+Interest in data science has recently increased significantly by companies on the one hand, and individuals wishing to learn this field on the other hand. Data science has become a science that is dominated by interdisciplinary overlap, which is based on the use of scientific methods, processors, algorithms and theorizing to extract knowledge and ideas from data in its form, whether unstructured or unstructured.
+
+According to the latest published reports, 90% of the data available today was invented during the past two years, and therefore data science is one of the most widespread specializations currently, and the demand for it will increase in the coming periods due to the need of major global companies to analyze and deal with the huge amount of data that is multiplying daily!
+
+From this standpoint, Alexandria University took the decision to establish the Faculty of Computers and Data Sciences in the University Council session held on 3/23/2019, with unique specializations that represent modern trends in line with technological progress and serve the labor market and contribute to building the digital society, developing the information infrastructure and acquiring skills in learning, research and innovation.
+
+The undergraduate study period at the college is four academic years divided into eight semesters, each of which lasts fifteen weeks, according to the credit hour system. The first steps of study at this college begin with a preparatory year with distinguished programs in computing, data science, business analytics, intelligent systems, media analysis, health analytics and informatics, and cybersecurity, while the college’s work teams continue to adopt policies that work to achieve educational goals and serve the business environment and Egyptian society in general, as well as work to open new programs that meet these requirements.
+
+B. College Vision
+
+The college seeks to provide distinguished education and scientific research in the fields of computers and data sciences by offering modern academic programs in accordance with national and international standards for the quality of education using advanced learning patterns and methods to create highly competitive cadres of specialists in the fields of computers and data sciences.
+
+C. College Mission
+
+Preparing specialized and distinguished cadres and qualifying competencies that compete academically and professionally in the fields of computers and data sciences by offering distinguished educational programs in accordance with national and international standards for the quality of education, which contributes to building a knowledge economy, solving the technical and information problems of society, and preparing graduates capable of enabling various sectors of the labor market to invest in modern technology and information technologies to serve society.
+
+<split>
+
+college Vision:
+
+Creativity and Excellence
+Quality and Excellence
+Teamwork and Team Spirit
+Belonging and Commitment
+Freedom of Thought
+Justice and Equal Opportunities
+Integrity and Transparency
+
+<split>
+
+College Mission:
+
+1. Keeping pace with global academic and scientific development in international universities in the fields of computers and data sciences.
+2. Upgrading the experiences of learners to be highly scientific and practical in their areas of specialization.
+3. Qualifying graduates and providing them with cognitive skills to achieve competitiveness in the fields of computers and data sciences and contribute to serving the community.
+4. Coherence of programs through the integration of academic materials that represent the latest scientific and technical developments in the fields of specialization.
+5. Integrating scientific programs and building bridges between computer science and information technology.
+6. Participating in providing consultations and training and educational programs in the field of computers and data sciences to enhance the role of the college in serving the community.
+7. Establishing and stimulating scientific research among students and faculty to contribute to the sustainable development of society.
+8. Providing more space for students to conduct practical and laboratory training that keeps pace with work requirements in all state institutions.
+
+<split>
+
+Chapter Two
+Executive Regulations of the Universities Law
+
+General Provisions
+
+Article 1 The academic degree granted to graduates:
+
+At the request of the Faculty Council, the Alexandria University Council grants a Bachelor’s degree in Computer Science and Data Science in one of the following programs:
+
+(1) General Program:
+-Computing and Data Science.
+(2) Specialized Programs: 
+-Business Analytics 
+-Intelligent Systems 
+-Media Analytics 
+-Healthcare Informatics and Data Analytics
+-Cybersecurity.
+
+<split>
+
+Article 2 Academic Systems of the College (the available programs):
+
+The College of Computers and Data Sciences consists of two academic departments:
+
+(1) General Program:
+-Computing and Data Science.
+(2) Specialized Programs: 
+-Business Analytics 
+-Intelligent Systems 
+-Media Analytics 
+-Healthcare Informatics and Data Analytics
+-Cybersecurity.
+
+<split>
+
+Article 3 General Conditions for Admission:
+
+Alexandria University is subject to the admission system of Egyptian public universities, and incoming students from all countries are accepted after the approval of the General Administration of Incoming Students and the competent authorities in the country of assignment and after the student passes the admission tests according to what is determined by the College Council.
+
+<split>
+
+Article 4: The code system used in numbering courses:
+
+Each course in the program has a code number consisting of five parts, nine numbers, each of which has a special meaning, as shown in the following example: The E-health, Telehealth and Telemedicine course follows the fifth program and is the first course in the order of the fourth-level courses and is expressed by the code 02-24-05401-04-01
+
+- University Code: 2
+- Faculty Code: 23
+- Program Code: 5
+- Academic Level: 4
+- Course Order within Level: 1
+- Alexandria University Code: 2
+
+<split>
+
+Chapter Three
+Study System and Student Evaluation
+
+Article 5: Study System
+
+Study in the Bachelor's Program in Computer Science and Data Science is based on the credit hour system and the semester system. The academic year is divided into two main semesters (fall and spring), each of which lasts fifteen weeks. The College Council may decide to hold a summer semester with a study period of eight weeks, provided that the weekly study hours allocated to the courses taught in this semester are doubled. The study is followed by written and practical exams.
+
+<split>
+
+Article 6: Credit Hour (what is the GPA system):
+
+It is a unit of measurement to determine the weight of each course in the main semester, and it is equivalent to:
+
+One theoretical hour per week.
+
+Two hours of exercises or practical lessons per week.
+
+Three hours of practical training per week.
+
+Four hours of field training per week.
+
+<split>
+
+Article 7: Language of Study:
+
+English is the official language of study in the college, and some courses may be taught in Arabic based on the approval of the college and university councils.
+
+<split>
+
+Article 8: Requirements for Obtaining the Academic Degree:
+
+Obtaining a Bachelor's degree in Computer Science and Data Sciences according to the credit hour system requires passing
+
+140 credit hours at least, including the requirements of the university, college and program in a period of no less than 7 basic semesters, provided that the overall cumulative grade point average upon graduation is not less than 2.00
+
+First: University requirements (10 credit hours):
+
+A. Mandatory requirements (4 credit hours):
+
+1. Critical Thinking course (2 credit hours).
+
+2. Innovation and Entrepreneurship course (2 credit hours).
+
+3. Human Rights and Anti-Corruption course
+
+4. Community Service and Environmental Development
+
+5. Military Education
+
+ Graduation requirement and its hours are not counted within the credit hours required for graduation.
+
+B. Elective Requirements (6 credit hours):
+
+Three courses, each of which is (2 credit hours), from the list of elective courses offered by the university colleges that advance the student's thinking and culture. The student may not register for the elective courses offered by his college, and this list may be reviewed and amended with the approval of the University Council.
+
+Second: College Requirements (60 credit hours):
+
+A. College Compulsory Courses (48 credit hours).
+B. College Elective Courses (12 credit hours).
+
+Third: Program Requirements (70 credit hours):
+
+A. Program Compulsory Courses (58 credit hours, including 4 credit hours of field training).
+B. Program Elective Courses (12 credit hours).
+
+<split>
+
+Article 9: Evaluation and Grading System
+
+A. The maximum grade for each course is calculated out of 100 points.
+B. The College Council determines the system for distributing grades for each of the practical exams, year work, oral exam - if any - and final written exam according to the special nature of each course as determined by the regulations. The final written exam grade ranges from 50 to 70 points, and the oral exam grade - if any - does not exceed 10 points.
+C. A student is considered to have failed the course by regulation (F) if he/she obtains less than 30% of the final written exam grade, regardless of his/her total grades in the course.
+D. A student's result in each course is estimated by one of the following grades:
+
+| Letter Grade | Points | Percentage Range                     |
+|--|--|--|
+| A            | 4      | 90% and above                        |
+| A-           | 3.666  | 85% to less than 90%                |
+| B+           | 3.333  | 80% to less than 85%                |
+| B            | 3      | 75% to less than 80%                |
+| B-           | 2.666  | 70% to less than 75%                |
+| C+           | 2.333  | 65% to less than 70%                |
+| C            | 2      | 60% to less than 65%                |
+| C-           | 1.666  | 56% to less than 60%                |
+| D+           | 1.333  | 53% to less than 56%                |
+| D            | 1      | 50% to less than 53%                |
+| F            | 0      | Less than 50% of the total grade    |
+| (F)          | 0      | Less than 30% of the written exam grade |
+| Abs          | 0      | Absent from the written exam without a valid excuse |
+
+
+
+E. Some symbols used in the credit hour system that do not count points:
+
+| Symbol | Meaning                                         |
+|--|-|
+| W      | Withdrawn from course                           |
+| FW     | Forced withdrawal from course                   |
+| MW     | Withdrawn for military service                  |
+| I      | Course incomplete (incomplete course)          |
+| IP     | Extended grade reported in the first semester for a two-semester course |
+| S      | Satisfactory                                   |
+| U      | Unsatisfactory                                 |
+| AU     | Audit                                          |
+
+Symbols (S, U) used in assessing the following mandatory university requirements:
+Human Rights and Anti-Corruption.
+Community Service and Environmental Development.
+
+Calculating the Semester Grade Point Average (GPA):
+Semester GPA = (Σ(Points for each course × Credit Hours for each course)) / Σ(Credit Hours for all courses))
+
+The overall cumulative grade point average (CGPA) is calculated using the following equation:
+Overall CGPA = (Σ(Points of each course × Credit Hours of each course)) / Σ(Total Credit Hours for all courses))
+
+In calculating both the semester and overall cumulative average, the result is rounded to four decimal places.
+
+<split>
+
+Article 10: Academic Load:
+
+A. The minimum number of credit hours that a student is allowed to register for in the fall and spring semesters is 12 credit hours, except in cases of graduation based on the proposal of the Education and Student Affairs Committee and the approval of the College Council.
+
+B. The maximum number of credit hours that a student is allowed to register for in the fall and spring semesters is 19 credit hours and may be increased to 21 credit hours for students who achieve a general cumulative average of no less than 3.333 (see Article 9: Evaluation and Grading System) or for cases of graduation during the last academic level for non-failing students.
+
+C. A student with a failure is not allowed to register for more than 12 credit hours in the fall and spring semesters.
+
+D. The maximum number of credit hours that a student is allowed to register for in the summer semester is 9 credit hours.
+
+<split>
+
+Article 11: Study Levels (credit hours distripution per semester):
+
+Students are classified during their studies into four study levels according to the number of credit hours passed as follows:
+
+First level: from 0 to 28 credit hours.
+Second level: from 29 to 64 credit hours.
+Third level: from 65 to 98 credit hours.
+Fourth level: from 99 to 140 credit hours.
+
+<split>
+
+Article 12: Academic Advisor:
+
+The College's Education and Student Affairs Council shall appoint an academic advisor for each student, to familiarize the student with his/her study plan, follow up on its implementation, and choose compulsory and elective courses according to that plan. The academic advisor's opinion shall be advisory and non-binding, and course registration shall not be approved except with the approval of the academic advisor on the student's study load.
+
+<split>
+
+Article 13: Course Registration
+
+A. The college determines the compulsory and elective courses that it will offer at least one month before the beginning of the semester, and registration begins at least one week before the beginning of each semester.
+
+B. The college council may allow late registration during the second week for those who fail to register on the specified date with an excuse accepted by the Education and Student Affairs Committee.
+
+C. The student is not allowed to register in any course that requires a pre-requisite unless he passes that pre-requisite, and the college council may set the necessary controls for that.
+
+<split>
+
+Article 14: Deletion and Addition
+
+The student has the right to delete/add any course starting from the beginning of the second week until the end of the third week of the main semester or the end of the first week of the summer semester after completing the deletion and addition form and its approval by the academic advisor without the deleted course appearing in his academic record, provided that the deletion and addition does not affect the student's academic load (see Article 10: Academic Load).
+
+<split>
+
+Article 15: Withdrawal from the course
+
+A. The student is allowed to withdraw from the course starting from the fourth week until the end of the twelfth week of the main semester and during the sixth week of the summer semester after completing the withdrawal form and its approval by the academic advisor, provided that the withdrawal does not affect the student’s academic load (see Article 10: Academic Load). In this case, the student’s hours for this course will not be counted and a Withdrawal (W) grade will be recorded for him in his academic record, provided that the student has not exceeded the specified absence rate before the withdrawal. B. Withdrawal requests after the specified dates will be submitted to the College’s Education and Student Affairs Committee for consideration.
+
+<split>
+
+Article 16: Attendance
+
+A. The student is not allowed to take the final exam unless he/she attends at least 75% of the practical teaching hours of the course.
+B. The student must be warned after missing 15% of the practical teaching hours of the course without an acceptable excuse.
+He/she will receive a second warning after missing 20% ​​of the practical teaching hours of the course.
+C. The student will be deprived of taking the final exam if his/her absence exceeds 25% of the practical teaching hours of the course and will be given a grade of (Forced Withdrawal (FW) and must repeat the course.
+
+<split>
+
+Article 17: Failure to attend the final exam
+
+A. If a student fails to attend the final exam for any course and submits a compelling excuse accepted by the College’s Education and Student Affairs Committee within two days at most from the exam date and completes an incomplete course application, a provisional grade of Incomplete (I) will be given to him in this course, provided that he has obtained at least 60% of the semester work grades and has not been denied entry to the final exam. See Article 16: Attendance).
+B. In the case of a grade of (I) Incomplete, the student will have the opportunity to take the final exam during the first week of the following semester directly or as determined by the College Council, and the student’s total grade in this course will be the final exam grade plus the total grades he previously obtained during the semester.
+C. In the event that a student fails to complete a course in which he obtained a grade of (Incomplete) (I), he will receive an Abs grade and must re-study this course.
+D. The number of semesters in which a student submits one or more applications for an incomplete course should not exceed three semesters during the study period.
+E. If a student fails to attend the final exam for any course without An excuse accepted by the Education and Student Affairs Committee, he gets an Abs grade and must re-study this course.
+
+<split>
+
+Article 18 Repetition of the course
+
+A. If the student gets an F or (F) or Abs or FW grade in any course, he must re-study this course if it is mandatory and he has the right to study an alternative course if it is optional, and the grade he got will be counted for him.
+B. If the student gets an unsatisfactory level U in one of the graduation requirements, he must re-study this course.
+C. An academically struggling student may re-study a course for the purpose of improving the overall cumulative average (CGPA).
+D. When calculating the overall cumulative average, the passing grade is counted for the first 8 attempts only in which the student re-studies a course, while for anything beyond that, the grades of both failure and passing are counted in his overall cumulative average.
+E. If a student fails a course repeatedly, the failure will be counted once in his overall cumulative average, with the number of times he took the exam for that course recorded in his academic record, and the points he obtained in his attempts will be included in calculating the overall cumulative average (CGPA) in all semesters.
+
+<split>
+
+Article 19: Academic Probation:
+
+A. The student is considered to be in default and is given a warning and academic probation if he obtains a cumulative GPA of less than 1.666 at the end of the second semester of enrollment in the programs or less than 2.000 in any other semester thereafter.
+
+B. The academic advisor follows up on the performance of the defaulting student and requests that he be placed under academic probation in the following semester and is not allowed to register for more than 12 credit hours.
+
+C. The student who is on the academic probation and warning list is allowed to retake a course for the purpose of improvement and the highest grade he obtained in this course is calculated for him.
+
+D. If the student placed under academic probation in a semester obtains a cumulative GPA of 2.000 or more, academic probation is lifted.
+
+E. The student is dismissed from the college in the event that he obtains a cumulative GPA of less than 2.000 after three consecutive semesters or four separate semesters.
+
+<split>
+
+Article 20: Suspension of Enrollment:
+
+A. The student may submit a request to suspend registration for one or more basic semesters, with a maximum of four separate or connected basic semesters, for reasons accepted by the College’s Education and Student Affairs Committee and approved by the College Council.
+
+B. The student is considered to have withdrawn from the semester if he/she does not register for any course during that semester, and it is counted among the four opportunities to suspend registration.
+
+C. The student is allowed to withdraw from the study program after registration when called upon to perform military service, and he/she is given a Military Withdrawal (MW) rating, and this withdrawal is not counted among the four opportunities allowed to him/her by law.
+
+<split>
+
+Article 21: Cancellation of registration:
+
+The student may cancel his registration in the program upon his request, and he may also submit a request for re-registration within a maximum of four basic semesters, provided that he explains the reasons for canceling the registration as well as the reasons for re-registration.
+
+It shall be presented to the College Council, and in the event of a recommendation for approval, it shall be presented to the University Council and the student shall be treated as a continuing student based on his previous status in the college before canceling his registration in the event of the approval of the University Council.
+
+He shall not have the right to stop registration after that.
+
+<split>
+
+Article 22: Graduation and Honors
+
+A. The college allows students to graduate in one academic year in:
+
+January semester after the end of the fall semester of the academic year
+June semester after the end of the spring semester of the academic year
+September semester after the end of the summer semester of the academic year
+B. Honors are awarded to a student who completes graduation requirements in a period not exceeding 9 basic semesters, provided that his/her semester GPA is not less than 3.333 points in any semester of his/her studies, and that his/her overall cumulative GPA is at least 3.666, and that he/she has not obtained a grade of F or (F) or FW or U in any course, or been subject to any disciplinary penalty during his/her studies.
+
+C. In the event that the overall cumulative GPA (CGPA) of the top graduates during any graduation cycle for one academic year is equal, the result is rounded to four decimal places and a comparison is made between them according to the controls determined by the College Council and the standards approved by the University Council and all the rules, laws and regulations contained in the Universities Organization Law and its Executive Regulations.
+
+<split>
+
+Article 23: Changing the study program:
+
+The student may change the study program after spending a period in the same college, after fulfilling the conditions for joining the new program, taking the opinion of the academic advisor, obtaining the approval of the Education and Student Affairs Committee at the college, and the approval of the college council. Courses that the student has previously studied and passed may be counted, provided that they are among the requirements of the new study program, and the remaining courses are not counted within the hours of the new study program.
+
+<split>
+
+Article 24: Listening System:
+
+The college council may accept the attendance of students from the same college or from other colleges or universities as listeners for some courses at the college according to the rules determined by the college council, and the college shall grant a certificate of attendance as a listener.
+
+<split>
+
+Article 25: Student Mobility:
+
+A. The student may register for courses from outside the college or university or from a foreign university and they will be counted within his study program after the content of these courses has been equated and the college council has approved that these courses be included in the calculation of the general cumulative grade point average (CGPA), provided that these courses do not exceed 25% of the hours required to graduate from the study program.
+
+B. A visiting student is a student from outside the university who studies some courses at the college without obtaining any degree after the approval of the Education and Student Affairs Committee and in accordance with the rules determined by the college council. The maximum registration limit in the main semester is 21 credit hours and in the summer semester 9 credit hours. The student is given a certificate of what he has studied and the grades of the courses he has studied and passed successfully.
+
+<split>
+
+Article 26: Continuous Learning:
+
+A. The College Council may, after the approval of the University Council, announce the teaching of some courses or packages of courses to graduates from the same college or from other colleges or universities or those at their level, in accordance with the rules and regulations determined by the College Council after the approval of the University Council.
+
+B. The maximum registration limit in the basic semester is 21 credit hours and 9 credit hours in the summer semester, taking into account the application of the articles and provisions of these regulations from Article 12 to Article 17.
+
+C. At the end of the period, the student is granted a certificate of the courses studied and passed, indicating the grades he obtained in accordance with Article 9: Evaluation and Grades System.
+
+<split>
+
+Article 27: Implementation of the Regulation Procedures:
+
+The College Council may take the necessary decisions to complete and implement these regulations and facilitate their procedures.
+
+<split>
+
+Article 28: Basic competencies of academic programs (Information about each program):
+
+The College of Computer Science and Data Science adopts the competency-based learning methodology. Based on the competencies required of graduates in the labor market, the various academic programs of the college include competencies included in the National Skills Framework in the field of communications and information, which was approved by the Ministry of Communications and Information Technology, in addition to other reference competencies approved by international programs in similar specializations. Some competencies were selected based on the labor market's need for them at the national level and at the labor market level in the Middle East and even in the world, as Egyptian educational institutions provide a large group of highly qualified workers in the field of communications and information for countries in the region and globally. Accordingly, the selection of academic programs is based on a realistic and studied need.
+
+Based on the professions required in the communications and information sector and the skills and competencies required for them, the latter directed the selection of programs in this regulation to ensure that the graduate is suitable for the needs of the labor market and equipped with what is necessary for him. This requires presenting educational content in innovative ways, centered around the student and linked to the industry. The following basic competencies have been identified to build the list, in addition to other supporting competencies, and they are stated as follows for each program.
+
+Business Application Development Program Competencies:
+
+Analysis and design of business processes.
+Creating data collection solutions based on modern trends in technology.
+Building data warehouses from different sources of data.
+Using different methods of data analysis to support decisions in business organizations.
+Localization and management of information systems including the legal aspect to support digital transformation.
+Data analysis in different sectors with high capacity to generate data such as digital marketing, e-commerce, and e-government services.
+Developing solutions and products based on data analysis technology to represent the nucleus of new projects.
+
+Smart Systems Program Competencies:
+
+Identify, analyze and evaluate the components and basics of smart systems.
+Collect and analyze information and predictions from big data and assist in decision-making.
+Design, build and test smart computing systems.
+Design and build embedded systems software and robotics.
+Learn how to design, create and manage smart cities.
+Provide the necessary support, management and maintenance to ensure the effectiveness and efficiency of smart systems.
+Review and evaluate available results to determine the usefulness and effectiveness of existing systems.
+
+Media Analytics Program Competencies:
+
+Analysis of media content and anticipation of changes in the digital media environment at the local and global levels.
+Production of all forms of digital radio and television programs using multimedia techniques, digital photography and editing.
+Using computing and technology to analyze data for all elements of journalistic work (report, article, investigation, and even journalistic directing techniques) in a digital and electronic manner.
+Developing media practices in light of the use of computer expertise and data and information sciences.
+Localizing digitization in various media institutions (radio, press, television), including the shift towards digital archives.
+Building observatories to analyze big data on social networks and sentiment analysis.
+Developing mechanisms for public opinion polls on various issues based on electronic measurement and electronic surveys in a manner that serves national goals.
+Developing media policies based on scientific analyses for international media platforms and documentary and recording programs.
+
+Healthcare Analytics and Informatics Program Competencies:
+
+Describe the basic concepts in health, medical and life sciences.
+Use data, information and knowledge in various health fields.
+Identify the basic determinants related to health such as genetics, physiology, psychology and environment and how to evaluate them.
+Identify mechanisms for making clinical, diagnostic and therapeutic health decisions.
+Enabling the importance of information sharing between different health care institutions.
+Excellence in the management, financing and service of health care systems.
+Use information to support public health and research that serves health fields.
+
+Cyber ​​Security Analysis Program Competencies:
+
+Analysis and interpretation of local and international political issues related to Arab affairs.
+Understanding of social and human sciences related to political analysis and employing them to understand contemporary political phenomena.
+Identifying and analyzing regional and international security challenges, and evaluating their impact on the Arab region.
+Being able to use advanced methods and techniques in collecting and analyzing political and security data.
+Collecting and analyzing information related to Arab political affairs and presenting it to security and political decision-makers.
+Analyzing the role, position, and interests of international organizations in the Arab political arena, and determining their positions on existing challenges.
+Predicting regional and international developments, and identifying the opportunities and challenges facing them in the field of Arab political security.
+
+<split>
+
+Article 29: Design of academic programs (GPA credit hours distribution):
+
+All academic programs of the College of Computer Science and Data Sciences include the requirements of the university, college, and program, where the student studies 140 credit hours divided as shown in the following:
+**University Requirements**
+* Mandatory: 4 credits
+* Optional: 6 credits
+**College Requirements**
+* Mandatory: 48 credits
+* Optional: 12 credits
+**Program Requirements**
+* Mandatory: 58 credits
+* Optional: 12 credits
+**Total**
+140 credits
+
+<split>
+
+Article 30: Compulsory College Requirements
+
+Every student in any of the college’s academic programs must study the following 16 compulsory courses, totaling 48 credit hours, as shown in the following table, which shows the number of credit hours for each course (Cr), lectures (Lecture), practical lessons (Practical), as well as the pre-requisites for the courses.
+
+<split>
+
+Article 31: Elective College Requirements:
+
+Each student in any of the college’s academic programs must study 4 elective courses, totaling 12 credit hours, from the following list of courses or from the compulsory courses in the study plan for other college programs:
+
+<split>
+
+Chapter Five
+Scientific Content of Curricula for Different Programs
+
+Article 44 Scientific Content of Compulsory College Courses (list and description of courses)
+
+02-24-00101 - Linear Algebra (3 Cr; 2 L, 1 P): Systems of linear equations, Matrices, Determinants, Euclidean spaces, Linear combinations and linear span, Subspaces, Linear independence, Basis and dimension, Rank of a matrix, Inner products, Eigen values and Eigen vectors.
+Pre-requisite(s): none. 
+
+02-24-00102 - Calculus (3 Cr; 2 L, 1 P): Functions and models, Limits and derivatives, Differentiation rules, Applications of differentiation, Integrals and applications of integration, Techniques of integration, Differential equations, Partial differential equations.
+Pre-requisite(s): none. 
+
+02-24-00103 - Introduction to Computer Systems (3 Cr; 2 L, 1 P): Introduction to computer systems, Representation and manipulation of information, Machine level representation of programs, Introduction to computer organization, Memory hierarchy, System I/O, Introduction to computer networks. 
+Pre-requisite(s): none. 
+
+02-24-00104 - Introduction to Data Sciences (3 Cr; 2 L, 1 P): Introduction to data science, Data science ecosystem, Data representation and manipulation, Tools for data scientists, Data analytics tracks, Case studies using R.
+Pre-requisite(s): none. 
+
+02-24-00105 - Programming I (3 Cr; 2 L, 1 P): Introduction to programming, Basic programming constructs, Branching and Iteration, Decomposition, Abstractions and Functions, Recursion, Structure types, Mutability, High order functions, Testing and debugging.
+Pre-requisite(s): none. 
+
+02-24-00106 - Probability and Statistics I (3 Cr; 2 L, 1 P): Sets, Techniques of counting, Probability spaces, Independence and dependence, Conditional probabilities, Random variables, Expectation, variance, and moments, Moment generating functions, Independence of random variables, Conditional expectation, Discrete and continuous distributions, Joint and marginal distributions.
+Pre-requisite(s): none. 
+
+02-24-00107 - Discrete Structures (3 Cr; 2 L, 1 P): Sequences and Summations, Growth of functions, Logic and Predicates, Proof techniques, Recursive relations, Advanced counting techniques, Functions and Relations, Graph and Tree structures, Introduction to number theory: Groups, Rings, and Fields.
+Pre-requisite(s): none. 
+
+02-24-00108 - Data Structures and Algorithms (3 Cr; 2 L, 1 P): Arrays, Linear lists, Queues, and Stacks, Tree structures and traversals, Dictionaries and Search trees, Heaps, Tries, Sorting and Searching, Hashing, Basic graph algorithms: Traversals, Minimum Spanning Trees, Shortest Paths.
+Pre-requisite(s): 02-24-00105.
+
+02-24-00109 - Introduction to Artificial Intelligence (3 Cr; 2 L, 1 P): Reasoning, Intelligent agents, Knowledge representation techniques, Problem solving by searching, Constraint satisfaction problems, Logic programming, Uncertain knowledge and probabilistic reasoning, Planning, Applications.
+Pre-requisite(s): 02-24-00103. 
+
+02-24-00110 - Programming II (3 Cr; 2 L, 1 P): Object-oriented programming concepts, UML and requirement analysis, Object-oriented design, Encapsulation and information hiding, Separation of interface and implementation, Classes and objects, Methods, Members, Subclasses and inheritance, Polymorphism, Using an object-oriented programming language, Message passing, Operator overloading, Genericity, Programming using threads, Using APIs, Software design patterns.
+Pre-requisite(s): 02-24-00105.
+
+02-24-00201 - Probability and Statistics II (3 Cr; 2 L, 1 P): Normal distribution, Law of large numbers, Central limit theorem, Distributions derived from Normal distribution: Chi-squared, Student-t, and F distributions, Statistical estimation, Point estimation, Confidence intervals, Test of hypotheses, Fitting straight lines, Analysis of variance, Stochastic models, Poisson processes.
+Pre-requisite(s): 02-24-00106.
+
+02-24-00202 - Introduction to Databases (3 Cr; 2 L, 1 P): Information management concepts, Database systems concepts, Data modeling, The relational data model and Relational algebra, Logical database design, Normalization, Query languages, Query optimization, Physical database design, B trees and Indices, Transaction processing concepts, Concurrency control, Recovery, Recent trends in database systems.
+Pre-requisite(s): 02-24-00108.
+
+02-24-00203 - Numerical Computations (3 Cr; 2 L, 1 P): Matrix manipulation, Simultaneous linear equations and matrix inversion, Vector space and basis, Eigen values and Eigen vectors, Approximation of roots of equations, Error analysis and Numerical instability, Numerical differentiation and integration, Interpolation and Extrapolation, Least-square approximation, Differential equations.
+Pre-requisite(s): 02-24-00101.
+
+02-24-00204 - Cloud Computing (3 Cr; 2 L, 1 P): Introduction to Cloud Computing, Cloud computing platforms and infrastructure, Parallel programming in the Cloud, Distributed storage systems, Virtualization, Cloud security, Cloud performance. Pre-requisite(s): 02-24-00108. 
+
+ 02-24-00205 - Machine Learning (3 Cr; 2 L, 1 P): Feature representation, Similarity, Dimensionality reduction, Supervised learning, Regression, Unsupervised learning, Evaluation, Fundamentals of neural networks (Feedforward and Backpropagation), Reinforcement learning, Applications.
+Pre-requisite(s): 02-24-00109.
+
+02-24-00206 - Data Mining and Analytics (3 Cr; 2 L, 1 P): Introduction to data mining, Data exploration and visualization, Data preprocessing, Classification: concepts, basic techniques and evaluation, advanced methods (support vector machines and Bayesian networks), Mining frequent patterns and associations: concepts, techniques and evaluation, Clustering: concepts, techniques, and evaluation, Selected advanced topics (text mining), Current trends in data mining. Pre-requisite(s): 02-24-00201.
