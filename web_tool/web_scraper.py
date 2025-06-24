@@ -13,7 +13,7 @@ from urllib3.util.retry import Retry
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 class WebScraper:
     """Advanced web scraper with rate limiting, error handling, and concurrency support"""
@@ -108,7 +108,7 @@ class WebScraper:
             if not parsed_url.scheme:
                 url = 'https://' + url
             
-            logger.info(f"Scraping: {url}")
+            # logger.info(f"Scraping: {url}")
             
             # Make request
             response = self.session.get(url, timeout=self.timeout)
@@ -148,7 +148,7 @@ class WebScraper:
             }
             
         except requests.exceptions.RequestException as e:
-            logger.error(f"Request error for {url}: {str(e)}")
+            # logger.error(f"Request error for {url}: {str(e)}")
             return {
                 'url':url,
                 'title':"",
@@ -158,7 +158,7 @@ class WebScraper:
                 'scrape_time':time.time() - start_time
             }
         except Exception as e:
-            logger.error(f"Unexpected error for {url}: {str(e)}")
+            # logger.error(f"Unexpected error for {url}: {str(e)}")
             return {
                 'url':url,
                 'title':"",
@@ -198,7 +198,7 @@ class WebScraper:
                 results.append(result)
                 
                 # Log progress
-                logger.info(f"Completed {len(results)}/{len(urls)}: {result['url']}")
+                # logger.info(f"Completed {len(results)}/{len(urls)}: {result['url']}")
         
         # Sort results by original URL order
         url_to_result = {result['url']: result for result in results}
@@ -235,9 +235,10 @@ class WebScraper:
             with open(filename, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
             
-            logger.info(f"Results saved to {filename}")
+            # logger.info(f"Results saved to {filename}")
         except Exception as e:
-            logger.error(f"Error saving results: {str(e)}")
+            # logger.error(f"Error saving results: {str(e)}")
+            pass
 
 # Convenience functions for backward compatibility
 def scrape_website(url: str) -> Dict[str, str]:
