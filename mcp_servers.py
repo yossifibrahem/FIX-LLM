@@ -187,14 +187,14 @@ async def handle_call_tool(
         
         elif name == "web":
             query = arguments.get("query", "")
-            keywords = arguments.get("Key_words", [])
+            keywords = arguments.get("Key_words", [query])
             num_websites = arguments.get("number_of_websites", 4)
             num_citations = arguments.get("number_of_citations", 4)
             
             if not query:
                 raise ValueError("Query parameter is required")
-            if not keywords:
-                raise ValueError("Key_words parameter is required")
+            # if not keywords:
+            #     raise ValueError("Key_words parameter is required")
             
             result = await asyncio.to_thread(
                 web, query, keywords, num_websites, num_citations
