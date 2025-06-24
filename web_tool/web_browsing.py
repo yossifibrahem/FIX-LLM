@@ -1,4 +1,5 @@
 import json
+import asyncio
 
 from web_tool.duck_duck_go_search import DuckDuckGoSearchManager
 from web_tool.scraper import scrape_multiple_websites
@@ -29,11 +30,13 @@ def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -
         citations = min(citations, 10)        # Maximum 10 citations
         
         urls = ddg.text_search(query, int(num_websites))
-        scraped_data = scrape_multiple_websites(urls)
+        scraped_data = asyncio.run(scrape_multiple_websites(urls))
         filtered_data = find_most_similar_content(scraped_data, prompt, citations)
         return filtered_data
     except Exception as e:
         return {"url": "error", "citation": str(e)}
+    
+
 
 def images_search(query, num_results=3):
     """Performs the image search for a specific query. For example, "puppies". If possible, the output should be in Markdown format.
@@ -50,6 +53,7 @@ def images_search(query, num_results=3):
         return image_info
     except Exception as e:
         return {"image": "error", "thumbnail": str(e)}
+    
 
 def webpage_scraper(url):
     """Scrape a webpage for its text content.
@@ -61,7 +65,7 @@ def webpage_scraper(url):
     :return: A JSON-formatted string containing the scraped text. In case of an error, it returns a JSON-formatted string with an error message.
     """
     try:
-        result = scrape_multiple_websites([url])
+        result = asyncio.run(scrape_multiple_websites([url]))
         return result[0]
     except Exception as e:
         return json.dumps({"error": str(e)})
