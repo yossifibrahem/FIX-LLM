@@ -25,7 +25,6 @@ from web_tool.web_browsing import (
     text_search as web,
     webpage_scraper as URL,
     images_search as image,
-    deep_search
 )
 from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
 from youtube_tool.youtube import (
@@ -163,29 +162,7 @@ Tools = [
                 "required": ["url"]
             }
         }
-    }, {
-        "type": "function",
-        "function": {
-            "name": "deep_search",
-            "description": "Perform a deep and smart web search for complex tasks, with detailed summaries from search results",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "queries": {
-                        "type": "array","items": {"type": "string"},
-                        "description": "List of search queries for web search, at least 2 queries are required"
-                    },
-                    "prompt": {"type": "string", "description": "Explain the what the user is looking for"},
-                    "number_of_results": {
-                        "type": "integer",
-                        "description": "Maximum number of search results to analyze",
-                        "default": 10,
-                    }
-                },
-                "required": ["query", "prompt"]
-            }
-        }
-    }
+    },
 ]
 
 def process_stream(stream: Any) -> Tuple[str, List[Dict]]:
@@ -389,15 +366,6 @@ def chat_loop() -> None:
                             arguments.get("keywords", arguments["query"]),
                             arguments.get("number_of_websites", 3),
                             arguments.get("number_of_citations", 5)
-                        )
-
-                    elif tool_name == "deep_search":
-                        result = deep_search(
-                            arguments["queries"],
-                            arguments["prompt"],
-                            arguments.get("number_of_results", 10),
-                            client,
-                            MODEL
                         )
                     
                     elif tool_name == "wiki":
