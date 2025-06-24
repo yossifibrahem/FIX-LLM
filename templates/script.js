@@ -432,9 +432,9 @@ function addResult(name, data, args, messageElement) {
                     <div class="text-sm text-gray-400 p-3 rounded-lg" style" style="text-align:center">${args.keywords}</div></div>
                     ${data.map(r => 
                         `<div><a href="${r.url}" target="_blank" class="text-sm text-blue-400 hover:underline mb-2 block">${r.title}</a>
-                        <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${marked.parse(r.citation)}</div></div>`
+                        <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${r.citation}</div></div>`
                     ).join('')}</div>` : 
-                    `<div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${marked.parse(data)}</div>`,
+                    `<div class="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">${data}</div>`,
             className: 'bg-gray-900'
         }),
         deep_search: () => ({
