@@ -16,8 +16,8 @@ import mcp.types as types
 # Tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
 from web_tool.web_browsing import (
-    text_search as web,
-    webpage_scraper as URL,
+    text_search_bs4 as web,
+    webpage_scraper_bs4 as URL,
     images_search as image,
 )
 from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
@@ -79,7 +79,7 @@ async def handle_list_tools() -> List[types.Tool]:
                         "default": 4
                     }
                 },
-                "required": ["query", "Key_words"]
+                "required": ["query"]
             }
         ),
         types.Tool(
@@ -187,14 +187,13 @@ async def handle_call_tool(
         
         elif name == "web":
             query = arguments.get("query", "")
-            keywords = arguments.get("Key_words", [])
+            keywords = arguments.get("Key_words", [query])
             num_websites = arguments.get("number_of_websites", 4)
             num_citations = arguments.get("number_of_citations", 4)
             
             if not query:
                 raise ValueError("Query parameter is required")
-            if not keywords:
-                raise ValueError("Key_words parameter is required")
+
             
             result = await asyncio.to_thread(
                 web, query, keywords, num_websites, num_citations
