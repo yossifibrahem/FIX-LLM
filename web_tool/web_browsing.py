@@ -44,7 +44,7 @@ def text_search(query: str, prompt, num_websites: int = 4, citations: int = 5) -
         return {"url": "error", "citation": str(e)}
     
 
-def text_search_bs4(query: str, prompt, num_websites: int = 4, citations: int = 5) -> str:
+def text_search_bs4(query: str, keywords: list, chunk_content: bool = True, num_websites: int = 4, citations: int = 5) -> str:
     """Conducts a general web text search and retrieves information from the internet in response to user queries.
 
     This function is best used when the user's query is seeking broad information available on various websites. It
@@ -69,8 +69,10 @@ def text_search_bs4(query: str, prompt, num_websites: int = 4, citations: int = 
             urls, 
             max_workers=3,
         )
-        # filtered_data = find_most_similar_content(scraped_data, prompt, citations)
-        return scraped_data
+        if not chunk_content:
+            return scraped_data
+        filtered_data = find_most_similar_content(scraped_data, keywords, citations)
+        return filtered_data
     except Exception as e:
         return {"url": "error", "citation": str(e)}    
 
