@@ -293,38 +293,38 @@ def scrape_multiple_websites(urls: List[str]) -> List[Dict[str, str]]:
     ]
 
 # Example usage and testing
-if __name__ == "__main__":
-    # Example 1: Simple scraping
-    print("=== Simple Scraping Example ===")
-    result = scrape_website("https://example.com")
-    print(f"Title: {result['title']}")
-    print(f"Content length: {len(result['content'])}")
+# if __name__ == "__main__":
+#     # Example 1: Simple scraping
+#     print("=== Simple Scraping Example ===")
+#     result = scrape_website("https://example.com")
+#     print(f"Title: {result['title']}")
+#     print(f"Content length: {len(result['content'])}")
     
-    # Example 2: Advanced scraping with custom settings
-    print("\n=== Advanced Scraping Example ===")
-    scraper = WebScraper(
-        delay_range=(0.5, 1.5),  # Faster scraping
-        timeout=15,
-        max_retries=2
-    )
+#     # Example 2: Advanced scraping with custom settings
+#     print("\n=== Advanced Scraping Example ===")
+#     scraper = WebScraper(
+#         delay_range=(0.5, 1.5),  # Faster scraping
+#         timeout=15,
+#         max_retries=2
+#     )
     
-    urls = [
-        "https://example.com",
-        "https://httpbin.org/html",
-        "https://quotes.toscrape.com"
-    ]
+#     urls = [
+#         "https://example.com",
+#         "https://httpbin.org/html",
+#         "https://quotes.toscrape.com"
+#     ]
     
-    results = scraper.scrape_multiple_websites(
-        urls, 
-        max_workers=3,
-        save_to_file="scraping_results.json"
-    )
+#     results = scraper.scrape_multiple_websites(
+#         urls, 
+#         max_workers=3,
+#         save_to_file="scraping_results.json"
+#     )
     
-    for result in results:
-        print(f"\nURL: {result.url}")
-        print(f"Title: {result.title}")
-        print(f"Status: {result.status_code}")
-        print(f"Content length: {len(result.content)}")
-        print(f"Scrape time: {result.scrape_time:.2f}s")
-        if result.error:
-            print(f"Error: {result.error}")
+#     for result in results:
+#         print(f"\nURL: {result.url}")
+#         print(f"Title: {result.title}")
+#         print(f"Status: {result.status_code}")
+#         print(f"Content length: {len(result.content)}")
+#         print(f"Scrape time: {result.scrape_time:.2f}s")
+#         if result.error:
+#             print(f"Error: {result.error}")
