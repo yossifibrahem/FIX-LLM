@@ -89,7 +89,7 @@ class MCPToolServer:
                                 "default": 4
                             }
                         },
-                        "required": ["query"]
+                        "required": ["query", "Key_words"]
                     }
                 ),
                 Tool(
