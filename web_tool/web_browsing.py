@@ -70,7 +70,7 @@ def text_search_bs4(query: str, prompt, num_websites: int = 4, citations: int = 
             max_workers=3,
         )
         # filtered_data = find_most_similar_content(scraped_data, prompt, citations)
-        return scrape_website
+        return scraped_data
     except Exception as e:
         return {"url": "error", "citation": str(e)}    
 

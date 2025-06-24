@@ -15,17 +15,6 @@ from urllib3.util.retry import Retry
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-@dataclass
-class ScrapedData:
-    """Data class for scraped website information"""
-    url: str
-    title: str
-    content: str
-    meta_description: str = ""
-    status_code: int = 200
-    error: str = ""
-    scrape_time: float = 0.0
-
 class WebScraper:
     """Advanced web scraper with rate limiting, error handling, and concurrency support"""
     
@@ -101,7 +90,7 @@ class WebScraper:
             delay = random.uniform(self.delay_range[0], self.delay_range[1])
             time.sleep(delay)
 
-    def scrape_website(self, url: str) -> ScrapedData:
+    def scrape_website(self, url: str) -> dict[str, Union[str, int, float]]:
         """
         Scrape a single website
         
@@ -109,7 +98,7 @@ class WebScraper:
             url: URL to scrape
             
         Returns:
-            ScrapedData object with scraped information
+            dict with scraped information
         """
         start_time = time.time()
         
@@ -149,40 +138,40 @@ class WebScraper:
             
             scrape_time = time.time() - start_time
             
-            return ScrapedData(
-                url=url,
-                title=title,
-                content=content,
-                meta_description=meta_desc,
-                status_code=response.status_code,
-                scrape_time=scrape_time
-            )
+            return {
+                'url':url,
+                'title':title,
+                'content':content,
+                'meta_description':meta_desc,
+                'status_code':response.status_code,
+                'scrape_time':scrape_time
+            }
             
         except requests.exceptions.RequestException as e:
             logger.error(f"Request error for {url}: {str(e)}")
-            return ScrapedData(
-                url=url,
-                title="",
-                content="",
-                status_code=0,
-                error=f"Request error: {str(e)}",
-                scrape_time=time.time() - start_time
-            )
+            return {
+                'url':url,
+                'title':"",
+                'content':"",
+                'status_code':0,
+                'error':f"Parsing error: {str(e)}",
+                'scrape_time':time.time() - start_time
+            }
         except Exception as e:
             logger.error(f"Unexpected error for {url}: {str(e)}")
-            return ScrapedData(
-                url=url,
-                title="",
-                content="",
-                status_code=0,
-                error=f"Parsing error: {str(e)}",
-                scrape_time=time.time() - start_time
-            )
+            return {
+                'url':url,
+                'title':"",
+                'content':"",
+                'status_code':0,
+                'error':f"Parsing error: {str(e)}",
+                'scrape_time':time.time() - start_time
+            }
 
     def scrape_multiple_websites(self, 
                                 urls: List[str], 
                                 max_workers: int = 5,
-                                save_to_file: str = None) -> List[ScrapedData]:
+                                save_to_file: str = None) -> List[dict[str, Union[str, int, float]]]:
         """
         Scrape multiple websites concurrently
         
@@ -192,7 +181,7 @@ class WebScraper:
             save_to_file: Optional filename to save results as JSON
             
         Returns:
-            List of ScrapedData objects
+            List of dicts with scraped information for each URL
         """
         results = []
         
@@ -209,10 +198,10 @@ class WebScraper:
                 results.append(result)
                 
                 # Log progress
-                logger.info(f"Completed {len(results)}/{len(urls)}: {result.url}")
+                logger.info(f"Completed {len(results)}/{len(urls)}: {result['url']}")
         
         # Sort results by original URL order
-        url_to_result = {result.url: result for result in results}
+        url_to_result = {result['url']: result for result in results}
         ordered_results = [url_to_result.get(url) for url in urls if url_to_result.get(url)]
         
         # Save to file if requested
@@ -221,24 +210,24 @@ class WebScraper:
         
         return ordered_results
 
-    def _scrape_with_rate_limit(self, url: str) -> ScrapedData:
+    def _scrape_with_rate_limit(self, url: str) -> dict[str, Union[str, int, float]]:
         """Scrape with rate limiting applied"""
         self._rate_limit()
         return self.scrape_website(url)
 
-    def save_results(self, results: List[ScrapedData], filename: str):
+    def save_results(self, results: List[dict[str, Union[str, int, float]]], filename: str):
         """Save results to JSON file"""
         try:
             # Convert dataclass objects to dictionaries
             data = [
                 {
-                    'url': result.url,
-                    'title': result.title,
-                    'content': result.content[:1000] + '...' if len(result.content) > 1000 else result.content,  # Truncate for JSON
-                    'meta_description': result.meta_description,
-                    'status_code': result.status_code,
-                    'error': result.error,
-                    'scrape_time': result.scrape_time
+                    'url': result['url'],
+                    'title': result['title'],
+                    'content': result['content'][:1000] + '...' if len(result['content']) > 1000 else result['content'],  # Truncate for JSON
+                    'meta_description': result['meta_description'],
+                    'status_code': result['status_code'],
+                    'error': result['error'],
+                    'scrape_time': result['scrape_time']
                 }
                 for result in results
             ]
@@ -265,9 +254,9 @@ def scrape_website(url: str) -> Dict[str, str]:
     result = scraper.scrape_website(url)
     
     return {
-        "url": result.url,
-        "title": result.title,
-        "content": result.content,
+        "url": result['url'],
+        "title": result['title'],
+        "content": result['content'],
     }
 
 def scrape_multiple_websites(urls: List[str]) -> List[Dict[str, str]]:
@@ -285,9 +274,9 @@ def scrape_multiple_websites(urls: List[str]) -> List[Dict[str, str]]:
     
     return [
         {
-            "url": result.url,
-            "title": result.title,
-            "content": result.content,
+            "url": result['url'],
+            "title": result['title'],
+            "content": result['content'],
         }
         for result in results
     ]
@@ -321,10 +310,9 @@ def scrape_multiple_websites(urls: List[str]) -> List[Dict[str, str]]:
 #     )
     
 #     for result in results:
-#         print(f"\nURL: {result.url}")
-#         print(f"Title: {result.title}")
-#         print(f"Status: {result.status_code}")
-#         print(f"Content length: {len(result.content)}")
-#         print(f"Scrape time: {result.scrape_time:.2f}s")
-#         if result.error:
-#             print(f"Error: {result.error}")
+#         print(f"\nURL: {result['url']}")
+#         print(f"Title: {result['title']}")
+#         print(f"Status: {result['status_code']}")
+#         print(f"Content length: {len(result['content'])}")
+#         print(f"Scrape time: {result['scrape_time']:.2f}s")
+    
