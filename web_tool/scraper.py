@@ -40,13 +40,16 @@ async def scrape_website_with_crawler(crawler, url):
 
 async def scrape_multiple_websites(urls):
     """
-    Scrape multiple websites concurrently using the AsyncWebCrawler.
-    This function enables web scraping for GPT models. It fetches the text content of multiple webpages and returns
-    it to the model. Use this function if user queries include multiple URLs.
-    :param urls: A list of URLs to scrape.
-    :return: A list of dictionaries, where each dictionary contains 'url', 'title', and 'content' of the scraped webpage.
-             In case of an error, it returns a JSON-formatted string with an error message.
+    This function enables asynchronous web scraping for GPT models. It fetches the text content of multiple webpages concurrently and returns the results. Use this function when user queries include multiple URLs.
+
+    Args:
+        urls (list): A list of URLs to scrape.
+
+    Returns:
+        list: A list of dictionaries, each containing 'url', 'title', and 'content' of the scraped webpage.
+        str: In case of an error, returns a JSON-formatted string with an error message.
     """
+
     try:
         async with AsyncWebCrawler() as crawler:
             tasks = [scrape_website_with_crawler(crawler, url) for url in urls]
