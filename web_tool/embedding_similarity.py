@@ -116,7 +116,7 @@ def process_content(item: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [{
         "url": item["url"],
         "title": item["title"],
-        "citation": chunk
+        "content": chunk
     } for chunk in chunks]
 
 def find_most_similar_content(data: List[Dict[str, Any]], 
@@ -143,7 +143,7 @@ def find_most_similar_content(data: List[Dict[str, Any]],
     chunk_scores = []
     with concurrent.futures.ThreadPoolExecutor() as executor:
         for chunk in all_chunks:
-            chunk_embedding = get_embedding(chunk["citation"])
+            chunk_embedding = get_embedding(chunk["content"])
             keyword_matches = 0
             total_similarity = 0
             
