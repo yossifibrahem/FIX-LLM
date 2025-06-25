@@ -315,8 +315,8 @@ def chat():
                             result = web(
                                 arguments["query"],
                                 arguments.get("keywords", [arguments["query"]]),
-                                arguments.get("number_of_websites", 3),
                                 arguments.get('chunk_content', True),
+                                arguments.get("number_of_websites", 3),
                                 arguments.get("number_of_citations", 5)
                             )
                         elif tool_name == "wiki":
