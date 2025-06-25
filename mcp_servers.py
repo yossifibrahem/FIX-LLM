@@ -16,14 +16,14 @@ import mcp.types as types
 # Tool imports
 from Python_tool.PythonExecutor_secure import execute_python_code as python
 from web_tool.web_browsing import (
-    text_search_bs4 as web,
-    webpage_scraper_bs4 as URL,
-    images_search as image,
+    text_search_bs4 as web_search,
+    webpage_scraper_bs4 as scrape_webpage,
+    images_search as image_search,
 )
 from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
 from youtube_tool.youtube import (
-    search_youtube as youtube,
-    get_video_info as watch
+    search_youtube as youtube_search,
+    get_video_info as youtube_info,
 )
 
 # Configure logging
@@ -54,7 +54,7 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="web",
+            name="web_search",
             description="Perform a quick simple web search for relevant realtime information.",
             inputSchema={
                 "type": "object",
@@ -75,7 +75,7 @@ async def handle_list_tools() -> List[types.Tool]:
                     },
                     "chunk_content": {
                         "type": "boolean",
-                        "description": " determines whether scraped web content should be split into smaller segments or processed as a whole. ",
+                        "description": " determines whether scraped web content should be split into smaller segments or processed as a whole. use False for full content or True for smaller segments",
                         "default": True
                     },
                     "number_of_chunks": {
@@ -102,7 +102,7 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="URL",
+            name="scrape_webpage",
             description="Scrape a website for its content",
             inputSchema={
                 "type": "object",
@@ -116,7 +116,7 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="image",
+            name="image_search",
             description="Search the web for images.",
             inputSchema={
                 "type": "object",
@@ -135,7 +135,7 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="youtube",
+            name="youtube_search",
             description="Search youtube videos and retrieve the urls.",
             inputSchema={
                 "type": "object",
@@ -154,7 +154,7 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="watch",
+            name="youtube_info",
             description="Get information about a youtube video (title, description and transcription)",
             inputSchema={
                 "type": "object",
@@ -190,7 +190,7 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "web":
+        elif name == "web_search":
             query = arguments.get("query", "")
             keywords = arguments.get("Key_words", [query])
             num_websites = arguments.get("number_of_websites", 4)
@@ -203,7 +203,7 @@ async def handle_call_tool(
                 raise ValueError("Key_words parameter is required")
 
             result = await asyncio.to_thread(
-                web, query, keywords, chunk_content, num_websites, num_citations
+                web_search, query, keywords, chunk_content, num_websites, num_citations
             )
             return [
                 types.TextContent(
@@ -225,12 +225,12 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "URL":
+        elif name == "scrape_webpage":
             url = arguments.get("url", "")
             if not url:
                 raise ValueError("URL parameter is required")
             
-            result = await asyncio.to_thread(URL, url)
+            result = await asyncio.to_thread(scrape_webpage, url)
             return [
                 types.TextContent(
                     type="text",
@@ -238,14 +238,14 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "image":
+        elif name == "image_search":
             query = arguments.get("query", "")
             num_images = arguments.get("number_of_images", 1)
             
             if not query:
                 raise ValueError("Query parameter is required")
             
-            result = await asyncio.to_thread(image, query, num_images)
+            result = await asyncio.to_thread(image_search, query, num_images)
             return [
                 types.TextContent(
                     type="text",
@@ -253,14 +253,14 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "youtube":
+        elif name == "youtube_search":
             query = arguments.get("query", "")
             num_videos = arguments.get("number_of_videos", 1)
             
             if not query:
                 raise ValueError("Query parameter is required")
             
-            result = await asyncio.to_thread(youtube, query, num_videos)
+            result = await asyncio.to_thread(youtube_search, query, num_videos)
             return [
                 types.TextContent(
                     type="text",
@@ -268,12 +268,12 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "watch":
+        elif name == "youtube_info":
             url = arguments.get("url", "")
             if not url:
                 raise ValueError("URL parameter is required")
             
-            result = await asyncio.to_thread(watch, url)
+            result = await asyncio.to_thread(youtube_info, url)
             return [
                 types.TextContent(
                     type="text",
