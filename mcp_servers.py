@@ -4,6 +4,7 @@ MCP Server with Python execution, web browsing, Wikipedia, and YouTube tools
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 from typing import Any, Dict, List, Optional, Sequence
@@ -14,13 +15,13 @@ import mcp.server.stdio
 import mcp.types as types
 
 # Tool imports
-from Python_tool.PythonExecutor_secure import execute_python_code as python
+from Python_tool.PythonExecutor_secure import execute_python_code as python_interpreter
 from web_tool.web_browsing import (
     text_search_bs4 as web_search,
     webpage_scraper_bs4 as scrape_webpage,
     images_search as image_search,
 )
-from wiki_tool.search_wiki import fetch_wikipedia_content as wiki
+from wiki_tool.search_wiki import fetch_wikipedia_content as wiki_search
 from youtube_tool.youtube import (
     search_youtube as youtube_search,
     get_video_info as youtube_info,
@@ -40,7 +41,7 @@ async def handle_list_tools() -> List[types.Tool]:
     """
     return [
         types.Tool(
-            name="python",
+            name="python_interpreter",
             description="Execute Python code and return the execution results. Use for math problems or task automation.",
             inputSchema={
                 "type": "object",
@@ -55,7 +56,7 @@ async def handle_list_tools() -> List[types.Tool]:
         ),
         types.Tool(
             name="web_search",
-            description="Perform a quick simple web search for relevant realtime information.",
+            description=f"Perform a quick simple web search for relevant realtime information. the current date is {datetime.now().strftime('%Y-%m-%d')}.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -88,7 +89,7 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="wiki",
+            name="wiki_search",
             description="Search Wikipedia for the most relevant article introduction",
             inputSchema={
                 "type": "object",
@@ -177,12 +178,12 @@ async def handle_call_tool(
     Handle tool calls.
     """
     try:
-        if name == "python":
+        if name == "python_interpreter":
             code = arguments.get("code", "")
             if not code:
                 raise ValueError("Code parameter is required")
             
-            result = await asyncio.to_thread(python, code)
+            result = await asyncio.to_thread(python_interpreter, code)
             return [
                 types.TextContent(
                     type="text",
@@ -212,12 +213,12 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "wiki":
+        elif name == "wiki_search":
             query = arguments.get("query", "")
             if not query:
                 raise ValueError("Query parameter is required")
             
-            result = await asyncio.to_thread(wiki, query)
+            result = await asyncio.to_thread(wiki_search, query)
             return [
                 types.TextContent(
                     type="text",
