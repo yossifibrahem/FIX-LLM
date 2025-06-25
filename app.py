@@ -57,7 +57,7 @@ Tools = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query for websites"},
-                    "Key_words": {
+                    "keywords": {
                         "type": "array","items": {"type": "string"}, 
                         "description": "list of Key word used for finding relevant citations"
                         },
@@ -311,22 +311,28 @@ def chat():
                         # Tool execution
                         if tool_name == "python":
                             result = python(arguments["code"])
+                        
                         elif tool_name == "web":
                             result = web(
                                 arguments["query"],
-                                arguments.get("keywords", [arguments["query"]]),
-                                arguments.get('chunk_content', True),
+                                arguments.get("keywords", arguments["query"]),
+                                arguments.get("chunk_content", True),
                                 arguments.get("number_of_websites", 3),
                                 arguments.get("number_of_citations", 5)
                             )
+                        
                         elif tool_name == "wiki":
                             result = wiki(arguments["query"])
+
                         elif tool_name == "URL":
                             result = URL(arguments["url"])
+
                         elif tool_name == "image":
                             result = image(arguments["query"], arguments.get("number_of_images", 1))
+                            
                         elif tool_name == "youtube":
                             result = youtube(arguments["query"], arguments.get("number_of_videos", 1))
+                            
                         elif tool_name == "watch":
                             result = watch(arguments["url"])
                         else:
