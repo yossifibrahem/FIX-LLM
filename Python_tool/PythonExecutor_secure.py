@@ -8,10 +8,6 @@ import json
 import threading
 import ctypes
 import re
-Base_Dir = os.path.expanduser("~/.conversations/python")
-if not os.path.exists(Base_Dir):
-    os.makedirs(Base_Dir)
-os.chdir(Base_Dir)
 
 
 class ThreadWithException(threading.Thread):
