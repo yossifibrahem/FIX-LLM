@@ -11,7 +11,7 @@ from web_tool.web_scraper import (
 
 scraper = WebScraper(
     delay_range=(0.5, 1.5),
-    timeout=15,
+    timeout=5,
     max_retries=2
 )
 ddg = DuckDuckGoSearchManager()

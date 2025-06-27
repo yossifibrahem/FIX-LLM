@@ -19,9 +19,9 @@ class WebScraper:
     """Advanced web scraper with rate limiting, error handling, and concurrency support"""
     
     def __init__(self, 
-                 delay_range: tuple = (1, 3),
-                 timeout: int = 10,
-                 max_retries: int = 3,
+                 delay_range: tuple = (0.5, 1.5),
+                 timeout: int = 5,
+                 max_retries: int = 2,
                  user_agent: str = None):
         """
         Initialize the web scraper
