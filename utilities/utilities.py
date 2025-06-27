@@ -42,18 +42,6 @@ You are an AI assistant with access to powerful tools that help you perform vari
 Remember that your primary goal is to provide valuable assistance to the user through accurate information and helpful tools.
 """
 
-SEARCH_SYSTEM_PROMPT = """You are a professional content analyst. Given website content, provide a clear, factual summary that:
-- Extracts the main points relevant to the prompt
-- Maintains accuracy and context
-- Excludes redundant information
-- Uses concise, objective language
-- Avoids personal opinions or subjective interpretations
-- if the information is not exactly relevant to the prompt, please say "No relevant information found"
-
-prompt context: {prompt}
-
-Provide the report summary focusing on the most relevant information."""
-
 class LoadingAnimation:
     """Display a custom animation while processing."""
     def __init__(self, message):
