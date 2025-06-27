@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-MCP Server with Python execution tool
+MCP Server with terminal commands tool
 """
-
+import platform
 import asyncio
 from datetime import datetime
 import json
@@ -14,14 +14,17 @@ import mcp.server.stdio
 import mcp.types as types
 
 # Tool imports
-from Python_tool.PythonExecutor_secure import execute_python_code as python_interpreter
+from Python_tool.terminal import execute_terminal_command
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("mcp-server")
 
 # Create server instance
-server = Server("python-interpreter")
+server = Server("python-terminal-interpreter")
+
+
+
 
 @server.list_tools()
 async def handle_list_tools() -> List[types.Tool]:
@@ -30,17 +33,21 @@ async def handle_list_tools() -> List[types.Tool]:
     """
     return [
         types.Tool(
-            name="python_interpreter",
-            description="Execute Python code and return the execution results. Use as calculator or task automation.",
+            name="terminal_command",
+            description=f"Execute terminal/command line commands and return the results. the current os is {platform.system()}. Use for system commands, file operations, or shell scripts.",
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "code": {
+                    "command": {
                         "type": "string",
-                        "description": "Complete Python script to execute. Must return a value."
+                        "description": "The terminal command to execute (e.g., 'ls -la', 'dir', 'echo hello', 'python --version')"
+                    },
+                    "working_directory": {
+                        "type": "string",
+                        "description": "Working directory to execute the command in"
                     }
                 },
-                "required": ["code"]
+                "required": ["command"]
             }
         )
     ]
@@ -53,18 +60,29 @@ async def handle_call_tool(
     Handle tool calls.
     """
     try:
-        if name == "python_interpreter":
-            code = arguments.get("code", "")
-            if not code:
-                raise ValueError("Code parameter is required")
+        if name == "terminal_command":
+            command = arguments.get("command", "")
+            if not command:
+                raise ValueError("Command parameter is required")
             
-            result = await asyncio.to_thread(python_interpreter, code)
+            timeout = arguments.get("timeout", 5)
+            working_directory = arguments.get("working_directory")
+            
+            # Execute command in thread to avoid blocking
+            result = await asyncio.to_thread(
+                execute_terminal_command, 
+                command, 
+                timeout, 
+                working_directory
+            )
+            
             return [
                 types.TextContent(
                     type="text",
-                    text=str(result)
+                    text=result
                 )
             ]
+        
         else:
             raise ValueError(f"Unknown tool: {name}")
     
@@ -87,7 +105,7 @@ async def main():
             read_stream,
             write_stream,
             InitializationOptions(
-                server_name="python-interpreter",
+                server_name="python-terminal-interpreter",
                 server_version="1.0.0",
                 capabilities=server.get_capabilities(
                     notification_options=NotificationOptions(),

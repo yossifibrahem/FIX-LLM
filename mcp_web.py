@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MCP Server with Python execution, web browsing, Wikipedia, and YouTube tools
+MCP Server with web browsing, Wikipedia, and YouTube tools
 """
 
 import asyncio
