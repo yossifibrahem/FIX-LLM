@@ -187,7 +187,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=f"Python execution result:\n{result}"
+                    text=result
                 )
             ]
         
@@ -209,7 +209,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=f"Web search results:\n{result}"
+                    text=result
                 )
             ]
         
@@ -222,7 +222,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=f"Wikipedia content:\n{result}"
+                    text=result
                 )
             ]
         
@@ -235,7 +235,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=f"Website content:\n{result}"
+                    text=result
                 )
             ]
         
@@ -250,7 +250,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=f"Image search results:\n{result}"
+                    text=result
                 )
             ]
         
@@ -265,7 +265,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=f"YouTube search results:\n{result}"
+                    text=result
                 )
             ]
         
@@ -278,7 +278,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=f"YouTube video info:\n{result}"
+                    text=result
                 )
             ]
         
