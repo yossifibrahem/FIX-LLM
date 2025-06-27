@@ -15,7 +15,6 @@ import mcp.server.stdio
 import mcp.types as types
 
 # Tool imports
-from Python_tool.PythonExecutor_secure import execute_python_code as python_interpreter
 from web_tool.web_browsing import (
     text_search_bs4 as web_search,
     webpage_scraper_bs4 as scrape_webpage,
@@ -32,7 +31,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("mcp-server")
 
 # Create server instance
-server = Server("multi-tool-server")
+server = Server("Web")
 
 @server.list_tools()
 async def handle_list_tools() -> List[types.Tool]:
@@ -40,20 +39,6 @@ async def handle_list_tools() -> List[types.Tool]:
     List available tools.
     """
     return [
-        types.Tool(
-            name="python_interpreter",
-            description="Execute Python code and return the execution results. Use for math problems or task automation.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "code": {
-                        "type": "string",
-                        "description": "Complete Python script to execute. Must return a value."
-                    }
-                },
-                "required": ["code"]
-            }
-        ),
         types.Tool(
             name="web_search",
             description=f"Perform a quick simple web search for relevant realtime information. the current date is {datetime.now().strftime('%Y-%m-%d')}.",
@@ -178,20 +163,7 @@ async def handle_call_tool(
     Handle tool calls.
     """
     try:
-        if name == "python_interpreter":
-            code = arguments.get("code", "")
-            if not code:
-                raise ValueError("Code parameter is required")
-            
-            result = await asyncio.to_thread(python_interpreter, code)
-            return [
-                types.TextContent(
-                    type="text",
-                    text=result
-                )
-            ]
-        
-        elif name == "web_search":
+        if name == "web_search":
             query = arguments.get("query", "")
             keywords = arguments.get("Key_words", [query])
             num_websites = arguments.get("number_of_websites", 4)
@@ -209,7 +181,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=result
+                    text=str(result)
                 )
             ]
         
@@ -222,7 +194,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=result
+                    text=str(result)
                 )
             ]
         
@@ -235,7 +207,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=result
+                    text=str(result)
                 )
             ]
         
@@ -250,7 +222,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=result
+                    text=str(result)
                 )
             ]
         
@@ -265,7 +237,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=result
+                    text=str(result)
                 )
             ]
         
@@ -278,7 +250,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=result
+                    text=str(result)
                 )
             ]
         
@@ -304,7 +276,7 @@ async def main():
             read_stream,
             write_stream,
             InitializationOptions(
-                server_name="multi-tool-server",
+                server_name="Web",
                 server_version="1.0.0",
                 capabilities=server.get_capabilities(
                     notification_options=NotificationOptions(),
