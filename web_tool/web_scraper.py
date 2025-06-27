@@ -99,9 +99,7 @@ class WebScraper:
             
         Returns:
             dict with scraped information
-        """
-        start_time = time.time()
-        
+        """        
         try:
             # Validate URL
             parsed_url = urlparse(url)
@@ -135,16 +133,13 @@ class WebScraper:
             meta_tag = soup.find('meta', attrs={'name': 'description'})
             if meta_tag:
                 meta_desc = meta_tag.get('content', '').strip()
-            
-            scrape_time = time.time() - start_time
-            
+                        
             return {
                 'url':url,
                 'title':title,
                 'content':content,
                 'meta_description':meta_desc,
                 'status_code':response.status_code,
-                'scrape_time':scrape_time
             }
             
         except requests.exceptions.RequestException as e:
@@ -155,7 +150,6 @@ class WebScraper:
                 'content':"",
                 'status_code':0,
                 'error':f"Parsing error: {str(e)}",
-                'scrape_time':time.time() - start_time
             }
         except Exception as e:
             # logger.error(f"Unexpected error for {url}: {str(e)}")
@@ -165,7 +159,6 @@ class WebScraper:
                 'content':"",
                 'status_code':0,
                 'error':f"Parsing error: {str(e)}",
-                'scrape_time':time.time() - start_time
             }
 
     def scrape_multiple_websites(self, 
