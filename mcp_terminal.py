@@ -65,7 +65,7 @@ async def handle_call_tool(
             if not command:
                 raise ValueError("Command parameter is required")
             
-            timeout = arguments.get("timeout", 5)
+            timeout = arguments.get("timeout", 10)
             working_directory = arguments.get("working_directory")
             
             # Execute command in thread to avoid blocking
@@ -79,7 +79,7 @@ async def handle_call_tool(
             return [
                 types.TextContent(
                     type="text",
-                    text=result
+                    text=str(result)
                 )
             ]
         
