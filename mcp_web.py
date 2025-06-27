@@ -59,10 +59,10 @@ async def handle_list_tools() -> List[types.Tool]:
                         "description": "Maximum websites to visit",
                         "default": 4
                     },
-                    "chunk_content": {
+                    "full_context": {
                         "type": "boolean",
-                        "description": " determines whether scraped web content should be split into smaller segments or processed as a whole. use False for full content or True for smaller segments",
-                        "default": True
+                        "description": "whether scraped web content full context for better understanding or only relevant citations",
+                        "default": False
                     },
                     "number_of_chunks": {
                         "type": "integer",
@@ -167,7 +167,7 @@ async def handle_call_tool(
             query = arguments.get("query", "")
             keywords = arguments.get("Key_words", [query])
             num_websites = arguments.get("number_of_websites", 4)
-            chunk_content = arguments.get("chunk_content", True)
+            full_context = arguments.get("full_context", False)
             num_citations = arguments.get("number_of_chunks", 4)
             
             if not query:
@@ -176,7 +176,7 @@ async def handle_call_tool(
                 raise ValueError("Key_words parameter is required")
 
             result = await asyncio.to_thread(
-                web_search, query, keywords, chunk_content, num_websites, num_citations
+                web_search, query, keywords, full_context, num_websites, num_citations
             )
             return [
                 types.TextContent(

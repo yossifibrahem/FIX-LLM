@@ -16,7 +16,7 @@ scraper = WebScraper(
 )
 ddg = DuckDuckGoSearchManager()
 
-def text_search(query: str, keywords: list, chunk_content: bool = True, num_websites: int = 4, citations: int = 5) -> str:
+def text_search(query: str, keywords: list, full_context: bool = True, num_websites: int = 4, citations: int = 5) -> str:
     """Conducts a general web text search and retrieves information from the internet in response to user queries.
 
     This function is best used when the user's query is seeking broad information available on various websites. It
@@ -38,7 +38,7 @@ def text_search(query: str, keywords: list, chunk_content: bool = True, num_webs
         
         urls = ddg.text_search(query, int(num_websites))
         scraped_data = asyncio.run(scrape_multiple_websites(urls))
-        if not chunk_content:
+        if full_context:
             return scraped_data
         filtered_data = find_most_similar_content(scraped_data, keywords, citations)
         return filtered_data
@@ -46,7 +46,7 @@ def text_search(query: str, keywords: list, chunk_content: bool = True, num_webs
         return {"url": "error", "citation": str(e)}
     
 
-def text_search_bs4(query: str, keywords: list, chunk_content: bool = True, num_websites: int = 4, citations: int = 5) -> str:
+def text_search_bs4(query: str, keywords: list, full_context: bool = True, num_websites: int = 4, citations: int = 5) -> str:
     """Conducts a general web text search and retrieves information from the internet in response to user queries.
 
     This function is best used when the user's query is seeking broad information available on various websites. It
@@ -71,7 +71,7 @@ def text_search_bs4(query: str, keywords: list, chunk_content: bool = True, num_
             urls, 
             max_workers=3,
         )
-        if not chunk_content:
+        if full_context:
             return scraped_data
         filtered_data = find_most_similar_content(scraped_data, keywords, citations)
         return filtered_data

@@ -78,10 +78,10 @@ Tools = [
                         "description": "Maximum websites to visit",
                         "default": 4,
                     },
-                    "chunk_content": {
+                    "full_context": {
                         "type": "boolean",
                         "description": " determines whether scraped web content should be split into smaller segments or processed as a whole. use False for full content or True for smaller segments",
-                        "default": True
+                        "default": False
                     },
                     "number_of_citations": {
                         "type": "integer",
@@ -369,7 +369,7 @@ def chat_loop() -> None:
                         result = web(
                             arguments["query"],
                             arguments.get("keywords", arguments["query"]),
-                            arguments.get("chunk_content", True),
+                            arguments.get("full_context", False),
                             arguments.get("number_of_websites", 3),
                             arguments.get("number_of_citations", 5)
                         )
