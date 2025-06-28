@@ -52,7 +52,7 @@ Tools = [
         "type": "function",
         "function": {
             "name": "web",
-            "description": f"Perform a quick simple web search for relevant realtime information.",
+            "description": f"Perform a web search for realtime information.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -68,12 +68,12 @@ Tools = [
                     },
                     "full_context": {
                         "type": "boolean",
-                        "description": " determines whether scraped web content should be split into smaller segments or processed as a whole. use False for full content or True for smaller segments",
+                        "description": "whether scraped web content full context for better understanding or only relevant chunks",
                         "default": False
                     },
                     "number_of_citations": {
                         "type": "integer",
-                        "description": "Maximum citations to scrape",
+                        "description": "if full_context is false, number of chunks to return",
                         "default": 4,
                     }
                 },
@@ -84,7 +84,7 @@ Tools = [
         "type": "function",
         "function": {
             "name": "wiki",
-            "description": "Search Wikipedia for the most relevant article introduction",
+            "description": "Search Wikipedia for the most relevant article. useful for getting information about a topic.",
             "parameters": {
                 "type": "object",
                 "properties": {

@@ -41,7 +41,7 @@ async def handle_list_tools() -> List[types.Tool]:
     return [
         types.Tool(
             name="web_search",
-            description=f"Perform a quick simple web search for relevant realtime information. the current date is {datetime.now().strftime('%Y-%m-%d')}.",
+            description=f"Perform a web search for realtime information. the current date is {datetime.now().strftime('%Y-%m-%d')}.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -56,17 +56,17 @@ async def handle_list_tools() -> List[types.Tool]:
                     },
                     "number_of_websites": {
                         "type": "integer",
-                        "description": "Maximum websites to visit",
+                        "description": "number websites to visit.",
                         "default": 4
                     },
                     "full_context": {
                         "type": "boolean",
-                        "description": "whether scraped web content full context for better understanding or only relevant citations",
+                        "description": "whether scraped web content full context for better understanding or only relevant chunks",
                         "default": False
                     },
                     "number_of_chunks": {
                         "type": "integer",
-                        "description": "Maximum citations to scrape",
+                        "description": "if full_context is false, number of chunks to return",
                         "default": 4
                     }
                 },
@@ -75,7 +75,7 @@ async def handle_list_tools() -> List[types.Tool]:
         ),
         types.Tool(
             name="wiki_search",
-            description="Search Wikipedia for the most relevant article introduction",
+            description="Search Wikipedia for the most relevant article. useful for getting information about a topic.",
             inputSchema={
                 "type": "object",
                 "properties": {
