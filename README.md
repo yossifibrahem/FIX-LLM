@@ -128,6 +128,26 @@ python server.py
 or Double-click `serverstart.bat`
 </details>
 
+## How to use the MCP servers
+Add these MCP server to claude desktop congig, LM Studio or any other client
+```json
+{
+    "mcpServers": {
+        "Web": {
+            "command": "python",
+            "args": [
+                "path/to/FIX-LLM/mcp_web.py"
+            ]
+        },
+        "code-interpreter": {
+            "command": "python",
+            "args": [
+                "path/to/FIX-LLM/mcp_web.py"
+            ]
+        }
+    }  
+}
+```
 ### Access the Application
 Open your browser and navigate to http://localhost:8080
 
