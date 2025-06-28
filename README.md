@@ -129,7 +129,7 @@ or Double-click `serverstart.bat`
 </details>
 
 ## How to use the MCP servers
-Add these MCP server to claude desktop congig, LM Studio or any other client
+Add these MCP server config to claude desktop config file, LM Studio or any other client
 ```json
 {
     "mcpServers": {
