@@ -2,8 +2,8 @@ import json
 import urllib.parse
 import urllib.request
 
-def fetch_wikipedia_content(search_query: str) -> dict:
-    """Fetches wikipedia content for a given search_query"""
+def fetch_wikipedia_content(search_query: str, full_article: bool = False) -> dict:
+    """Fetches wikipedia content for a given search_query."""
     try:
         # Search for most relevant article
         search_url = "https://en.wikipedia.org/w/api.php"
@@ -34,10 +34,11 @@ def fetch_wikipedia_content(search_query: str) -> dict:
             "format": "json",
             "titles": normalized_title,
             "prop": "extracts",
-            "exintro": "true",
             "explaintext": "true",
             "redirects": 1,
         }
+        if not full_article:
+            content_params["exintro"] = "true"
 
         url = f"{search_url}?{urllib.parse.urlencode(content_params)}"
         with urllib.request.urlopen(url) as response:
@@ -57,6 +58,7 @@ def fetch_wikipedia_content(search_query: str) -> dict:
             "status": "success",
             "content": content,
             "title": pages[page_id]["title"],
+            "full_article": full_article
         }
 
     except Exception as e:

@@ -90,6 +90,11 @@ Tools = [
                 "properties": {
                     "query": {"type": "string", "description": "Search query for Wikipedia article"}
                 },
+                "full_article": {
+                    "type": "boolean",
+                    "description": "If True, returns the full article content. If False, returns only the introduction.",
+                    "default": False
+                },
                 "required": ["query"]
             }
         }
@@ -322,7 +327,7 @@ def chat():
                             )
                         
                         elif tool_name == "wiki":
-                            result = wiki(arguments["query"])
+                            result = wiki(arguments["query"], arguments.get("full_article", False))
 
                         elif tool_name == "URL":
                             result = URL(arguments["url"])

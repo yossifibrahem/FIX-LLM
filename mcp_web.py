@@ -82,6 +82,11 @@ async def handle_list_tools() -> List[types.Tool]:
                     "query": {
                         "type": "string",
                         "description": "Search query for Wikipedia article"
+                    },
+                    "full_article": {
+                        "type": "boolean",
+                        "description": "If True, returns the full article content. If False, returns only the introduction.",
+                        "default": False
                     }
                 },
                 "required": ["query"]
@@ -187,10 +192,11 @@ async def handle_call_tool(
         
         elif name == "wiki_search":
             query = arguments.get("query", "")
+            full_article = arguments.get("full_article", False)
             if not query:
                 raise ValueError("Query parameter is required")
             
-            result = await asyncio.to_thread(wiki_search, query)
+            result = await asyncio.to_thread(wiki_search, query, full_article)
             return [
                 types.TextContent(
                     type="text",
