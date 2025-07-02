@@ -57,10 +57,7 @@ Tools = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query for websites"},
-                    "keywords": {
-                        "type": "array","items": {"type": "string"}, 
-                        "description": "list of Key word used for finding relevant citations"
-                        },
+                    
                     "number_of_websites": {
                         "type": "integer",
                         "description": "Maximum websites to visit",
@@ -68,8 +65,12 @@ Tools = [
                     },
                     "full_context": {
                         "type": "boolean",
-                        "description": "whether scraped web content full context for better understanding or only relevant chunks",
+                        "description": "Whether to return full context from the websites or only relevant citations. set to true for detailed information. or false for concise information.",
                         "default": False
+                    },
+                    "keywords": {
+                        "type": "array","items": {"type": "string"}, 
+                        "description": "if full_context is false, list of Key word used for finding relevant citations"
                     },
                     "number_of_citations": {
                         "type": "integer",

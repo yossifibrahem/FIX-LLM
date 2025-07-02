@@ -49,11 +49,6 @@ async def handle_list_tools() -> List[types.Tool]:
                         "type": "string",
                         "description": "Search query for websites"
                     },
-                    "Key_words": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "list of Key word used for finding relevant citations"
-                    },
                     "number_of_websites": {
                         "type": "integer",
                         "description": "number websites to visit.",
@@ -61,8 +56,13 @@ async def handle_list_tools() -> List[types.Tool]:
                     },
                     "full_context": {
                         "type": "boolean",
-                        "description": "whether scraped web content full context for better understanding or only relevant chunks",
+                        "description": "Whether to return full context from the websites or only relevant citations. set to true for detailed information. or false for concise information.",
                         "default": False
+                    },
+                    "Key_words": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "if full_context is false, list of Key word used for finding relevant citations"
                     },
                     "number_of_chunks": {
                         "type": "integer",
