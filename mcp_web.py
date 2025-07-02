@@ -70,7 +70,7 @@ async def handle_list_tools() -> List[types.Tool]:
                         "default": 4
                     }
                 },
-                "required": ["query", "Key_words"]
+                "required": ["query"]
             }
         ),
         types.Tool(
@@ -177,8 +177,6 @@ async def handle_call_tool(
             
             if not query:
                 raise ValueError("Query parameter is required")
-            if not keywords:
-                raise ValueError("Key_words parameter is required")
 
             result = await asyncio.to_thread(
                 web_search, query, keywords, full_context, num_websites, num_citations

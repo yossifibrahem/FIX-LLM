@@ -78,7 +78,7 @@ Tools = [
                         "default": 4,
                     }
                 },
-                "required": ["query", "keywords"]
+                "required": ["query"]
             }
         }
     }, {
