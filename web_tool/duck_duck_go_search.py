@@ -1,5 +1,5 @@
-from duckduckgo_search import DDGS
-
+from ddgs import DDGS
+# import json
 class DuckDuckGoSearchManager:
     """
     A class to perform various types of web searches using DuckDuckGo.
@@ -16,10 +16,10 @@ class DuckDuckGoSearchManager:
         Returns:
         - list of str: A list containing the URLs of the search results. Each URL in the list corresponds to a page that matches the search query.
         """
-        with DDGS() as ddgs:
-            results = ddgs.text(query, max_results=num_results)
-            urls = [result['href'] for result in results]
-            return urls
+        ddgs = DDGS()
+        results = ddgs.text(query, max_results=num_results)
+        urls = [result['href'] for result in results]
+        return urls
 
     def news_search(self, query, num_results=3) -> list:
         """
@@ -32,10 +32,10 @@ class DuckDuckGoSearchManager:
         Returns:
         - list of str: A list containing the URLs of the news articles. Each URL in the list corresponds to a news article that matches the search query.
         """
-        with DDGS() as ddgs:
-            results = ddgs.news(query, max_results=num_results)
-            urls = [result['url'] for result in results]
-            return urls
+        ddgs = DDGS()
+        results = ddgs.news(query, max_results=num_results)
+        urls = [result['url'] for result in results]
+        return urls
 
     def images_search(self, query, num_results=3) -> list:
         """
@@ -50,11 +50,11 @@ class DuckDuckGoSearchManager:
             'image': URL of the actual image,
             'thumbnail': URL of the thumbnail of the image.
         """
-        with DDGS() as ddgs:
-            results = ddgs.images(query, max_results=num_results)
-            # Extract image and thumbnail URLs
-            image_info = [{'image': result['image'], 'thumbnail': result['thumbnail']} for result in results]
-            return image_info
+        ddgs = DDGS()
+        results = ddgs.images(query, max_results=num_results)
+        # Extract image and thumbnail URLs
+        image_info = [{'image': result['image'], 'thumbnail': result['thumbnail']} for result in results]
+        return image_info
 
     def videos_search(self, query, num_results=3):
         """
@@ -68,10 +68,10 @@ class DuckDuckGoSearchManager:
         - list of dict: A list where each dictionary contains 'title' and 'content' keys.
           'title' is the title of the video, and 'content' is the URL of the video.
         """
-        with DDGS() as ddgs:
-            results = ddgs.videos(query, max_results=num_results)
-            video_info = [{'title': result['title'], 'content': result['content']} for result in results]
-            return video_info
+        ddgs = DDGS()
+        results = ddgs.videos(query, max_results=num_results)
+        video_info = [{'title': result['title'], 'content': result['content']} for result in results]
+        return video_info
 
     def maps_search(self, query, place, num_results=3):
         """
@@ -92,14 +92,14 @@ class DuckDuckGoSearchManager:
 
         Each dictionary represents one map search result, providing concise details about a location relevant to the search query.
         """
-        with DDGS() as ddgs:
-            results = ddgs.maps(query, place, max_results=num_results)
-            map_info = [{'title': result['title'],
-                         'address': result['address'],
-                         'phone': result.get('phone', 'Not available'),
-                         'url': result.get('url', 'Not available'),
-                         'operating_hours': result.get('hours', 'Not available')} for result in results]
-            return map_info
+        ddgs = DDGS()
+        results = ddgs.maps(query, place=place, max_results=num_results)
+        map_info = [{'title': result['title'],
+                     'address': result['address'],
+                     'phone': result.get('phone', 'Not available'),
+                     'url': result.get('url', 'Not available'),
+                     'operating_hours': result.get('hours', 'Not available')} for result in results]
+        return map_info
 
 
 # if __name__ == "__main__":
