@@ -56,7 +56,7 @@ async def handle_list_tools() -> List[types.Tool]:
                     "full_context": {
                         "type": "boolean",
                         "description": "Whether to return full context from the websites or only relevant citations. set to true for detailed information. or false for concise information.",
-                        "default": False
+                        "default": True
                     },
                     "Key_words": {
                         "type": "array",
@@ -152,7 +152,7 @@ async def handle_call_tool(
             query = arguments.get("query", "")
             keywords = arguments.get("Key_words", [query])
             num_websites = arguments.get("number_of_websites", 4)
-            full_context = arguments.get("full_context", False)
+            full_context = arguments.get("full_context", True)
             num_citations = arguments.get("number_of_chunks", 4)
             
             if not query:
