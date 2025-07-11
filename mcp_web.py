@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MCP Server with web browsing, Wikipedia, and YouTube tools
+MCP Server with web browsing and YouTube tools
 """
 
 import asyncio
@@ -20,7 +20,6 @@ from web_tool.web_browsing import (
     webpage_scraper_bs4 as scrape_webpage,
     images_search as image_search,
 )
-from wiki_tool.search_wiki import fetch_wikipedia_content as wiki_search
 from youtube_tool.youtube import (
     search_youtube as youtube_search,
     get_video_info as youtube_info,
@@ -68,25 +67,6 @@ async def handle_list_tools() -> List[types.Tool]:
                         "type": "integer",
                         "description": "if full_context is false, number of chunks to return",
                         "default": 4
-                    }
-                },
-                "required": ["query"]
-            }
-        ),
-        types.Tool(
-            name="wiki_search",
-            description="Search Wikipedia for the most relevant article. useful for getting information about a topic.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": "Search query for Wikipedia article"
-                    },
-                    "full_article": {
-                        "type": "boolean",
-                        "description": "If True, returns the full article content. If False, returns only the introduction.",
-                        "default": False
                     }
                 },
                 "required": ["query"]
@@ -181,20 +161,6 @@ async def handle_call_tool(
             result = await asyncio.to_thread(
                 web_search, query, keywords, full_context, num_websites, num_citations
             )
-            return [
-                types.TextContent(
-                    type="text",
-                    text=str(result)
-                )
-            ]
-        
-        elif name == "wiki_search":
-            query = arguments.get("query", "")
-            full_article = arguments.get("full_article", False)
-            if not query:
-                raise ValueError("Query parameter is required")
-            
-            result = await asyncio.to_thread(wiki_search, query, full_article)
             return [
                 types.TextContent(
                     type="text",
