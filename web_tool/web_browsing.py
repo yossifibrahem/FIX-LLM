@@ -85,7 +85,8 @@ def text_search_bs4(query: str, keywords: list, full_context: bool = True, num_w
         return {"url": "error", "citation": str(e)}    
 
 
-# def images_search(query, num_results=3):
+def images_search(query, num_results=3):
+    pass
 #     """Performs the image search for a specific query. For example, "puppies". If possible, the output should be in Markdown format.
 
 #     This function enables real-time image search and information retrieval for GPT models. It fetches relevant data from the internet in response to user queries, enhancing GPT's knowledge base.
