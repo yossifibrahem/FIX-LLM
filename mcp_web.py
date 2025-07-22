@@ -51,7 +51,7 @@ async def handle_list_tools() -> List[types.Tool]:
                     "number_of_websites": {
                         "type": "integer",
                         "description": "number websites to visit.",
-                        "default": 4
+                        "default": 2
                     },
                     "full_context": {
                         "type": "boolean",
@@ -151,7 +151,7 @@ async def handle_call_tool(
         if name == "web_search":
             query = arguments.get("query", "")
             keywords = arguments.get("Key_words", [query])
-            num_websites = arguments.get("number_of_websites", 4)
+            num_websites = arguments.get("number_of_websites", 2)
             full_context = arguments.get("full_context", True)
             num_citations = arguments.get("number_of_chunks", 4)
             
