@@ -17,7 +17,7 @@ import mcp.types as types
 # Tool imports
 from web_tool.web_browsing import (
     text_search_bs4 as web_search,
-    webpage_scraper_bs4 as scrape_webpage,
+    webpage_scraper_bs4 as scrape_website,
     images_search as image_search,
 )
 from youtube_tool.youtube import (
@@ -40,7 +40,7 @@ async def handle_list_tools() -> List[types.Tool]:
     return [
         types.Tool(
             name="web_search",
-            description=f"Perform a web search for realtime information. the current date is {datetime.now().strftime('%Y-%m-%d')}.",
+            description=f"Perform a web search for realtime information, return list of URLs. use the scrape_website to scrape the content of the URLs. the current date is {datetime.now().strftime('%Y-%m-%d')}.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -53,27 +53,27 @@ async def handle_list_tools() -> List[types.Tool]:
                         "description": "number websites to visit.",
                         "default": 2
                     },
-                    "full_context": {
-                        "type": "boolean",
-                        "description": "Whether to return full context from the websites or only relevant citations. set to true for detailed information. or false for concise information.",
-                        "default": True
-                    },
-                    "Key_words": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "if full_context is false, list of Key word used for finding relevant citations"
-                    },
-                    "number_of_chunks": {
-                        "type": "integer",
-                        "description": "if full_context is false, number of chunks to return",
-                        "default": 4
-                    }
+                    # "full_context": {
+                    #     "type": "boolean",
+                    #     "description": "Whether to return full context from the websites or only relevant citations. set to true for detailed information. or false for concise information.",
+                    #     "default": True
+                    # },
+                    # "Key_words": {
+                    #     "type": "array",
+                    #     "items": {"type": "string"},
+                    #     "description": "if full_context is false, list of Key word used for finding relevant citations"
+                    # },
+                    # "number_of_chunks": {
+                    #     "type": "integer",
+                    #     "description": "if full_context is false, number of chunks to return",
+                    #     "default": 4
+                    # }
                 },
                 "required": ["query"]
             }
         ),
         types.Tool(
-            name="scrape_webpage",
+            name="scrape_website",
             description="Scrape a website for its content",
             inputSchema={
                 "type": "object",
@@ -168,12 +168,12 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "scrape_webpage":
+        elif name == "scrape_website":
             url = arguments.get("url", "")
             if not url:
                 raise ValueError("URL parameter is required")
             
-            result = await asyncio.to_thread(scrape_webpage, url)
+            result = await asyncio.to_thread(scrape_website, url)
             return [
                 types.TextContent(
                     type="text",
