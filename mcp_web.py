@@ -17,12 +17,12 @@ import mcp.types as types
 # Tool imports
 from web_tool.web_browsing import (
     text_search_bs4 as web_search,
-    webpage_scraper_bs4 as scrape_website,
+    webpage_scraper_bs4 as web_scrape,
     images_search as image_search,
 )
 from youtube_tool.youtube import (
     search_youtube as youtube_search,
-    get_video_info as youtube_info,
+    get_video_info as youtube_scrape,
 )
 
 # Configure logging
@@ -40,7 +40,7 @@ async def handle_list_tools() -> List[types.Tool]:
     return [
         types.Tool(
             name="web_search",
-            description=f"Perform a web search for realtime information, the current date is {datetime.now().strftime('%Y-%m-%d')}.",
+            description=f"Perform a web search for realtime information and scrape the top results, the current date is {datetime.now().strftime('%Y-%m-%d')}.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -50,7 +50,7 @@ async def handle_list_tools() -> List[types.Tool]:
                     },
                     "number_of_websites": {
                         "type": "integer",
-                        "description": "number websites to visit.",
+                        "description": "number websites to scrape.",
                         "default": 2
                     },
                     "full_context": {
@@ -73,7 +73,7 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="scrape_website",
+            name="web_scrape",
             description="Scrape a website for its content",
             inputSchema={
                 "type": "object",
@@ -125,7 +125,7 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="youtube_info",
+            name="youtube_scrape",
             description="Get information about a youtube video (title, description and transcription)",
             inputSchema={
                 "type": "object",
@@ -168,12 +168,12 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "scrape_website":
+        elif name == "web_scrape":
             url = arguments.get("url", "")
             if not url:
                 raise ValueError("URL parameter is required")
             
-            result = await asyncio.to_thread(scrape_website, url)
+            result = await asyncio.to_thread(web_scrape, url)
             return [
                 types.TextContent(
                     type="text",
@@ -211,12 +211,12 @@ async def handle_call_tool(
                 )
             ]
         
-        elif name == "youtube_info":
+        elif name == "youtube_scrape":
             url = arguments.get("url", "")
             if not url:
                 raise ValueError("URL parameter is required")
             
-            result = await asyncio.to_thread(youtube_info, url)
+            result = await asyncio.to_thread(youtube_scrape, url)
             return [
                 types.TextContent(
                     type="text",

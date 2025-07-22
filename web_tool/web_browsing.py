@@ -39,7 +39,7 @@ def text_search(query: str, keywords: list, full_context: bool = True, num_websi
         citations = min(citations, 10)        # Maximum 10 citations
         
         # urls = ddg.text_search(query, int(num_websites))
-        results = search_engine.search_with_retry(query, num_results=5, max_retries=2)
+        results = search_engine.search_with_retry(query, num_websites, max_retries=2)
         urls = [result.url for result in results]
         scraped_data = asyncio.run(scrape_multiple_websites(urls))
         if full_context:
@@ -71,7 +71,7 @@ def text_search_bs4(query: str, keywords: list, full_context: bool = True, num_w
         citations = min(citations, 10)        # Maximum 10 citations
         
         # urls = ddg.text_search(query, int(num_websites))
-        results = search_engine.search_with_retry(query, num_results=5, max_retries=2)
+        results = search_engine.search_with_retry(query, num_websites, max_retries=2)
         urls = [result.url for result in results]
         scraped_data = scraper.scrape_multiple_websites(
             urls, 
