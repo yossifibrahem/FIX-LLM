@@ -31,13 +31,14 @@ async def handle_list_tools() -> List[types.Tool]:
     return [
         types.Tool(
             name="python_interpreter",
-            description="Execute Python code and return the execution results. Use as calculator or task automation.",
+            description="This function executes Python code dynamically and returns structured results including output, errors, and success status." \
+            " It captures print statements and provides detailed error tracebacks when code execution fails.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "code": {
                         "type": "string",
-                        "description": "Complete Python script to execute. Must return a value."
+                        "description": "Complete Python script to execute. can be a single line or multiple lines of code."
                     }
                 },
                 "required": ["code"]
