@@ -73,14 +73,15 @@ def text_search_bs4(query: str, keywords: list, full_context: bool = True, num_w
         # urls = ddg.text_search(query, int(num_websites))
         results = search_engine.search_with_retry(query, num_results=5, max_retries=2)
         urls = [result.url for result in results]
-        scraped_data = scraper.scrape_multiple_websites(
-            urls, 
-            max_workers=3,
-        )
-        if full_context:
-            return scraped_data
-        filtered_data = find_most_similar_content(scraped_data, keywords, citations)
-        return filtered_data
+        return urls
+        # scraped_data = scraper.scrape_multiple_websites(
+        #     urls, 
+        #     max_workers=3,
+        # )
+        # if full_context:
+        #     return scraped_data
+        # filtered_data = find_most_similar_content(scraped_data, keywords, citations)
+        # return filtered_data
     except Exception as e:
         return {"url": "error", "citation": str(e)}    
 
