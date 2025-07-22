@@ -384,7 +384,7 @@ function addResult(name, data, args, messageElement) {
                 ${args.code ? `<pre><code class="language-python">${escapeHtml(args.code)}</code></pre>` : ''}
                 ${data.success ? 
                     `${data.output ? `<pre><code class="language-shell">${escapeHtml(data.output)}</code></pre>` : ''}
-                    ${data.result !== null ? `<pre><code class="language-json">${escapeHtml(JSON.stringify(data.result, null, 2))}</code></pre>` : ''}`
+                    ${data.result !== null ? `<pre><code class="language-json">${escapeHtml(JSON.stringify(data.return_value, null, 2))}</code></pre>` : ''}`
                     : `<div class="text-red-500"><pre><code class="language-shell">${escapeHtml(data.error)}</code></pre></div>`}
             `;
             return {
