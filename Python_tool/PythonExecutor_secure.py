@@ -1,234 +1,309 @@
-from io import StringIO
-import os
-import traceback
-from typing import Dict, Optional, Tuple, Generator
-import contextlib
 import sys
-import json
+import os
+import platform
+from io import StringIO
+import traceback
 import threading
-import ctypes
-import re
+import time
+from contextlib import contextmanager
 
+# Check if we're on a Unix-like system
+IS_UNIX = platform.system() != 'Windows'
 
-class ThreadWithException(threading.Thread):
-    """A Thread subclass that can be stopped by forcing an exception."""
+if IS_UNIX:
+    import signal
+
+@contextmanager
+def timeout_handler(seconds):
+    """Cross-platform context manager for handling timeouts"""
     
-    def _get_id(self):
-        # Returns the thread ID
-        if hasattr(self, '_thread_id'):
-            return self._thread_id
-        for id, thread in threading._active.items():
-            if thread is self:
-                self._thread_id = id
-                return id
-
-    def raise_exception(self):
-        """Raises KeyboardInterrupt in the thread to stop it."""
-        thread_id = self._get_id()
-        if thread_id is not None:
-            res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
-                ctypes.c_long(thread_id),
-                ctypes.py_object(KeyboardInterrupt)
-            )
-            if res > 1:
-                # If more than one exception was raised, something went wrong
-                ctypes.pythonapi.PyThreadState_SetAsyncExc(
-                    ctypes.c_long(thread_id),
-                    None
-                )
-                raise RuntimeError("Failed to stop thread")
-
-class PythonExecutor:
-    """
-    A tool for safely executing Python code and capturing its output.
-    Windows-compatible version with timeout support.
-    """
-    
-    def __init__(self):
-        self.global_state: Dict = {}
-        self.execution_result = None
-        self.blocked_imports = ["os", "sys", "subprocess", "shutil"]
-        self.blocked_keywords = [
-            "exec", "eval", "open", "os.system", "subprocess", "ctypes", "importlib" , "input"
-        ]
-
-    @contextlib.contextmanager
-    def _capture_output(self) -> Generator[Tuple[StringIO, StringIO], None, None]:
-        """Capture stdout and stderr"""
-        new_out, new_err = StringIO(), StringIO()
-        old_out, old_err = sys.stdout, sys.stderr
+    if IS_UNIX:
+        # Unix-like systems: use signal-based timeout
+        def timeout_signal(signum, frame):
+            raise TimeoutError(f"Code execution timed out after {seconds} seconds")
+        
+        # Set the signal handler
+        old_handler = signal.signal(signal.SIGALRM, timeout_signal)
+        signal.alarm(seconds)
+        
         try:
-            sys.stdout, sys.stderr = new_out, new_err
-            yield sys.stdout, sys.stderr
+            yield
         finally:
-            sys.stdout, sys.stderr = old_out, old_err
-
-    def _is_code_safe(self, code: str) -> bool:
-        """Check if the provided code contains unsafe imports or keywords."""
-        # Check for blocked imports
-        for module in self.blocked_imports:
-            if re.search(rf"\bimport\s+{module}\b|\bfrom\s+{module}\b", code):
-                return False
-
-        # Check for blocked keywords
-        for keyword in self.blocked_keywords:
-            if keyword in code:
-                return False
-
-        return True
-
-    def _execute_code(self, code: str):
-        """Execute code and store the result"""
-        result = {
-            'success': False,
-            'output': '',
-            'error': None,
-            'result': None
-        }
-
-        # Security check
-        if not self._is_code_safe(code):
-            result['error'] = "SecurityError: Unsafe code detected"
-            self.execution_result = result
-            return
-        
-        with self._capture_output() as (out, err):
-            try:
-                # Execute the code within the global state
-                exec_globals = {
-                    '__builtins__': __builtins__,
-                    **self.global_state
-                }
-                
-                # Try to compile the code first to catch syntax errors
-                compiled_code = compile(code, '<string>', 'exec')
-                
-                # Execute the code
-                exec(compiled_code, exec_globals)
-                
-                # Update global state
-                self.global_state.update(exec_globals)
-                
-                # Get output
-                result['output'] = out.getvalue()
-                result['success'] = True
-                
-                # Try to get the last expression result
-                # Split by both newlines and semicolons
-                lines = [line.strip() for line in re.split(r'[;\n]', code) if line.strip()]
-                if lines:
-                    try:
-                        last_expr = compile(lines[-1], '<string>', 'eval')
-                        result['result'] = eval(last_expr, exec_globals)
-                    except:
-                        pass
-                    
-            except KeyboardInterrupt:
-                result['error'] = 'Execution timed out'
-                result['output'] = out.getvalue()
-            except Exception as e:
-                result['error'] = f"{type(e).__name__}: {str(e)}\n{traceback.format_exc()}"
-                result['output'] = out.getvalue()
-
-        if not is_json_serializable(result):
-            result = make_json_serializable(result)
-        self.execution_result = result
-            
-    def execute(self, code: str, timeout: Optional[int] = 10) -> Dict:
-        """
-        Execute Python code with timeout and return the results.
-        
-        Args:
-            code: String containing Python code to execute
-            timeout: Maximum execution time in seconds
-            
-        Returns:
-            Dictionary containing execution results
-        """
-        if timeout is None or timeout <= 0:
-            timeout = float('inf')
-        
-        # Create and start execution thread
-        execution_thread = ThreadWithException(target=self._execute_code, args=(code,))
-        execution_thread.start()
-        
-        # Wait for completion or timeout
-        execution_thread.join(timeout)
-        
-        # If thread is still alive after join, it's running too long
-        if execution_thread.is_alive():
-            execution_thread.raise_exception()
-            execution_thread.join()
-            return {
-                'success': False,
-                'output': '',
-                'error': f'Execution timed out after {timeout} seconds',
-                'result': None
-            }
-            
-        return self.execution_result or {
-            'success': False,
-            'output': '',
-            'error': 'Execution failed with no result',
-            'result': None
-        }
+            # Restore the old handler and cancel the alarm
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, old_handler)
     
-    def reset_state(self):
-        """Clear the stored global state"""
-        self.global_state = {}
-
-# Example usage
-def execute_python_code(code: str, timeout: int = 5) -> dict:
-    """
-    Execute Python code and return the execution results.
-    
-    Args:
-        code: String containing the Python code to execute
-        timeout: Maximum execution time in seconds (default: 5)
-        
-    Returns:
-        Dictionary containing:
-        - success: Boolean indicating if execution was successful
-        - output: Captured stdout content
-        - error: Error message if execution failed
-        - result: Last evaluated expression result
-    """
-    executor = PythonExecutor()
-    return executor.execute(code, timeout)
-
-def is_json_serializable(data):
-    try:
-        json.dumps(data)
-        return True
-    except (TypeError, OverflowError):
-        return False
-
-import numpy as np
-def make_json_serializable(data):
-    """
-    Convert non-JSON-serializable data to a JSON-serializable format.
-    
-    Args:
-        data: The data to convert.
-        
-    Returns:
-        The JSON-serializable data.
-    """
-    if isinstance(data, np.ndarray):
-        return data.tolist()
-    elif isinstance(data, (set,)):
-        return list(data)
-    elif isinstance(data, (bytes, bytearray)):
-        return data.decode('utf-8')
-    elif isinstance(data, (complex,)):
-        return [data.real, data.imag]
-    elif isinstance(data, (np.generic,)):
-        return data.item()
-    elif isinstance(data, (dict,)):
-        return {make_json_serializable(k): make_json_serializable(v) for k, v in data.items()}
-    elif isinstance(data, (list, tuple)):
-        return [make_json_serializable(item) for item in data]
-    elif isinstance(data, (int, float, str, bool, type(None))):
-        return data
     else:
-        return str(data)
+        # Windows: use thread-based timeout
+        result = [None]
+        exception = [None]
+        completed = [False]
+        
+        def execute_with_timeout():
+            try:
+                # This will be overridden by the actual execution
+                pass
+            except Exception as e:
+                exception[0] = e
+            finally:
+                completed[0] = True
+        
+        # We'll use this context manager differently for Windows
+        # The actual execution will be handled in the calling functions
+        yield
+        
+        # For Windows, timeout handling is done in individual functions
+
+def execute_with_thread_timeout(func, timeout, *args, **kwargs):
+    """Execute a function with timeout using threading (Windows-compatible)"""
+    result = [None]
+    exception = [None]
+    
+    def target():
+        try:
+            result[0] = func(*args, **kwargs)
+        except Exception as e:
+            exception[0] = e
+    
+    thread = threading.Thread(target=target)
+    thread.daemon = True
+    thread.start()
+    thread.join(timeout)
+    
+    if thread.is_alive():
+        # Note: We can't actually kill the thread, but we can timeout
+        raise TimeoutError(f"Operation timed out after {timeout} seconds")
+    
+    if exception[0]:
+        raise exception[0]
+    
+    return result[0]
+
+def _execute_code_core(code, namespace):
+    """Core execution function for threading"""
+    # Check if the code ends with an expression that should return a value
+    lines = code.strip().split('\n')
+    if lines:
+        last_line = lines[-1].strip()
+        
+        try:
+            if len(lines) > 1:
+                exec('\n'.join(lines[:-1]), namespace)
+            return eval(last_line, namespace)
+        except:
+            # If eval fails, execute as statement
+            exec(code, namespace)
+            return None
+    else:
+        exec(code, namespace)
+        return None
+
+def _evaluate_expression_core(expression, namespace):
+    """Core evaluation function for threading"""
+    return eval(expression, namespace)
+
+def execute_python_code(code, timeout=10):
+    """
+    Execute Python code dynamically and return the result.
+    
+    Args:
+        code (str): Python code to execute
+        timeout (int): Execution timeout in seconds (default: 10)
+    
+    Returns:
+        dict: Contains 'success', 'output', 'error', and 'return_value' keys
+    """
+    # Capture stdout
+    old_stdout = sys.stdout
+    sys.stdout = captured_output = StringIO()
+    
+    result = {
+        'success': False,
+        'output': '',
+        'error': '',
+        'return_value': None
+    }
+    
+    try:
+        # Create a namespace for execution
+        namespace = {'__builtins__': __builtins__}
+        
+        if IS_UNIX:
+            # Unix: use signal-based timeout
+            with timeout_handler(timeout):
+                exec_result = _execute_code_core(code, namespace)
+        else:
+            # Windows: use thread-based timeout
+            exec_result = execute_with_thread_timeout(_execute_code_core, timeout, code, namespace)
+        
+        # Get captured output
+        output = captured_output.getvalue()
+        
+        result.update({
+            'success': True,
+            'output': output,
+            'return_value': exec_result
+        })
+        
+    except TimeoutError as e:
+        # Handle timeout specifically
+        result.update({
+            'success': False,
+            'error': str(e),
+            'output': captured_output.getvalue()
+        })
+        
+    except Exception as e:
+        # Capture the error
+        error_msg = traceback.format_exc()
+        result.update({
+            'success': False,
+            'error': error_msg,
+            'output': captured_output.getvalue()
+        })
+        
+    finally:
+        # Restore stdout
+        sys.stdout = old_stdout
+    
+    return result
+
+def execute_python_expression(expression, timeout=5):
+    """
+    Evaluate a Python expression and return the result.
+    
+    Args:
+        expression (str): Python expression to evaluate
+        timeout (int): Evaluation timeout in seconds (default: 5)
+    
+    Returns:
+        dict: Contains 'success', 'result', and 'error' keys
+    """
+    result = {
+        'success': False,
+        'result': None,
+        'error': ''
+    }
+    
+    try:
+        if IS_UNIX:
+            # Unix: use signal-based timeout
+            with timeout_handler(timeout):
+                # Create a safe namespace
+                namespace = {'__builtins__': __builtins__}
+                eval_result = eval(expression, namespace)
+        else:
+            # Windows: use thread-based timeout
+            namespace = {'__builtins__': __builtins__}
+            eval_result = execute_with_thread_timeout(_evaluate_expression_core, timeout, expression, namespace)
+        
+        result.update({
+            'success': True,
+            'result': eval_result
+        })
+        
+    except TimeoutError as e:
+        result.update({
+            'success': False,
+            'error': str(e)
+        })
+        
+    except Exception as e:
+        error_msg = traceback.format_exc()
+        result.update({
+            'success': False,
+            'error': error_msg
+        })
+    
+    return result
+
+# # Example usage:
+# if __name__ == "__main__":
+#     print(f"Running on: {platform.system()}")
+#     print(f"Using {'signal-based' if IS_UNIX else 'thread-based'} timeout\n")
+    
+#     # Test with a simple print statement
+#     code1 = """
+# print("Hello, World!")
+# x = 5 + 3
+# print(f"5 + 3 = {x}")
+# x * 2
+# """
+    
+#     result1 = execute_python_code(code1)
+#     print("Example 1:")
+#     print(f"Success: {result1['success']}")
+#     print(f"Output: {result1['output']}")
+#     print(f"Return Value: {result1['return_value']}")
+    
+#     # Test with an expression
+#     expr = "2 ** 10"
+#     result2 = execute_python_expression(expr)
+#     print("\nExample 2:")
+#     print(f"Success: {result2['success']}")
+#     print(f"Result: {result2['result']}")
+    
+#     # Test code that returns a value
+#     code2 = """
+# def calculate():
+#     return 10 * 5 + 3
+
+# result = calculate()
+# result
+# """
+    
+#     result2b = execute_python_code(code2)
+#     print("\nExample 2b (code with return value):")
+#     print(f"Success: {result2b['success']}")
+#     print(f"Output: {result2b['output']}")
+#     print(f"Return Value: {result2b['return_value']}")
+    
+#     # Test with an error
+#     code3 = "print(undefined_variable)"
+#     result3 = execute_python_code(code3)
+#     print("\nExample 3 (error):")
+#     print(f"Success: {result3['success']}")
+#     print(f"Error: {result3['error']}")
+    
+#     # Test with timeout
+#     code4 = """
+# import time
+# print("Starting long operation...")
+# time.sleep(15)
+# print("This shouldn't print due to timeout")
+# """
+    
+#     result4 = execute_python_code(code4, timeout=3)
+#     print("\nExample 4 (timeout):")
+#     print(f"Success: {result4['success']}")
+#     print(f"Error: {result4['error']}")
+#     print(f"Output: {result4['output']}")
+    
+#     # Test expression timeout (might be too fast to timeout on some systems)
+#     print("\nExample 5 (expression timeout test):")
+#     try:
+#         expr_slow = "sum(range(10**7))"  # Reduced size for reliable timeout
+#         result5 = execute_python_expression(expr_slow, timeout=1)
+#         print(f"Success: {result5['success']}")
+#         if not result5['success']:
+#             print(f"Error: {result5['error']}")
+#         else:
+#             print(f"Result: {result5['result']}")
+#     except Exception as e:
+#         print(f"Test failed: {e}")
+    
+#     # Test with list comprehension as last line
+#     code6 = """
+# numbers = [1, 2, 3, 4, 5]
+# [x**2 for x in numbers]
+# """
+    
+#     result6 = execute_python_code(code6)
+#     print("\nExample 6 (list comprehension return):")
+#     print(f"Success: {result6['success']}")
+#     print(f"Return Value: {result6['return_value']}")
+    
+#     # Platform-specific timeout behavior note
+#     if not IS_UNIX:
+#         print("\nNote: On Windows, thread-based timeouts may not interrupt")
+#         print("certain blocking operations as effectively as signal-based timeouts on Unix.")

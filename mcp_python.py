@@ -14,7 +14,7 @@ import mcp.server.stdio
 import mcp.types as types
 
 # Tool imports
-from Python_tool.PythonExecutor_secure import execute_python_code as python_interpreter
+from Python_tool.PythonExecutor_secure import execute_python_code, execute_python_expression
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -30,7 +30,7 @@ async def handle_list_tools() -> List[types.Tool]:
     """
     return [
         types.Tool(
-            name="python_interpreter",
+            name="execute_python_code",
             description="This function executes Python code dynamically and returns structured results including output, errors, and success status." \
             " It captures print statements and provides detailed error tracebacks when code execution fails.",
             inputSchema={
@@ -38,10 +38,28 @@ async def handle_list_tools() -> List[types.Tool]:
                 "properties": {
                     "code": {
                         "type": "string",
-                        "description": "Complete Python script to execute. can be a single line or multiple lines of code."
+                        "description": "Complete Python script to execute. can be multiple lines of code."
+                    },
+                    "timeout": {
+                        "type": "integer",
+                        "description": "Execution timeout in seconds (default: 10)."
                     }
                 },
                 "required": ["code"]
+            }
+        ),
+        types.Tool(
+            name="execute_python_expression",
+            description="Evaluates a single Python expression and returns the computed value.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "expression": {
+                        "type": "string",
+                        "description": "Python expression to evaluate."
+                    }
+                },
+                "required": ["expression"]
             }
         )
     ]
@@ -54,12 +72,24 @@ async def handle_call_tool(
     Handle tool calls.
     """
     try:
-        if name == "python_interpreter":
+        if name == "execute_python_code":
             code = arguments.get("code", "")
             if not code:
                 raise ValueError("Code parameter is required")
             
-            result = await asyncio.to_thread(python_interpreter, code)
+            result = await asyncio.to_thread(execute_python_code, code, arguments.get("timeout", 10))
+            return [
+                types.TextContent(
+                    type="text",
+                    text=str(result)
+                )
+            ]
+        elif name == "execute_python_expression":
+            expression = arguments.get("expression", "")
+            if not expression:
+                raise ValueError("Expression parameter is required")
+            
+            result = await asyncio.to_thread(execute_python_expression, expression)
             return [
                 types.TextContent(
                     type="text",
