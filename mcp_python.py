@@ -56,7 +56,7 @@ async def handle_list_tools() -> List[types.Tool]:
                 "properties": {
                     "expression": {
                         "type": "string",
-                        "description": "Python expression to evaluate."
+                        "description": "Python expression to evaluate. can only be a single line of code."
                     }
                 },
                 "required": ["expression"]
