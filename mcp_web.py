@@ -40,7 +40,7 @@ async def handle_list_tools() -> List[types.Tool]:
     return [
         types.Tool(
             name="web_search",
-            description=f"Perform a web search for realtime information, return list of URLs. use the scrape_website to scrape the content of the URLs. the current date is {datetime.now().strftime('%Y-%m-%d')}.",
+            description=f"Perform a web search for realtime information, the current date is {datetime.now().strftime('%Y-%m-%d')}.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -53,21 +53,21 @@ async def handle_list_tools() -> List[types.Tool]:
                         "description": "number websites to visit.",
                         "default": 2
                     },
-                    # "full_context": {
-                    #     "type": "boolean",
-                    #     "description": "Whether to return full context from the websites or only relevant citations. set to true for detailed information. or false for concise information.",
-                    #     "default": True
-                    # },
-                    # "Key_words": {
-                    #     "type": "array",
-                    #     "items": {"type": "string"},
-                    #     "description": "if full_context is false, list of Key word used for finding relevant citations"
-                    # },
-                    # "number_of_chunks": {
-                    #     "type": "integer",
-                    #     "description": "if full_context is false, number of chunks to return",
-                    #     "default": 4
-                    # }
+                    "full_context": {
+                        "type": "boolean",
+                        "description": "Whether to return full context from the websites or only relevant citations. set to true for detailed information. or false for concise information.",
+                        "default": True
+                    },
+                    "Key_words": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "if full_context is false, list of Key word used for finding relevant citations"
+                    },
+                    "number_of_chunks": {
+                        "type": "integer",
+                        "description": "if full_context is false, number of chunks to return",
+                        "default": 4
+                    }
                 },
                 "required": ["query"]
             }
