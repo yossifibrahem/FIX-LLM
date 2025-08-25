@@ -48,20 +48,20 @@ async def handle_list_tools() -> List[types.Tool]:
                 "required": ["code"]
             }
         ),
-        types.Tool(
-            name="execute_python_expression",
-            description="Evaluates a single Python expression and returns the computed value.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "expression": {
-                        "type": "string",
-                        "description": "Python expression to evaluate. can only be a single line of code."
-                    }
-                },
-                "required": ["expression"]
-            }
-        )
+        # types.Tool(
+        #     name="execute_python_expression",
+        #     description="Evaluates a single Python expression and returns the computed value.",
+        #     inputSchema={
+        #         "type": "object",
+        #         "properties": {
+        #             "expression": {
+        #                 "type": "string",
+        #                 "description": "Python expression to evaluate. can only be a single line of code."
+        #             }
+        #         },
+        #         "required": ["expression"]
+        #     }
+        # )
     ]
 
 @server.call_tool()
