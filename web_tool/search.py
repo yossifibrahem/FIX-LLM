@@ -29,9 +29,6 @@ class SearchResult:
     title: str
     url: str
     description: str
-    full_content: str = ''
-    content_preview: str = ''
-    word_count: int = 0
     timestamp: str = ''
     fetch_status: str = 'success'
     

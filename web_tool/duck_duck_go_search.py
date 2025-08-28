@@ -1,3 +1,4 @@
+import json
 from ddgs import DDGS
 # import json
 class DuckDuckGoSearchManager:
@@ -73,37 +74,9 @@ class DuckDuckGoSearchManager:
         video_info = [{'title': result['title'], 'content': result['content']} for result in results]
         return video_info
 
-    def maps_search(self, query, place, num_results=3):
-        """
-        Performs a DuckDuckGo maps search for a specific query and place, returning a list of relevant location details.
 
-        Parameters:
-        - query (str): The search query string for finding relevant map results.
-        - place (str): The geographical area or location to focus the search on.
-        - num_results (int): The maximum number of results to return. Defaults to 3.
-
-        Returns:
-        - list of dict: A list where each dictionary contains the following keys:
-            'title': The name or title of the location.
-            'address': The address of the location.
-            'phone': The phone number of the location, if available.
-            'url': The URL to more information about the location.
-            'operating_hours': The operating hours of the location, if available.
-
-        Each dictionary represents one map search result, providing concise details about a location relevant to the search query.
-        """
-        ddgs = DDGS()
-        results = ddgs.maps(query, place=place, max_results=num_results)
-        map_info = [{'title': result['title'],
-                     'address': result['address'],
-                     'phone': result.get('phone', 'Not available'),
-                     'url': result.get('url', 'Not available'),
-                     'operating_hours': result.get('hours', 'Not available')} for result in results]
-        return map_info
-
-
-# if __name__ == "__main__":
-#     ddg_search = DuckDuckGoSearchManager()
+if __name__ == "__main__":
+    ddg_search = DuckDuckGoSearchManager()
 
 #     # Example usage:
 #     text_results = ddg_search.text_search("Is there any possibility of rain in Berlin today?", 3)
@@ -117,6 +90,3 @@ class DuckDuckGoSearchManager:
 
 #     videos_results = ddg_search.videos_search("puppies", 3)
 #     print("Video Search Results:", json.dumps(videos_results, indent=2, sort_keys=True))
-
-#     maps_results = ddg_search.maps_search("school", "berlin", 3)
-#     print("Maps Search Results:", json.dumps(maps_results, indent=2, sort_keys=True))

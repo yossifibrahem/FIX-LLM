@@ -16,8 +16,8 @@ import mcp.types as types
 
 # Tool imports
 from web_tool.web_browsing import (
-    text_search_bs4 as web_search,
-    webpage_scraper_bs4 as web_scrape,
+    text_search as web_search,
+    webpage_scraper as web_scrape,
     images_search as image_search,
 )
 from youtube_tool.youtube import (
@@ -40,34 +40,19 @@ async def handle_list_tools() -> List[types.Tool]:
     return [
         types.Tool(
             name="web_search",
-            description=f"Perform a web search for realtime information and scrape the top results, the current date is {datetime.now().strftime('%Y-%m-%d')}.",
+            description=f"Perform a web search for realtime information, the current date is {datetime.now().strftime('%Y-%m-%d')}.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "query": {
                         "type": "string",
-                        "description": "Search query for websites"
+                        "description": "Search query for relevant web results"
                     },
-                    "number_of_websites": {
+                    "number_of_results": {
                         "type": "integer",
-                        "description": "number websites to scrape.",
-                        "default": 2
+                        "description": "number of urls to return.",
+                        "default": 10
                     },
-                    "full_context": {
-                        "type": "boolean",
-                        "description": "Whether to return full context from the websites or only relevant citations. set to true for detailed information. or false for concise information.",
-                        "default": True
-                    },
-                    "Key_words": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "if full_context is false, list of Key word used for finding relevant citations"
-                    },
-                    "number_of_chunks": {
-                        "type": "integer",
-                        "description": "if full_context is false, number of chunks to return",
-                        "default": 4
-                    }
                 },
                 "required": ["query"]
             }
@@ -150,17 +135,12 @@ async def handle_call_tool(
     try:
         if name == "web_search":
             query = arguments.get("query", "")
-            keywords = arguments.get("Key_words", [query])
-            num_websites = arguments.get("number_of_websites", 2)
-            full_context = arguments.get("full_context", True)
-            num_citations = arguments.get("number_of_chunks", 4)
+            num_websites = arguments.get("number_of_results", 10)
             
             if not query:
                 raise ValueError("Query parameter is required")
 
-            result = await asyncio.to_thread(
-                web_search, query, keywords, full_context, num_websites, num_citations
-            )
+            result = await asyncio.to_thread(web_search, query, num_websites)
             return [
                 types.TextContent(
                     type="text",
