@@ -645,30 +645,30 @@ class AdvancedSearchEngine:
         else:
             raise ValueError(f"Unsupported format: {format}")
 
-# Example usage
-if __name__ == "__main__":
-    # Initialize the search engine
-    search_engine = AdvancedSearchEngine(max_requests_per_minute=10)
+# # Example usage
+# if __name__ == "__main__":
+#     # Initialize the search engine
+#     search_engine = AdvancedSearchEngine(max_requests_per_minute=10)
     
-    # Example searches
-    queries = [
-        "machine learning algorithms comparison",
-    ]
+#     # Example searches
+#     queries = [
+#         "machine learning algorithms comparison",
+#     ]
     
-    for query in queries:
-        print(f"\n{'='*60}")
-        print(f"Searching for: '{query}'")
-        print(f"{'='*60}")
+#     for query in queries:
+#         print(f"\n{'='*60}")
+#         print(f"Searching for: '{query}'")
+#         print(f"{'='*60}")
         
-        # Search with retry
-        results = search_engine.search_with_retry(query, num_results=5, max_retries=2)
+#         # Search with retry
+#         results = search_engine.search_with_retry(query, num_results=5, max_retries=2)
         
-        if results:
-            print(f"\nFound {len(results)} results:")
-            for i, result in enumerate(results, 1):
-                print(f"\n{i}. {result.title}")
-                print(f"   URL: {result.url}")
-                print(f"   Description: {result.description[:100]}...")
-                print(f"   Timestamp: {result.timestamp}")
-        else:
-            print("\nNo results found.")
+#         if results:
+#             print(f"\nFound {len(results)} results:")
+#             for i, result in enumerate(results, 1):
+#                 print(f"\n{i}. {result.title}")
+#                 print(f"   URL: {result.url}")
+#                 print(f"   Description: {result.description[:100]}...")
+#                 print(f"   Timestamp: {result.timestamp}")
+#         else:
+#             print("\nNo results found.")
