@@ -275,7 +275,7 @@ def scrape_multiple_websites(urls: List[str]) -> List[Dict[str, str]]:
         for result in results
     ]
 
-# Example usage and testing
+# # Example usage and testing
 # if __name__ == "__main__":
 #     # Example 1: Simple scraping
 #     print("=== Simple Scraping Example ===")
@@ -308,5 +308,4 @@ def scrape_multiple_websites(urls: List[str]) -> List[Dict[str, str]]:
 #         print(f"Title: {result['title']}")
 #         print(f"Status: {result['status_code']}")
 #         print(f"Content length: {len(result['content'])}")
-#         print(f"Scrape time: {result['scrape_time']:.2f}s")
     
