@@ -139,7 +139,7 @@ Add these MCP server config to claude desktop config file, LM Studio or any othe
         "Web": {
             "command": "python",
             "args": [
-                "path/to/FIX-LLM/mcp_web.py"
+                "path/to/FIX-LLM/mcp_python.py"
             ]
         },
         "code-interpreter": {
