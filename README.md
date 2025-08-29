@@ -46,7 +46,7 @@ Ensure LM Studio is running on your machine with the server running.
 
 - Download the zip file for the repo by clicking [here](https://github.com/yossifibrahem/FIX-LLM/archive/refs/tags/v0.1.1.zip)
 - unzip the file
-move to the project directory
+- move to the project directory
 ```bash
 cd LLM-Tool-Calling-Web-Application
 ```
