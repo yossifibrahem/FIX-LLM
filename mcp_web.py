@@ -50,7 +50,7 @@ async def handle_list_tools() -> List[types.Tool]:
                     },
                     "number_of_results": {
                         "type": "integer",
-                        "description": "number of urls to return.",
+                        "description": "number of resources to return.",
                         "default": 10
                     },
                 },
