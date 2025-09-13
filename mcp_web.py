@@ -72,25 +72,6 @@ async def handle_list_tools() -> List[types.Tool]:
             }
         ),
         types.Tool(
-            name="image_search",
-            description="Search the web for images.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": "Search query for images"
-                    },
-                    "number_of_images": {
-                        "type": "integer",
-                        "description": "Maximum images to get",
-                        "default": 1
-                    }
-                },
-                "required": ["query"]
-            }
-        ),
-        types.Tool(
             name="youtube_search",
             description="Search youtube videos and retrieve the urls.",
             inputSchema={

@@ -8,16 +8,13 @@ from web_tool.web_scraper import (
     scrape_website,
     WebScraper
 )
-from web_tool.duck_duck_go_search import DuckDuckGoSearchManager
 
 scraper = WebScraper(
     delay_range=(0.5, 1.5),
     timeout=5,
     max_retries=2
 )
-# ddg = DuckDuckGoSearchManager()
 search_engine = AdvancedSearchEngine(max_requests_per_minute=10)
-ddg = DuckDuckGoSearchManager()
 
 def text_search(query: str, num_websites: int = 5) -> str:
     """Conducts a general web text search and retrieves information from the internet in response to user queries.
@@ -31,33 +28,30 @@ def text_search(query: str, num_websites: int = 5) -> str:
     :param query: The search query string.
     :param num_websites: The number of websites to search for the query. Defaults to 4 if not provided. (optional)
 
-    :return: A dictionary containing the URL and citation of the most relevant content.
+    :return: A dictionary containing the scraped content from the most relevant websites.
     """
     try:
         num_websites = min(num_websites, 8)  # Maximum 8 websites
         
-        # urls = ddg.text_search(query, int(num_websites))
-        results = search_engine.search_with_retry(query, num_websites, max_retries=2)
-        return results
+        # Get URLs first
+        URLs = search_engine.search_with_retry(query, num_websites, max_retries=2)
+        
+        # Scrape content from the websites
+        scraped_content = []
+        for url in URLs:
+            try:
+                content = scrape_website(url)
+                scraped_content.append(content)
+            except Exception as e:
+                # If scraping fails, add error information
+                scraped_content.append({
+                    "url": url,
+                    "content": f"Error scraping content: {str(e)}"
+                })
+        
+        return json.dumps(scraped_content)
     except Exception as e:
-        return {"url": "error", "citation": str(e)}    
-
-
-def images_search(query, num_results=3):
-    """Performs the image search for a specific query. For example, "puppies". If possible, the output should be in Markdown format.
-
-    This function enables real-time image search and information retrieval for GPT models. It fetches relevant data from the internet in response to user queries, enhancing GPT's knowledge base.
-
-    :param query: The search query string for the image search.
-    :param num_results: The maximum number of URLs to return. Defaults to 3 if not provided. (optional)
-
-    :return: A list of dictionaries, where each dictionary contains 'image' (URL of the actual image) and 'thumbnail' (URL of the image's thumbnail).
-    """
-    try:
-        image_info = ddg.images_search(query, int(num_results))
-        return image_info
-    except Exception as e:
-        return {"image": "error", "thumbnail": str(e)}
+        return json.dumps({"error": str(e)})
     
 
 def webpage_scraper(url):

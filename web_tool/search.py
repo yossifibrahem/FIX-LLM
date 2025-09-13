@@ -161,7 +161,7 @@ class AdvancedSearchEngine:
         logger.debug(f"Adding human delay: {delay:.2f} seconds")
         time.sleep(delay)
     
-    def search(self, query: str, num_results: int = 5, timeout: int = 10) -> List[SearchResult]:
+    def search(self, query: str, num_results: int = 5, timeout: int = 10) -> List[str]:
         """
         Perform search with multiple fallback strategies.
         
@@ -171,7 +171,7 @@ class AdvancedSearchEngine:
             timeout: Request timeout in seconds
             
         Returns:
-            List of search results
+            List of URLs
         """
         sanitized_query = self._sanitize_query(query)
         logger.info(f"Starting search for query: '{sanitized_query}'")
@@ -193,7 +193,8 @@ class AdvancedSearchEngine:
                 
                 if results:
                     logger.info(f"Found {len(results)} results with {approach.__name__}")
-                    return results
+                    # Extract just URLs from SearchResult objects
+                    return [result.url for result in results]
                 else:
                     logger.warning(f"{approach.__name__} returned no results")
                     
@@ -588,7 +589,7 @@ class AdvancedSearchEngine:
         return url
     
     def search_with_retry(self, query: str, num_results: int = 5, 
-                         max_retries: int = 3, delay: float = 2.0) -> List[SearchResult]:
+                         max_retries: int = 3, delay: float = 2.0) -> List[str]:
         """
         Search with retry mechanism.
         
@@ -599,7 +600,7 @@ class AdvancedSearchEngine:
             delay: Delay between retries
             
         Returns:
-            List of search results
+            List of URLs
         """
         for attempt in range(max_retries + 1):
             try:
@@ -620,10 +621,11 @@ class AdvancedSearchEngine:
         
         return []
     
-    def export_results(self, results: List[SearchResult], format: str = 'json') -> str:
+    def export_results(self, results: List[str], format: str = 'json') -> str:
         """Export search results to different formats."""
         if format.lower() == 'json':
-            return json.dumps([result.to_dict() for result in results], indent=2)
+            # For URLs only, create a simple list structure
+            return json.dumps(results, indent=2)
         elif format.lower() == 'csv':
             import csv
             import io
@@ -632,11 +634,11 @@ class AdvancedSearchEngine:
             writer = csv.writer(output)
             
             # Write header
-            writer.writerow(['Title', 'URL', 'Description', 'Timestamp'])
+            writer.writerow(['URL'])
             
             # Write data
-            for result in results:
-                writer.writerow([result.title, result.url, result.description, result.timestamp])
+            for url in results:
+                writer.writerow([url])
             
             return output.getvalue()
         else:
@@ -662,10 +664,7 @@ class AdvancedSearchEngine:
         
 #         if results:
 #             print(f"\nFound {len(results)} results:")
-#             for i, result in enumerate(results, 1):
-#                 print(f"\n{i}. {result.title}")
-#                 print(f"   URL: {result.url}")
-#                 print(f"   Description: {result.description[:100]}...")
-#                 print(f"   Timestamp: {result.timestamp}")
+#             for i, url in enumerate(results, 1):
+#                 print(f"\n{i}. URL: {url}")
 #         else:
 #             print("\nNo results found.")
