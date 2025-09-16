@@ -15,10 +15,6 @@ import mcp.server.stdio
 import mcp.types as types
 
 # Tool imports
-from web_tool.web_browsing import (
-    text_search as deep_web_search,
-    webpage_scraper as web_scrape,
-)
 from youtube_tool.youtube import (
     search_youtube as youtube_search,
     get_video_info as youtube_scrape,
@@ -29,7 +25,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("mcp-server")
 
 # Create server instance
-server = Server("Web")
+server = Server("YT")
 
 @server.list_tools()
 async def handle_list_tools() -> List[types.Tool]:
@@ -37,39 +33,6 @@ async def handle_list_tools() -> List[types.Tool]:
     List available tools.
     """
     return [
-        types.Tool(
-            name="deep_web_search",
-            description=f"Perform a web search for realtime information, the current date is {datetime.now().strftime('%Y-%m-%d')}.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": "Search query for relevant web results"
-                    },
-                    "number_of_results": {
-                        "type": "integer",
-                        "description": "number of resources to return.",
-                        "default": 10
-                    },
-                },
-                "required": ["query"]
-            }
-        ),
-        types.Tool(
-            name="web_scrape",
-            description="Scrape a website for its content",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "url": {
-                        "type": "string",
-                        "description": "URL of the website to scrape"
-                    }
-                },
-                "required": ["url"]
-            }
-        ),
         types.Tool(
             name="youtube_search",
             description="Search youtube videos and retrieve the urls.",
@@ -113,35 +76,7 @@ async def handle_call_tool(
     Handle tool calls.
     """
     try:
-        if name == "web_search":
-            query = arguments.get("query", "")
-            num_websites = arguments.get("number_of_results", 10)
-            
-            if not query:
-                raise ValueError("Query parameter is required")
-
-            result = await asyncio.to_thread(deep_web_search, query, num_websites)
-            return [
-                types.TextContent(
-                    type="text",
-                    text=str(result)
-                )
-            ]
-        
-        elif name == "web_scrape":
-            url = arguments.get("url", "")
-            if not url:
-                raise ValueError("URL parameter is required")
-            
-            result = await asyncio.to_thread(web_scrape, url)
-            return [
-                types.TextContent(
-                    type="text",
-                    text=str(result)
-                )
-            ]
-        
-        elif name == "youtube_search":
+        if name == "youtube_search":
             query = arguments.get("query", "")
             num_videos = arguments.get("number_of_videos", 1)
             
@@ -191,7 +126,7 @@ async def main():
             read_stream,
             write_stream,
             InitializationOptions(
-                server_name="Web",
+                server_name="YT",
                 server_version="1.0.0",
                 capabilities=server.get_capabilities(
                     notification_options=NotificationOptions(),
