@@ -16,23 +16,10 @@ scraper = WebScraper(
 )
 search_engine = AdvancedSearchEngine(max_requests_per_minute=10)
 
-def text_search(query: str, num_websites: int = 5) -> str:
-    """Conducts a general web text search and retrieves information from the internet in response to user queries.
-
-    This function is best used when the user's query is seeking broad information available on various websites. It
-    is ideal for queries that require diverse perspectives or data from multiple sources, not limited to current
-    events or specific topics. Use this function for general inquiries, research, or when the user's query is not
-    explicitly news-related. It fetches relevant data from the internet in response to user queries, enhancing GPT's
-    knowledge base.
-
-    :param query: The search query string.
-    :param num_websites: The number of websites to search for the query. Defaults to 4 if not provided. (optional)
-
-    :return: A dictionary containing the scraped content from the most relevant websites.
-    """
+def text_search(query: str, num_websites: int = 10) -> str:
     try:
-        num_websites = min(num_websites, 8)  # Maximum 8 websites
-        
+        num_websites = min(num_websites, 20)  # Maximum 20 websites
+
         # Get URLs first
         URLs = search_engine.search_with_retry(query, num_websites, max_retries=2)
         
