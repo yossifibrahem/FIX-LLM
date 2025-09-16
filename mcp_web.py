@@ -16,9 +16,8 @@ import mcp.types as types
 
 # Tool imports
 from web_tool.web_browsing import (
-    text_search as web_search,
+    text_search as deep_web_search,
     webpage_scraper as web_scrape,
-    images_search as image_search,
 )
 from youtube_tool.youtube import (
     search_youtube as youtube_search,
@@ -39,7 +38,7 @@ async def handle_list_tools() -> List[types.Tool]:
     """
     return [
         types.Tool(
-            name="web_search",
+            name="deep_web_search",
             description=f"Perform a web search for realtime information, the current date is {datetime.now().strftime('%Y-%m-%d')}.",
             inputSchema={
                 "type": "object",
@@ -121,7 +120,7 @@ async def handle_call_tool(
             if not query:
                 raise ValueError("Query parameter is required")
 
-            result = await asyncio.to_thread(web_search, query, num_websites)
+            result = await asyncio.to_thread(deep_web_search, query, num_websites)
             return [
                 types.TextContent(
                     type="text",
@@ -135,21 +134,6 @@ async def handle_call_tool(
                 raise ValueError("URL parameter is required")
             
             result = await asyncio.to_thread(web_scrape, url)
-            return [
-                types.TextContent(
-                    type="text",
-                    text=str(result)
-                )
-            ]
-        
-        elif name == "image_search":
-            query = arguments.get("query", "")
-            num_images = arguments.get("number_of_images", 1)
-            
-            if not query:
-                raise ValueError("Query parameter is required")
-            
-            result = await asyncio.to_thread(image_search, query, num_images)
             return [
                 types.TextContent(
                     type="text",
